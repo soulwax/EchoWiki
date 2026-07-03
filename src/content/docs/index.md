@@ -2,10 +2,7 @@
 title: "EchoWarrior Contributor Wiki"
 ---
 
-<div class="hero-lockup">
-  <img class="site-mark" src="/Shisaku-2.png" alt="EchoWarrior wiki mark" />
-  <img class="hero-screenshot" src="/assets/readme-window.png" alt="EchoWarrior prototype window" />
-</div>
+<img class="hero-screenshot" src="/start_screen.png" alt="EchoWarrior start screen with rain and main menu" />
 
 This wiki is written for someone who may want to contribute to EchoWarrior and needs a calm first map of the codebase. It documents the main code surface: the crate entry points, app shell, state model, asset and pack gateways, logging, performance hooks, mod manifest layer, and command-line tools.
 
@@ -14,6 +11,10 @@ It deliberately does not document every `src/game`, `src/runtime`, `src/data`, `
 ## Prototype At A Glance
 
 <div class="visual-grid">
+  <figure>
+    <img src="/assets/readme-window.png" alt="Main EchoWarrior prototype screen with HUD and companions" />
+    <figcaption>Main runtime: world simulation, companion labels, HUD, input hints, and gameplay stats in the Macroquad prototype.</figcaption>
+  </figure>
   <figure>
     <img src="/shader_arena_1.png" alt="Shader arena with VFX tuning controls and runtime HUD" />
     <figcaption>Shader arena: runtime VFX, HUD layering, and data-driven tuning visible in one frame.</figcaption>

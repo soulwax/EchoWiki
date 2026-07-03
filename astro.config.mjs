@@ -22,6 +22,10 @@ export default defineConfig({
       title: 'EchoWarrior Wiki',
       description:
         'Contributor documentation for EchoWarrior architecture, modding routes, and main Rust code boundaries.',
+      logo: {
+        src: './public/favicon-symbol.png',
+        alt: 'EchoWarrior',
+      },
       customCss: ['./src/styles/custom.css'],
       editLink: {
         baseUrl: 'https://github.com/soulwax/EchoWiki/edit/main/',

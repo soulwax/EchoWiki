@@ -8,6 +8,10 @@ This page gives new contributors a quick visual map before they dive into code. 
 
 <div class="visual-grid">
   <figure>
+    <img src="/start_screen.png" alt="EchoWarrior start screen with rain, title, and menu options" />
+    <figcaption>Start screen: the first contributor-facing frame for mood, menu flow, background atmosphere, and modded/unmodded entry state.</figcaption>
+  </figure>
+  <figure>
     <img src="/assets/readme-window.png" alt="Main EchoWarrior prototype screen with HUD and companions" />
     <figcaption>Main runtime: world simulation, companion labels, HUD, input hints, and gameplay stats in the Macroquad prototype.</figcaption>
   </figure>
@@ -54,6 +58,7 @@ Prefer short, descriptive lowercase names:
 ```text
 public/shader_arena_2.png
 public/dialogue_choice_1.png
+public/start_screen_2.png
 public/level_up_cards_1.png
 ```
 
