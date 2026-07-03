@@ -20,8 +20,12 @@ This page gives new contributors a quick visual map before they dive into code. 
     <figcaption>Dialogue and choreography: authored scene beats over live gameplay, with speaker portraits and input prompts.</figcaption>
   </figure>
   <figure class="mark-figure">
-    <img src="/Shisaku.png" alt="EchoWarrior wiki identity mark" />
-    <figcaption>Wiki mark: useful for site identity, social previews, favicons, and future contributor-facing screenshots.</figcaption>
+    <img src="/Shisaku-2.png" alt="EchoWarrior combat identity mark" />
+    <figcaption>Primary mark: useful for site identity, social previews, favicons, and future contributor-facing screenshots.</figcaption>
+  </figure>
+  <figure class="mark-figure">
+    <img src="/Shisaku.png" alt="EchoWarrior lore identity mark" />
+    <figcaption>Lore mark: a quieter library/candle variant that fits design notes, worldbuilding pages, and modding reference material.</figcaption>
   </figure>
 </div>
 

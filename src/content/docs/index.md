@@ -3,7 +3,7 @@ title: "EchoWarrior Contributor Wiki"
 ---
 
 <div class="hero-lockup">
-  <img class="site-mark" src="/Shisaku.png" alt="EchoWarrior wiki mark" />
+  <img class="site-mark" src="/Shisaku-2.png" alt="EchoWarrior wiki mark" />
   <img class="hero-screenshot" src="/assets/readme-window.png" alt="EchoWarrior prototype window" />
 </div>
 

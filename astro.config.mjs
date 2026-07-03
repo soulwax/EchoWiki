@@ -40,11 +40,11 @@ export default defineConfig({
         },
         {
           tag: 'meta',
-          attrs: { property: 'og:image', content: new URL('/Shisaku.png', site).toString() },
+          attrs: { property: 'og:image', content: new URL('/Shisaku-2.png', site).toString() },
         },
         {
           tag: 'meta',
-          attrs: { name: 'twitter:image', content: new URL('/Shisaku.png', site).toString() },
+          attrs: { name: 'twitter:image', content: new URL('/Shisaku-2.png', site).toString() },
         },
         {
           tag: 'script',
