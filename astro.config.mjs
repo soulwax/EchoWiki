@@ -4,9 +4,16 @@ import starlight from '@astrojs/starlight';
 
 import remarkMermaid from './src/plugins/remark-mermaid.mjs';
 
+const site =
+  process.env.SITE ??
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : 'https://echo-wiki.vercel.app');
+
 export default defineConfig({
-  site: 'https://soulwax.github.io',
-  base: '/EchoWiki',
+  site,
   markdown: unified({
     remarkPlugins: [remarkMermaid],
   }),
@@ -140,7 +147,7 @@ export default defineConfig({
             { label: 'Logging And Perf Reference', slug: 'pages/logging-and-perf-reference' },
             { label: 'Observability', slug: 'pages/observability' },
             { label: 'CLI Tools', slug: 'pages/cli-tools' },
-            { label: 'GitHub Pages', slug: 'pages/github-pages' },
+            { label: 'Vercel Deployment', slug: 'pages/vercel-deployment' },
           ],
         },
       ],

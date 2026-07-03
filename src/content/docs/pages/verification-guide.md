@@ -93,7 +93,7 @@ Check:
 - home page loads
 - sidebar includes the page
 - page links resolve
-- images are inside the wiki repository so GitHub Pages can serve them
+- images are inside the wiki repository so Vercel can serve them
 
 ## When A Check Fails
 

@@ -29,13 +29,12 @@ The fastest way to get oriented is to run the game once, read the contributor st
 
 ## Site Stack
 
-This is a GitHub Pages site powered by [Astro](https://astro.build/) and
+This is a Vercel-hosted static site powered by [Astro](https://astro.build/) and
 [Starlight](https://starlight.astro.build/). Pages are Markdown files under
 `src/content/docs`, the navigation is configured in `astro.config.mjs`, and the
 site builds to static HTML in `dist`.
 
-The repository includes a GitHub Actions workflow at `.github/workflows/pages.yml`
-that builds the site and publishes `dist` as the Pages artifact. In the private
+Vercel builds the site with `npm run build` and serves `dist`. In the private
 game repository, this repo is mounted as the `Docs/Wiki` submodule.
 
 ## Related Project Docs

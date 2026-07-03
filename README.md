@@ -3,8 +3,8 @@
 Public contributor website for EchoWarrior, mounted into the private game
 repository as the `Docs/Wiki` submodule.
 
-The site is built with Astro and Starlight, then deployed to GitHub Pages from
-this repository.
+The site is built with Astro and Starlight, then deployed to Vercel from this
+repository.
 
 ## Local Development
 
@@ -29,5 +29,5 @@ npm run build
 
 ## Publishing
 
-The `.github/workflows/pages.yml` workflow builds the Starlight site and uploads
-`dist` as the GitHub Pages artifact.
+Vercel builds the site with `npm run build` and serves the generated `dist`
+directory. The deployment settings are captured in `vercel.json`.
