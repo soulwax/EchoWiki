@@ -35,6 +35,18 @@ export default defineConfig({
       ],
       head: [
         {
+          tag: 'link',
+          attrs: { rel: 'icon', href: '/favicon.ico', sizes: 'any' },
+        },
+        {
+          tag: 'meta',
+          attrs: { property: 'og:image', content: new URL('/Shisaku.png', site).toString() },
+        },
+        {
+          tag: 'meta',
+          attrs: { name: 'twitter:image', content: new URL('/Shisaku.png', site).toString() },
+        },
+        {
           tag: 'script',
           attrs: { type: 'module' },
           content: `
@@ -70,6 +82,7 @@ export default defineConfig({
           label: 'New Contributors',
           items: [
             { label: 'Start Here', slug: 'pages/new-contributor-start' },
+            { label: 'Visual Orientation', slug: 'pages/visual-orientation' },
             { label: 'Contribution Workflow', slug: 'pages/contribution-workflow' },
             { label: 'Change Routes', slug: 'pages/change-routes' },
             { label: 'Verification Guide', slug: 'pages/verification-guide' },

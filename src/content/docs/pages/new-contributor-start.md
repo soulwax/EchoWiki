@@ -27,14 +27,16 @@ cargo check
 cargo run
 ```
 
-4. Read the short project map:
+4. Skim [Visual Orientation](../visual-orientation/) so the main screens, debug surfaces, and scene UI have names before you read deeper architecture pages.
+
+5. Read the short project map:
 
 - `README.md`
 - `AI_CONTEXT.md`
 - `Docs/TECHNICAL_NOTES.md`
 - `TODO.md`
 
-5. Pick one small contribution and find the right route in [Change Routes](../change-routes/).
+6. Pick one small contribution and find the right route in [Change Routes](../change-routes/).
 
 ## What Kind Of Project Is This?
 

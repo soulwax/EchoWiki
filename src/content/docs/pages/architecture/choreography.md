@@ -6,6 +6,11 @@ Choreography is the single architecture path for authored beats: story staging, 
 
 Do not create a parallel scene or beat system.
 
+<figure class="wide-figure">
+  <img src="/dialogue_1.png" alt="Rainy gameplay scene with dialogue overlay, speaker portrait, and continuation prompt" />
+  <figcaption>A scene beat in context: gameplay keeps its world state, while choreography and dialogue temporarily own presentation and input focus.</figcaption>
+</figure>
+
 ## Concept Model
 
 ```mermaid

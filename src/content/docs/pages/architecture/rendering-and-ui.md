@@ -4,6 +4,11 @@ title: "10. Rendering And UI"
 
 Rendering is the clearest place where EchoWarrior must keep boundaries tidy: world simulation, world rendering, post-processing, and screen-space UI all happen in one frame, but they do different jobs.
 
+<figure class="wide-figure">
+  <img src="/shader_arena_1.png" alt="Shader arena with a nova preview, runtime HUD, VFX icon bar, and egui controls" />
+  <figcaption>The shader arena makes the rendering/UI split visible: world-space effects, HUD, icon rows, and tuning panels all share a frame but belong to different layers.</figcaption>
+</figure>
+
 ## Layer Stack
 
 ```mermaid
