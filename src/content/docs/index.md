@@ -27,6 +27,7 @@ It deliberately does not document every `src/game`, `src/runtime`, `src/data`, `
 
 ## What To Read First
 
+- [Wiki Map](pages/wiki-map/) for the sidebar structure and recommended reading paths.
 - [New Contributor Start](pages/new-contributor-start/) if this is your first hour in the repo.
 - [Visual Orientation](pages/visual-orientation/) to connect screenshots to the systems behind them.
 - [Contribution Workflow](pages/contribution-workflow/) before opening a pull request.
