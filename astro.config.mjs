@@ -192,6 +192,8 @@ export default defineConfig({
             { label: 'Overview', slug: 'pages/leitmotif' },
             { label: 'Screenshots', slug: 'pages/leitmotif/screenshots' },
             { label: 'Getting Started', slug: 'pages/leitmotif/getting-started' },
+            { label: 'Usage', slug: 'pages/leitmotif/usage' },
+            { label: 'Moddability', slug: 'pages/leitmotif/moddability' },
             { label: 'Architecture', slug: 'pages/leitmotif/architecture' },
             { label: 'Contributor Slices', slug: 'pages/leitmotif/contributor-slices' },
           ],

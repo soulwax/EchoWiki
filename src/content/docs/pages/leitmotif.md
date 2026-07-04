@@ -69,10 +69,12 @@ A newcomer can read Leitmotif as three layers:
 
 Start here if you are new:
 
-1. [Getting Started](leitmotif/getting-started/) to run the app and understand the dev modes.
-2. [Architecture](leitmotif/architecture/) to see the document, UI, bridge, and CLI boundaries.
-3. [Screenshots](leitmotif/screenshots/) to connect the visual surface to the code.
-4. [Contributor Slices](leitmotif/contributor-slices/) for small, practical changes.
+1. [Getting Started](getting-started/) to run the app and understand the dev modes.
+2. [Usage](usage/) to learn the authoring loop from open to export.
+3. [Moddability](moddability/) to understand how scene files, ids, schema, and mods fit together.
+4. [Architecture](architecture/) to see the document, UI, bridge, and CLI boundaries.
+5. [Screenshots](screenshots/) to connect the visual surface to the code.
+6. [Contributor Slices](contributor-slices/) for small, practical changes.
 
 ## Rule Of Thumb
 
@@ -83,4 +85,3 @@ When adding a Leitmotif feature, keep the authoring model boring and reliable:
 - derive forms from schema or curated vocabulary
 - make suggestions valid by construction
 - degrade gracefully when Tauri or `choreo` is unavailable
-

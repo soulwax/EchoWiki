@@ -52,8 +52,10 @@ The structure follows a documentation pattern used by mature engine manuals: fir
 1. [Leitmotif Overview](leitmotif/)
 2. [Leitmotif Screenshots](leitmotif/screenshots/)
 3. [Leitmotif Getting Started](leitmotif/getting-started/)
-4. [Leitmotif Architecture](leitmotif/architecture/)
-5. [Leitmotif Contributor Slices](leitmotif/contributor-slices/)
+4. [Leitmotif Usage](leitmotif/usage/)
+5. [Leitmotif Moddability](leitmotif/moddability/)
+6. [Leitmotif Architecture](leitmotif/architecture/)
+7. [Leitmotif Contributor Slices](leitmotif/contributor-slices/)
 
 ## Page Granularity
 

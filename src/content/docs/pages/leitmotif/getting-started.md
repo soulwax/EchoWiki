@@ -74,3 +74,4 @@ cargo run --bin choreo -- graph Assets/Data/scenes --json
 6. Open a scene file from `Assets/Data/scenes`.
 7. Validate, preview, and export only after you understand where the target file will be written.
 
+Next, read [Usage](../usage/) for the day-to-day authoring loop and [Moddability](../moddability/) before changing how Leitmotif treats ids, scene files, schema, or exported data.
