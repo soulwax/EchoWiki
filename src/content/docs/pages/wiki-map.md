@@ -13,6 +13,7 @@ The structure follows a documentation pattern used by mature engine manuals: fir
 | Getting Started | You are new to the repository or trying to find the right door. |
 | Tutorials | You want a guided feature slice or a concrete worked example. |
 | Manual | You need the big-picture architecture and runtime system explanations. |
+| Leitmotif | You want to work on the choreography authoring app and its screenshots. |
 | Reference | You need exact file boundaries, tools, assets, and diagnostics. |
 | Contributing And Operations | You are preparing a change, verifying it, or deploying the wiki. |
 
@@ -45,6 +46,14 @@ The structure follows a documentation pattern used by mature engine manuals: fir
 2. [Assets And Packaging](assets-and-packaging/)
 3. [Asset Pack Reference](asset-pack-reference/)
 4. [Vercel Deployment](vercel-deployment/)
+
+### Leitmotif Work
+
+1. [Leitmotif Overview](leitmotif/)
+2. [Leitmotif Screenshots](leitmotif/screenshots/)
+3. [Leitmotif Getting Started](leitmotif/getting-started/)
+4. [Leitmotif Architecture](leitmotif/architecture/)
+5. [Leitmotif Contributor Slices](leitmotif/contributor-slices/)
 
 ## Page Granularity
 

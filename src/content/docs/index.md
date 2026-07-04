@@ -25,6 +25,19 @@ It deliberately does not document every `src/game`, `src/runtime`, `src/data`, `
   </figure>
 </div>
 
+## Tooling At A Glance
+
+<div class="visual-grid">
+  <figure>
+    <img src="/leitmotif/editor-overview.png" alt="Leitmotif scene director with sequences, stage, timeline, and inspector" />
+    <figcaption>Leitmotif: the Tauri scene director for authored choreography, backed by the game's `choreo` CLI and schema contract.</figcaption>
+  </figure>
+  <figure>
+    <img src="/leitmotif/action-picker.png" alt="Leitmotif action picker with suggestions and beat verbs" />
+    <figcaption>Authoring aids: deterministic suggestions, action picking, fix-it flows, and timeline edits all route through one scene document model.</figcaption>
+  </figure>
+</div>
+
 ## What To Read First
 
 - [Wiki Map](pages/wiki-map/) for the sidebar structure and recommended reading paths.
@@ -35,6 +48,7 @@ It deliberately does not document every `src/game`, `src/runtime`, `src/data`, `
 - [Verification Guide](pages/verification-guide/) to choose the right checks.
 - [Tiny Moddable Feature](pages/guides/tiny-moddable-feature/) for a slow, guided first implementation path.
 - [Architecture Chapter](pages/architecture/) for the big picture first, then progressively deeper details.
+- [Leitmotif](pages/leitmotif/) if you want to work on the choreography authoring app.
 - [Main Code Map](pages/main-code-map/) for a file-by-file reference to the main Rust files.
 - [Assets And Packaging](pages/assets-and-packaging/) before changing runtime asset discovery or release packs.
 - [Asset Pack Reference](pages/asset-pack-reference/) for the public pack API and read order.

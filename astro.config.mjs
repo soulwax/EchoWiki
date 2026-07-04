@@ -187,6 +187,16 @@ export default defineConfig({
           ],
         },
         {
+          label: 'Leitmotif',
+          items: [
+            { label: 'Overview', slug: 'pages/leitmotif' },
+            { label: 'Screenshots', slug: 'pages/leitmotif/screenshots' },
+            { label: 'Getting Started', slug: 'pages/leitmotif/getting-started' },
+            { label: 'Architecture', slug: 'pages/leitmotif/architecture' },
+            { label: 'Contributor Slices', slug: 'pages/leitmotif/contributor-slices' },
+          ],
+        },
+        {
           label: 'Reference',
           items: [
             {
