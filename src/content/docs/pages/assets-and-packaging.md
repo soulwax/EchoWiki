@@ -18,6 +18,8 @@ The default manifest includes player/enemy/tileset/object/particle sprites and t
 
 Do not add new runtime assets here unless the code really needs a stable enum id. Prefer data manifests when a modder should be able to replace or extend content.
 
+Runtime decoding and GPU upload are covered in [Asset Loading Pipeline](../asset-loading-pipeline/). This page is about pack/discovery contracts; the loader page is about how assets become live `Texture2D`, `Material`, `Font`, and audio handles.
+
 ## Sprite Metadata
 
 `SpriteMetadata` loads `Assets/Metadata/spritesheets.toml` through `asset_pack::read_to_string`, which means the same call works for loose files and packed files.

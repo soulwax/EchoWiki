@@ -60,3 +60,5 @@ It has two policy helpers:
 The live Macroquad prototype has a richer runtime mode model inside `src/runtime/`. Treat `AppState` as a lightweight shared shell model, not as the authoritative live runtime state machine.
 
 If you change the live runtime state model, update the runtime docs and only mirror that change here when the shared library state also changes.
+
+The current runtime mode flow is documented in [Runtime Shell](../runtime-shell/). Use that page when touching `src/runtime/mod.rs`; use this page when touching the shared crate shell.

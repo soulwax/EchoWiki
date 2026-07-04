@@ -24,6 +24,8 @@ async fn main() {
 
 The important behavior is the error path: startup/runtime failures are printed to stderr and also shown through `runtime::show_error`, so a player or tester gets visible feedback instead of a silent close.
 
+`window_conf()` is delegated to `src/runtime/config.rs`, where the Macroquad window is built from the current fixed view size and the moddable `settings.toml` MSAA value. The window is created before the full runtime can load settings, so MSAA is read directly there and clamped to Macroquad-supported sample counts.
+
 ## `src/lib.rs`
 
 `src/lib.rs` exposes the reusable crate modules:
@@ -45,6 +47,8 @@ pub mod ui;
 
 This is the boundary used by the command-line tools in `src/bin/` and by library tests. The runtime itself is binary-private because it is tied to Macroquad and should not leak into pure gameplay modules.
 
+Current top-level library modules include `noise`, which bakes the reusable ambient shader noise tile used by the runtime loader. Keep this kind of pure support code in the library when it is renderer-agnostic and testable.
+
 ## Adding A New Top-Level Module
 
 Only add a new `pub mod` in `src/lib.rs` when the code is genuinely shared outside the runtime binary. If the code imports Macroquad or exists only for frame rendering, it probably belongs under `src/runtime/`.
@@ -55,3 +59,5 @@ When adding a shared module, check:
 - Is it covered by focused tests where practical?
 - Does it need to be documented in this wiki or an existing subsystem doc?
 - Does it introduce any runtime asset references that must be discovered by `asset_pack`?
+
+Next: read [Runtime Shell](../runtime-shell/) for the binary-private runtime shape.
