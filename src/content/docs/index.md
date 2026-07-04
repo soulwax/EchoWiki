@@ -36,6 +36,10 @@ It deliberately does not document every `src/game`, `src/runtime`, `src/data`, `
     <img src="/leitmotif/action-picker.png" alt="Leitmotif action picker with suggestions and beat verbs" />
     <figcaption>Authoring aids: deterministic suggestions, action picking, fix-it flows, and timeline edits all route through one scene document model.</figcaption>
   </figure>
+  <figure>
+    <img src="/soundgarden/soundgarden.png" alt="Soundgarden logo artwork" />
+    <figcaption>Soundgarden: the audio-manifest studio topic for SFX, music, voice profiles, unregistered clips, and the pending audio CLI contract.</figcaption>
+  </figure>
 </div>
 
 ## What To Read First
@@ -49,6 +53,7 @@ It deliberately does not document every `src/game`, `src/runtime`, `src/data`, `
 - [Tiny Moddable Feature](pages/guides/tiny-moddable-feature/) for a slow, guided first implementation path.
 - [Architecture Chapter](pages/architecture/) for the big picture first, then progressively deeper details.
 - [Leitmotif](pages/leitmotif/) if you want to work on the choreography authoring app.
+- [Soundgarden](pages/soundgarden/) if you want to work on audio manifests and the audio studio.
 - [Main Code Map](pages/main-code-map/) for a file-by-file reference to the main Rust files.
 - [Assets And Packaging](pages/assets-and-packaging/) before changing runtime asset discovery or release packs.
 - [Asset Pack Reference](pages/asset-pack-reference/) for the public pack API and read order.

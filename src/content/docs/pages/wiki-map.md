@@ -14,6 +14,7 @@ The structure follows a documentation pattern used by mature engine manuals: fir
 | Tutorials | You want a guided feature slice or a concrete worked example. |
 | Manual | You need the big-picture architecture and runtime system explanations. |
 | Leitmotif | You want to work on the choreography authoring app and its screenshots. |
+| Soundgarden | You want to work on audio manifests, voice profiles, or the audio studio. |
 | Reference | You need exact file boundaries, tools, assets, and diagnostics. |
 | Contributing And Operations | You are preparing a change, verifying it, or deploying the wiki. |
 
@@ -56,6 +57,15 @@ The structure follows a documentation pattern used by mature engine manuals: fir
 5. [Leitmotif Moddability](leitmotif/moddability/)
 6. [Leitmotif Architecture](leitmotif/architecture/)
 7. [Leitmotif Contributor Slices](leitmotif/contributor-slices/)
+
+### Soundgarden Work
+
+1. [Soundgarden Overview](soundgarden/)
+2. [Available Now](soundgarden/available-now/)
+3. [Manifest Studio](soundgarden/manifest-studio/)
+4. [Audio Manifests](soundgarden/audio-manifests/)
+5. [Soundgarden Architecture](soundgarden/architecture/)
+6. [Soundgarden Moddability](soundgarden/moddability/)
 
 ## Page Granularity
 

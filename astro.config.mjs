@@ -199,6 +199,17 @@ export default defineConfig({
           ],
         },
         {
+          label: 'Soundgarden',
+          items: [
+            { label: 'Overview', slug: 'pages/soundgarden' },
+            { label: 'Available Now', slug: 'pages/soundgarden/available-now' },
+            { label: 'Manifest Studio', slug: 'pages/soundgarden/manifest-studio' },
+            { label: 'Audio Manifests', slug: 'pages/soundgarden/audio-manifests' },
+            { label: 'Architecture', slug: 'pages/soundgarden/architecture' },
+            { label: 'Moddability', slug: 'pages/soundgarden/moddability' },
+          ],
+        },
+        {
           label: 'Reference',
           items: [
             {
