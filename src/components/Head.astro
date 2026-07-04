@@ -76,16 +76,29 @@ const { head } = Astro.locals.starlightRoute;
     return 'diagram';
   }
 
-  function markRenderedDiagrams(kinds: string[]) {
-    document.querySelectorAll<SVGElement>('svg[id^="mermaid-"]:not([data-ew-framed])').forEach((svg, index) => {
-      const frame = document.createElement('div');
-      frame.className = 'mermaid-frame mermaid-rendered';
-      frame.dataset.diagram = kinds[index] ?? 'diagram';
-      svg.dataset.ewFramed = 'true';
+  function finishRenderedDiagrams() {
+    document.querySelectorAll<SVGSVGElement>('svg[id^="mermaid-"]').forEach((svg) => {
+      const legacyFrame = svg.closest<HTMLElement>('.mermaid-frame');
+      const pre = legacyFrame?.parentElement ?? svg.closest<HTMLElement>('pre');
+      if (!pre) return;
+
+      if (legacyFrame) {
+        legacyFrame.replaceWith(svg);
+      }
+
+      const surface = pre.closest<HTMLElement>('figure') ?? pre;
+      const kind = pre.dataset.diagram ?? 'diagram';
+      surface.classList.add('mermaid-surface');
+      surface.dataset.diagram = kind;
+      pre.classList.add('mermaid-rendered');
       svg.setAttribute('role', 'img');
       svg.setAttribute('focusable', 'false');
-      svg.parentNode?.insertBefore(frame, svg);
-      frame.appendChild(svg);
+      svg.setAttribute('aria-label', `${kind} diagram`);
+
+      const naturalWidth = svg.viewBox.baseVal.width;
+      if (naturalWidth > 0) {
+        svg.style.setProperty('--ew-mermaid-width', `${naturalWidth}px`);
+      }
     });
   }
 
@@ -94,10 +107,9 @@ const { head } = Astro.locals.starlightRoute;
       'pre.mermaid:not([data-processed]), pre[data-language="mermaid"]:not([data-processed])',
     );
     if (!diagrams.length) {
-      markRenderedDiagrams([]);
+      finishRenderedDiagrams();
       return;
     }
-    const kinds: string[] = [];
     for (const diagram of diagrams) {
       const copiedCode = diagram
         .closest('.expressive-code')
@@ -108,12 +120,11 @@ const { head } = Astro.locals.starlightRoute;
       }
       const kind = diagramKind(diagram.textContent ?? '');
       diagram.dataset.diagram = kind;
-      kinds.push(kind);
     }
     await mermaid.run({ nodes: Array.from(diagrams) });
-    markRenderedDiagrams(kinds);
-    requestAnimationFrame(() => markRenderedDiagrams(kinds));
-    window.setTimeout(() => markRenderedDiagrams([]), 250);
+    finishRenderedDiagrams();
+    requestAnimationFrame(finishRenderedDiagrams);
+    window.setTimeout(finishRenderedDiagrams, 250);
   }
 
   window.addEventListener('load', renderMermaid);
