@@ -179,19 +179,43 @@ Wrong key and corrupt payload both land at checksum mismatch. The runtime should
 flowchart TB
     datapak[data.pak read]
     identity[identity.pak read]
-    keyfile[hwdruntime or universal.key]
+    universal[universal.key]
+    legacy[legacy hwdruntime]
     embeddedasset[ECHO_WARRIOR_ASSET_KEY]
     embeddedidentity[ECHO_WARRIOR_IDENTITY_KEY]
     readpack[read_pack]
 
-    datapak --> keyfile
+    datapak --> universal
+    datapak --> legacy
     datapak --> embeddedasset
-    keyfile --> readpack
+    universal --> readpack
+    legacy --> readpack
     embeddedasset --> readpack
     identity --> embeddedidentity --> readpack
 ```
 
-`data.pak` supports key files for development and embedded asset keys for packaged release builds. `identity.pak` uses the embedded identity key path.
+`data.pak` supports key files for development and embedded asset keys for packaged release builds. New release packaging uses `universal.key`; `hwdruntime` remains only as a legacy runtime fallback so older local encrypted packs can still be read.
+
+## Release Encryption Decision
+
+```mermaid
+flowchart TD
+    release[release packaging]
+    key{universal.key present?}
+    encrypt[encrypt data.pak with UniversalKey]
+    embed[embed same key in ECHO_WARRIOR_ASSET_KEY]
+    plain[write unencrypted data.pak]
+    warning[print distribution warning]
+    verify[verify pack contents]
+    ship[ship package]
+
+    release --> key
+    key -- yes --> encrypt --> embed --> verify
+    key -- no --> warning --> plain --> verify
+    verify --> ship
+```
+
+This means encryption is optional for `data.pak`, but integrity is not optional. Both branches still run `asset_pack --verify`.
 
 ## What Verification Catches
 

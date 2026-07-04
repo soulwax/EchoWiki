@@ -30,6 +30,7 @@ Common commands:
 ```powershell
 cargo run --bin asset_pack -- --dry-run --list
 cargo run --bin asset_pack -- --out data.pak --inventory-out asset_inventory.md --verify
+cargo run --bin asset_pack -- --key universal.key --out data.pak --inventory-out asset_inventory.md --verify
 cargo run --bin asset_pack -- --identity --key identity.key --out identity.pak --inventory-out identity_inventory.md --verify
 cargo run --bin asset_pack -- --pack data.pak --unpack unpacked_assets
 ```
@@ -41,6 +42,8 @@ Responsibilities:
 - optionally encrypt with `UniversalKey`
 - verify packed bytes against source files
 - reject unsafe unpack paths
+
+For distribution, `universal.key` is the current optional key file for `data.pak`. If it is missing, the dist scripts warn and stage a verified unencrypted pack.
 
 ```mermaid
 flowchart LR

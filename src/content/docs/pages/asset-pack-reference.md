@@ -57,7 +57,14 @@ flowchart LR
 | `write_encrypted_pack(pack, key, path)` | Explicit encrypted write helper. |
 | `build_pack_from_paths(root, paths)` | Reads source files and builds an `AssetPack` from discovered paths. |
 
-`data.pak` can be encrypted when a repo-root `hwdruntime` key exists. `identity.pak` is always written with an explicit per-build key by release scripts.
+`data.pak` is optionally encrypted:
+
+- release scripts look for repo-root `universal.key`
+- when `universal.key` exists, the scripts pass it to `asset_pack --key` and embed the same value into `ECHO_WARRIOR_ASSET_KEY`
+- when `universal.key` is missing, the scripts warn and still write a verified unencrypted `data.pak`
+- runtime key discovery still accepts legacy `hwdruntime` for older local packs, but new release work should use `universal.key`
+
+`identity.pak` is different. It is always written with an explicit per-build key by release scripts.
 
 ## Pack Reading
 
@@ -191,6 +198,27 @@ flowchart LR
 - checksum validation
 
 The encryption protects against casual browsing, not against a determined user with the client binary.
+
+## Release Key Decision
+
+```mermaid
+flowchart TD
+    dist[dist script]
+    key{repo-root universal.key exists?}
+    encrypted[write encrypted data.pak]
+    embed[embed ECHO_WARRIOR_ASSET_KEY]
+    plain[write verified plain data.pak]
+    warn[warn during distribution]
+    verify[asset_pack --verify]
+    zip[release package]
+
+    dist --> key
+    key -- yes --> encrypted --> embed --> verify
+    key -- no --> warn --> plain --> verify
+    verify --> zip
+```
+
+That warning is intentional. Missing `universal.key` should not block local or internal packaging, but the distributor should notice that the resulting `data.pak` is readable without a key.
 
 ## Change Checklist
 

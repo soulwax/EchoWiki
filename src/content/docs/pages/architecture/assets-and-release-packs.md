@@ -102,6 +102,31 @@ Build and verify `data.pak`:
 cargo run --bin asset_pack -- --out data.pak --inventory-out asset_inventory.md --verify
 ```
 
+Build an encrypted `data.pak` explicitly:
+
+```powershell
+cargo run --bin asset_pack -- --key universal.key --out data.pak --inventory-out asset_inventory.md --verify
+```
+
+For full distribution, prefer the dist scripts because they also decide whether the release binary should embed `ECHO_WARRIOR_ASSET_KEY`.
+
+```mermaid
+flowchart TD
+    dist[dist script]
+    key{repo-root universal.key?}
+    encrypted[encrypted data.pak]
+    embedded[embed asset key in binary]
+    plain[unencrypted data.pak]
+    warn[warn distributor]
+    verify[verify inventory and bytes]
+
+    dist --> key
+    key -- yes --> encrypted --> embedded --> verify
+    key -- no --> warn --> plain --> verify
+```
+
+No key is allowed. It produces a verified plain `data.pak` and a warning during distribution. Use that knowingly, not by accident.
+
 Validate mod/content references:
 
 ```powershell

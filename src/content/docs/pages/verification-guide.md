@@ -84,7 +84,10 @@ For release packaging work:
 
 ```powershell
 cargo run --bin asset_pack -- --out data.pak --inventory-out asset_inventory.md --verify
+cargo run --bin asset_pack -- --key universal.key --out data.pak --inventory-out asset_inventory.md --verify
 ```
+
+The first command verifies a plain pack. The second verifies an encrypted pack using the current release key filename.
 
 The release scripts are the final packaging path:
 
@@ -108,6 +111,9 @@ flowchart TB
     leitmotif[Leitmotif package]
     soundgarden[soundgarden package]
     data[data pack]
+    key{universal.key?}
+    encrypted[encrypted data.pak]
+    plain[plain data.pak warning]
     identity[identity pack]
     choreo[choreo CLI]
     audio[audio CLI if available]
@@ -117,7 +123,9 @@ flowchart TB
     profile --> game
     profile --> leitmotif
     profile --> soundgarden
-    game --> data
+    game --> data --> key
+    key -- yes --> encrypted
+    key -- no --> plain
     game --> identity
     leitmotif --> choreo
     soundgarden --> audio

@@ -191,8 +191,10 @@ Key sources differ by pack:
 
 | Pack | Key behavior |
 | --- | --- |
-| `data.pak` | optional key from `hwdruntime`, `universal.key`, or embedded `ECHO_WARRIOR_ASSET_KEY` |
+| `data.pak` | release encryption uses repo-root `universal.key`; packaged runtime reads embedded `ECHO_WARRIOR_ASSET_KEY`; legacy `hwdruntime` is accepted only as a fallback for older local packs |
 | `identity.pak` | embedded `ECHO_WARRIOR_IDENTITY_KEY`, generated fresh by release packaging |
+
+If `universal.key` is not present during distribution, release scripts warn and produce a verified unencrypted `data.pak`. That package is still complete and playable, but the ordinary content pack is not obfuscated.
 
 The identity key is per release-script invocation. It is embedded into the release build and the loose key is not meant to be staged.
 
@@ -203,14 +205,19 @@ Release packaging should prove that the shipped packs match the runtime set.
 ```mermaid
 flowchart TD
     discover[discover_used_asset_paths]
+    key{universal.key exists?}
     identitydiscover[discover_identity_asset_paths]
     builddata[build data.pak]
+    warn[warn unencrypted data.pak]
     buildidentity[build identity.pak]
     verify[--verify byte comparison]
     inventory[inventory markdown]
     release[release zip]
 
-    discover --> builddata --> verify
+    discover --> key
+    key -- yes --> builddata
+    key -- no --> warn --> builddata
+    builddata --> verify
     identitydiscover --> buildidentity --> verify
     verify --> inventory
     verify --> release
