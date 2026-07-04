@@ -125,7 +125,9 @@ flowchart TD
     key -- no --> warn --> plain --> verify
 ```
 
-No key is allowed. It produces a verified plain `data.pak` and a warning during distribution. Use that knowingly, not by accident.
+No key is allowed. `universal.key` is only required for encrypted `data.pak`;
+omitting it produces a verified plain pack and a warning during distribution.
+Use that knowingly, not by accident.
 
 Validate mod/content references:
 

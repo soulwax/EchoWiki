@@ -89,6 +89,11 @@ cargo run --bin asset_pack -- --key universal.key --out data.pak --inventory-out
 
 The first command verifies a plain pack. The second verifies an encrypted pack using the current release key filename.
 
+For encrypted source-built release packages, `universal.key` is required:
+without it you can still run local compile checks and plain-pack checks, but
+you have not verified the encrypted `data.pak` path the release binary must
+decrypt. The no-key path remains valid when an unencrypted pack is intended.
+
 The release scripts are the final packaging path:
 
 ```powershell
@@ -113,7 +118,7 @@ flowchart TB
     data[data pack]
     key{universal.key?}
     encrypted[encrypted data.pak]
-    plain[plain data.pak warning]
+    plain[plain data.pak]
     identity[identity pack]
     choreo[choreo CLI]
     audio[audio CLI if available]

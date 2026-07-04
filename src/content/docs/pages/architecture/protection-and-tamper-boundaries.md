@@ -191,10 +191,12 @@ Key sources differ by pack:
 
 | Pack | Key behavior |
 | --- | --- |
-| `data.pak` | release encryption uses repo-root `universal.key`; packaged runtime reads embedded `ECHO_WARRIOR_ASSET_KEY`; legacy `hwdruntime` is accepted only as a fallback for older local packs |
+| `data.pak` | optional release encryption uses repo-root `universal.key`; packaged runtime reads embedded `ECHO_WARRIOR_ASSET_KEY` when present; legacy `hwdruntime` is accepted only as a fallback for older local packs |
 | `identity.pak` | embedded `ECHO_WARRIOR_IDENTITY_KEY`, generated fresh by release packaging |
 
-If `universal.key` is not present during distribution, release scripts warn and produce a verified unencrypted `data.pak`. That package is still complete and playable, but the ordinary content pack is not obfuscated.
+If `universal.key` is not present, the release scripts warn and produce a
+verified plain `data.pak`. The package is still complete and playable, but
+ordinary content is readable without a key.
 
 The identity key is per release-script invocation. It is embedded into the release build and the loose key is not meant to be staged.
 
@@ -208,7 +210,7 @@ flowchart TD
     key{universal.key exists?}
     identitydiscover[discover_identity_asset_paths]
     builddata[build data.pak]
-    warn[warn unencrypted data.pak]
+    plain[verified plain data.pak]
     buildidentity[build identity.pak]
     verify[--verify byte comparison]
     inventory[inventory markdown]
@@ -216,7 +218,7 @@ flowchart TD
 
     discover --> key
     key -- yes --> builddata
-    key -- no --> warn --> builddata
+    key -- no --> plain --> builddata
     builddata --> verify
     identitydiscover --> buildidentity --> verify
     verify --> inventory

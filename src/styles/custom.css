@@ -88,17 +88,130 @@
   line-height: 1.45;
 }
 
-.mermaid {
-  margin: 1.5rem 0;
-  padding: 1rem;
+.mermaid,
+.mermaid-frame,
+pre:has(> svg[id^='mermaid-']) {
+  --ew-diagram-bg: color-mix(in srgb, var(--sl-color-gray-6) 76%, transparent);
+  --ew-diagram-border: color-mix(in srgb, var(--sl-color-accent) 34%, transparent);
+  --ew-diagram-line: #8aa09f;
+  --ew-diagram-node: #fff7ed;
+  --ew-diagram-node-2: #e8f4ef;
+  --ew-diagram-node-3: #eef4fb;
+  --ew-diagram-text: #172026;
+  --ew-diagram-accent: #b8752d;
+  --ew-diagram-teal: #3d7c72;
+  --ew-diagram-blue: #517aa5;
+  --ew-diagram-warn: #c28a2c;
+  margin: 1.65rem 0;
+  padding: clamp(0.85rem, 1.4vw, 1.25rem);
   overflow-x: auto;
-  border: 1px solid color-mix(in srgb, var(--sl-color-accent) 30%, transparent);
+  border: 1px solid var(--ew-diagram-border);
   border-radius: 8px;
-  background: color-mix(in srgb, var(--sl-color-gray-6) 72%, transparent);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 7rem),
+    radial-gradient(circle at top left, color-mix(in srgb, var(--sl-color-accent) 15%, transparent), transparent 18rem),
+    var(--ew-diagram-bg);
+  box-shadow:
+    0 16px 36px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  scrollbar-color: color-mix(in srgb, var(--sl-color-accent) 55%, transparent) transparent;
 }
 
-:root[data-theme='light'] .mermaid {
-  background: color-mix(in srgb, var(--sl-color-gray-6) 44%, white);
+:root[data-theme='light'] :is(.mermaid, .mermaid-frame, pre:has(> svg[id^='mermaid-'])) {
+  --ew-diagram-bg: color-mix(in srgb, var(--sl-color-gray-6) 42%, white);
+  --ew-diagram-border: color-mix(in srgb, var(--sl-color-accent) 28%, var(--sl-color-gray-5));
+  box-shadow:
+    0 18px 42px rgba(38, 50, 56, 0.09),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+.mermaid svg,
+.mermaid-frame svg,
+pre > svg[id^='mermaid-'] {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin-inline: auto;
+  overflow: visible;
+}
+
+:is(.mermaid, .mermaid-frame, pre:has(> svg[id^='mermaid-'])) :is(.node rect, .node polygon, .node circle, .node ellipse) {
+  filter: drop-shadow(0 7px 12px rgba(15, 23, 42, 0.12));
+  stroke-width: 1.35px !important;
+}
+
+:is(.mermaid, .mermaid-frame, pre:has(> svg[id^='mermaid-'])) .node:nth-of-type(3n + 1) :is(rect, polygon, circle, ellipse) {
+  fill: var(--ew-diagram-node) !important;
+  stroke: var(--ew-diagram-accent) !important;
+}
+
+:is(.mermaid, .mermaid-frame, pre:has(> svg[id^='mermaid-'])) .node:nth-of-type(3n + 2) :is(rect, polygon, circle, ellipse) {
+  fill: var(--ew-diagram-node-2) !important;
+  stroke: var(--ew-diagram-teal) !important;
+}
+
+:is(.mermaid, .mermaid-frame, pre:has(> svg[id^='mermaid-'])) .node:nth-of-type(3n) :is(rect, polygon, circle, ellipse) {
+  fill: var(--ew-diagram-node-3) !important;
+  stroke: var(--ew-diagram-blue) !important;
+}
+
+:is(.mermaid, .mermaid-frame, pre:has(> svg[id^='mermaid-'])) :is(.nodeLabel, .edgeLabel, .label, .messageText, .actor, .stateLabel, .loopText, .noteText) {
+  color: var(--ew-diagram-text) !important;
+  fill: var(--ew-diagram-text) !important;
+  font-family: var(--sl-font) !important;
+  letter-spacing: 0 !important;
+}
+
+:is(.mermaid, .mermaid-frame, pre:has(> svg[id^='mermaid-'])) .edgeLabel {
+  padding: 0.12rem 0.3rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ew-diagram-bg) 70%, white) !important;
+}
+
+:is(.mermaid, .mermaid-frame, pre:has(> svg[id^='mermaid-'])) :is(.edgePath path, .flowchart-link, .messageLine0, .messageLine1, .transition, .relation) {
+  stroke: var(--ew-diagram-line) !important;
+  stroke-width: 1.35px !important;
+}
+
+:is(.mermaid, .mermaid-frame, pre:has(> svg[id^='mermaid-'])) :is(marker path, marker polygon) {
+  fill: var(--ew-diagram-line) !important;
+  stroke: var(--ew-diagram-line) !important;
+}
+
+:is(.mermaid, .mermaid-frame, pre:has(> svg[id^='mermaid-'])) .cluster rect {
+  fill: color-mix(in srgb, var(--ew-diagram-node-2) 58%, transparent) !important;
+  stroke: color-mix(in srgb, var(--ew-diagram-teal) 72%, transparent) !important;
+  stroke-dasharray: 4 4;
+  rx: 8px;
+}
+
+:is(.mermaid, .mermaid-frame, pre:has(> svg[id^='mermaid-'])) :is(.actor, .actor-man line) {
+  stroke: var(--ew-diagram-accent) !important;
+}
+
+:is(.mermaid, .mermaid-frame, pre:has(> svg[id^='mermaid-'])) .actor > rect,
+:is(.mermaid, .mermaid-frame, pre:has(> svg[id^='mermaid-'])) rect.actor {
+  fill: var(--ew-diagram-node) !important;
+  stroke: var(--ew-diagram-accent) !important;
+  filter: drop-shadow(0 7px 12px rgba(15, 23, 42, 0.1));
+}
+
+:is(.mermaid, .mermaid-frame, pre:has(> svg[id^='mermaid-'])) :is(.note, .noteBox) {
+  fill: #fff3c7 !important;
+  stroke: var(--ew-diagram-warn) !important;
+}
+
+:is(.mermaid, .mermaid-frame)[data-diagram='sequence'] svg,
+:is(.mermaid, .mermaid-frame)[data-diagram='state'] svg {
+  min-width: min(42rem, 100%);
+}
+
+:is(.mermaid, .mermaid-frame)[data-diagram='quadrant'] svg {
+  max-width: min(100%, 42rem);
+}
+
+.mermaid-rendered {
+  line-height: 1.35;
 }
 
 .sl-markdown-content table {

@@ -57,12 +57,16 @@ flowchart LR
 | `write_encrypted_pack(pack, key, path)` | Explicit encrypted write helper. |
 | `build_pack_from_paths(root, paths)` | Reads source files and builds an `AssetPack` from discovered paths. |
 
-`data.pak` is optionally encrypted:
+`data.pak` is optionally encrypted. The current release key filename is
+repo-root `universal.key`:
 
 - release scripts look for repo-root `universal.key`
 - when `universal.key` exists, the scripts pass it to `asset_pack --key` and embed the same value into `ECHO_WARRIOR_ASSET_KEY`
 - when `universal.key` is missing, the scripts warn and still write a verified unencrypted `data.pak`
 - runtime key discovery still accepts legacy `hwdruntime` for older local packs, but new release work should use `universal.key`
+
+The no-key path is always available. It produces a warning and a verified plain
+pack.
 
 `identity.pak` is different. It is always written with an explicit per-build key by release scripts.
 
@@ -218,7 +222,8 @@ flowchart TD
     verify --> zip
 ```
 
-That warning is intentional. Missing `universal.key` should not block local or internal packaging, but the distributor should notice that the resulting `data.pak` is readable without a key.
+That warning is intentional. `universal.key` is required only for encrypted
+`data.pak`; omitting it produces a readable plain pack.
 
 ## Change Checklist
 

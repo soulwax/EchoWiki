@@ -43,7 +43,11 @@ Responsibilities:
 - verify packed bytes against source files
 - reject unsafe unpack paths
 
-For distribution, `universal.key` is the current optional key file for `data.pak`. If it is missing, the dist scripts warn and stage a verified unencrypted pack.
+For encrypted source-built release packages, repo-root `universal.key` is the
+key file for `data.pak`. The dist build embeds the same value into
+the binary through `ECHO_WARRIOR_ASSET_KEY` so the packaged runtime can decrypt
+the pack. Omitting `--key` remains valid when an unencrypted plain pack is
+intended.
 
 ```mermaid
 flowchart LR

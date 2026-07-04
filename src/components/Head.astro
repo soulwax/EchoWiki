@@ -11,22 +11,93 @@ const { head } = Astro.locals.starlightRoute;
     startOnLoad: false,
     theme: 'base',
     securityLevel: 'strict',
+    flowchart: {
+      curve: 'basis',
+      diagramPadding: 18,
+      nodeSpacing: 42,
+      rankSpacing: 52,
+      htmlLabels: true,
+    },
+    sequence: {
+      diagramMarginX: 34,
+      diagramMarginY: 22,
+      actorMargin: 52,
+      boxMargin: 12,
+      messageMargin: 42,
+      mirrorActors: false,
+      showSequenceNumbers: false,
+    },
+    state: {
+      dividerMargin: 12,
+      sizeUnit: 6,
+    },
+    quadrantChart: {
+      chartWidth: 560,
+      chartHeight: 420,
+      quadrantPadding: 22,
+    },
     themeVariables: {
+      background: 'transparent',
+      mainBkg: '#fff7ed',
       primaryColor: '#fff7ed',
       primaryTextColor: '#172026',
-      primaryBorderColor: '#c47a30',
-      lineColor: '#5f6f73',
-      secondaryColor: '#e9f5f1',
-      tertiaryColor: '#f8fafc',
+      primaryBorderColor: '#b8752d',
+      secondaryColor: '#e8f4ef',
+      secondaryBorderColor: '#3d7c72',
+      tertiaryColor: '#eef4fb',
+      tertiaryBorderColor: '#517aa5',
+      lineColor: '#667c80',
+      edgeLabelBackground: '#f8fafc',
+      clusterBkg: '#f5faf8',
+      clusterBorder: '#9eb8b2',
+      noteBkgColor: '#fff3c7',
+      noteBorderColor: '#c28a2c',
+      noteTextColor: '#172026',
+      actorBkg: '#fff7ed',
+      actorBorder: '#b8752d',
+      actorTextColor: '#172026',
+      actorLineColor: '#8aa09f',
+      signalColor: '#30434a',
+      signalTextColor: '#172026',
+      labelBoxBkgColor: '#f8fafc',
+      labelBoxBorderColor: '#b8752d',
+      labelTextColor: '#172026',
       fontFamily: 'Inter, ui-sans-serif, system-ui, sans-serif',
+      fontSize: '15px',
     },
   });
+
+  function diagramKind(source: string) {
+    const trimmed = source.trimStart();
+    if (trimmed.startsWith('sequenceDiagram')) return 'sequence';
+    if (trimmed.startsWith('stateDiagram')) return 'state';
+    if (trimmed.startsWith('quadrantChart')) return 'quadrant';
+    if (trimmed.startsWith('flowchart')) return 'flowchart';
+    return 'diagram';
+  }
+
+  function markRenderedDiagrams(kinds: string[]) {
+    document.querySelectorAll<SVGElement>('svg[id^="mermaid-"]:not([data-ew-framed])').forEach((svg, index) => {
+      const frame = document.createElement('div');
+      frame.className = 'mermaid-frame mermaid-rendered';
+      frame.dataset.diagram = kinds[index] ?? 'diagram';
+      svg.dataset.ewFramed = 'true';
+      svg.setAttribute('role', 'img');
+      svg.setAttribute('focusable', 'false');
+      svg.parentNode?.insertBefore(frame, svg);
+      frame.appendChild(svg);
+    });
+  }
 
   async function renderMermaid() {
     const diagrams = document.querySelectorAll<HTMLElement>(
       'pre.mermaid:not([data-processed]), pre[data-language="mermaid"]:not([data-processed])',
     );
-    if (!diagrams.length) return;
+    if (!diagrams.length) {
+      markRenderedDiagrams([]);
+      return;
+    }
+    const kinds: string[] = [];
     for (const diagram of diagrams) {
       const copiedCode = diagram
         .closest('.expressive-code')
@@ -35,8 +106,14 @@ const { head } = Astro.locals.starlightRoute;
       if (copiedCode) {
         diagram.textContent = copiedCode.replaceAll('\x7f', '\n');
       }
+      const kind = diagramKind(diagram.textContent ?? '');
+      diagram.dataset.diagram = kind;
+      kinds.push(kind);
     }
     await mermaid.run({ nodes: Array.from(diagrams) });
+    markRenderedDiagrams(kinds);
+    requestAnimationFrame(() => markRenderedDiagrams(kinds));
+    window.setTimeout(() => markRenderedDiagrams([]), 250);
   }
 
   window.addEventListener('load', renderMermaid);

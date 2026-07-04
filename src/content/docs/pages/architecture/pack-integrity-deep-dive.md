@@ -194,7 +194,12 @@ flowchart TB
     identity --> embeddedidentity --> readpack
 ```
 
-`data.pak` supports key files for development and embedded asset keys for packaged release builds. New release packaging uses `universal.key`; `hwdruntime` remains only as a legacy runtime fallback so older local encrypted packs can still be read.
+`data.pak` supports key files for development and embedded asset keys for
+packaged release builds. When repo-root `universal.key` exists, release
+packaging encrypts `data.pak` and embeds the same value into the built binary.
+When it is missing, packaging warns and writes a verified plain pack. `hwdruntime`
+remains only as a legacy runtime fallback so older local encrypted packs can
+still be read.
 
 ## Release Encryption Decision
 
@@ -204,14 +209,14 @@ flowchart TD
     key{universal.key present?}
     encrypt[encrypt data.pak with UniversalKey]
     embed[embed same key in ECHO_WARRIOR_ASSET_KEY]
-    plain[write unencrypted data.pak]
-    warning[print distribution warning]
+    plain[write verified plain data.pak]
+    note[no embedded asset key]
     verify[verify pack contents]
     ship[ship package]
 
     release --> key
     key -- yes --> encrypt --> embed --> verify
-    key -- no --> warning --> plain --> verify
+    key -- no --> note --> plain --> verify
     verify --> ship
 ```
 
