@@ -51,6 +51,28 @@ flowchart TB
 
 Important boundary: `src/main.ts` renders and coordinates. It should not become the owner of manifest state. `AudioDoc` owns that.
 
+## Packaging Boundary
+
+Soundgarden is now part of the dist suite, but the packaged app still depends on the same CLI boundary as the desktop shell.
+
+```mermaid
+flowchart TB
+    dist[dist script]
+    app[soundgarden app]
+    cli[audio CLI]
+    missing{CLI present}
+    package[soundgarden zip]
+    warning[warning and AUDIO_BIN hint]
+
+    dist --> app
+    dist --> cli
+    cli --> missing
+    missing -- yes --> package
+    missing -- no --> warning --> package
+```
+
+The package can exist before the full authoring loop is ready. Contributors should still treat `audio validate`, `convert`, `schema`, `assets`, and `scan` as the completion contract.
+
 ## Bridge Calls
 
 ```mermaid

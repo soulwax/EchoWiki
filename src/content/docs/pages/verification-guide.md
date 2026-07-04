@@ -4,6 +4,27 @@ title: "Verification Guide"
 
 This page helps contributors choose the right check before calling a change done.
 
+```mermaid
+flowchart TD
+    change[Change]
+    rust[Rust code]
+    content[Content or modding]
+    runtime[Runtime behavior]
+    release[Release packaging]
+    wiki[Wiki docs]
+    fast[fast compile or test]
+    modcheck[mod_check and asset dry run]
+    smoke[cargo run smoke]
+    dist[dist script]
+    wikibuild[wiki audit and build]
+
+    change --> rust --> fast
+    change --> content --> modcheck
+    change --> runtime --> smoke
+    change --> release --> dist
+    change --> wiki --> wikibuild
+```
+
 ## Fast Checks
 
 | Command | Use when |
@@ -77,11 +98,45 @@ or:
 bash scripts/dist.sh
 ```
 
+As of the current release pipeline, the dist scripts ship a suite, not just the game:
+
+```mermaid
+flowchart TB
+    dist[scripts dist]
+    profile[speed_trace cargo profile]
+    game[EchoWarrior package]
+    leitmotif[Leitmotif package]
+    soundgarden[soundgarden package]
+    data[data pack]
+    identity[identity pack]
+    choreo[choreo CLI]
+    audio[audio CLI if available]
+    warning[audio CLI warning while branch is unmerged]
+
+    dist --> profile
+    profile --> game
+    profile --> leitmotif
+    profile --> soundgarden
+    game --> data
+    game --> identity
+    leitmotif --> choreo
+    soundgarden --> audio
+    soundgarden --> warning
+```
+
+Use the game-only escape hatch only when the studio apps are irrelevant to the change:
+
+```powershell
+pwsh -NoLogo -File scripts/dist.ps1 -SkipTools
+bash scripts/dist.sh --skip-tools
+```
+
 ## Wiki Checks
 
 For Starlight pages:
 
 ```powershell
+npm run wiki:audit
 npm run build
 npm run dev
 ```
@@ -93,7 +148,19 @@ Check:
 - home page loads
 - sidebar includes the page
 - page links resolve
+- Mermaid diagrams render as diagrams, not raw code blocks
 - images are inside the wiki repository so Vercel can serve them
+
+```mermaid
+flowchart LR
+    markdown[Markdown page]
+    audit[wiki audit]
+    astro[Astro build]
+    preview[local preview]
+    browser[Browser screenshot or visual check]
+
+    markdown --> audit --> astro --> preview --> browser
+```
 
 ## When A Check Fails
 

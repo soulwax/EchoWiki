@@ -23,6 +23,29 @@ flowchart TB
 
 `logging::init()` sends logs to stderr and to the in-memory ring buffer used by the debug overlay.
 
+## Ship Trace Profile
+
+The dist scripts build shipped binaries with the `speed_trace` cargo profile: release-grade optimization plus out-of-line debug information for external profilers.
+
+```mermaid
+flowchart TB
+    speed[speed_trace profile]
+    release[release optimizations]
+    debuginfo[full debug info]
+    split[split debuginfo packed]
+    binary[lean staged binary]
+    symbols[PDB or DWARF side file]
+    traces[ETW WPA Tracy Superluminal perf]
+
+    speed --> release --> binary
+    speed --> debuginfo --> split
+    split --> symbols
+    binary --> traces
+    symbols --> traces
+```
+
+The symbol side files stay in `target/` on the build machine and are not staged into the zip packages. That keeps package size stable while preserving trace readability.
+
 ## Performance Scope Flow
 
 ```mermaid
@@ -72,6 +95,21 @@ flowchart TD
     visible -- yes --> isolate
     visible -- no --> scope --> isolate
     isolate --> ownership --> fix --> verify
+```
+
+For release-performance investigations, use the packaged binary path:
+
+```mermaid
+flowchart TB
+    dist[run dist script]
+    package[launch shipped package]
+    capture[capture ETW WPA Tracy or perf trace]
+    symbolize[match trace with target side symbols]
+    hot[identify the hot area]
+    fix[focused fix]
+    compare[rebuild and compare]
+
+    dist --> package --> capture --> symbolize --> hot --> fix --> compare
 ```
 
 ## Contributor Guidance

@@ -104,6 +104,27 @@ sequenceDiagram
 
 The browser-side bridge degrades when Tauri is unavailable. The native side degrades when `CHOREO_BIN` is missing by returning a clear error string. Both choices matter: authors should see a problem, not lose work.
 
+## Packaging Boundary
+
+The dist scripts stage Leitmotif with the `choreo` CLI it drives.
+
+```mermaid
+flowchart LR
+    dist[dist script]
+    app[leitmotif executable]
+    cli[choreo executable]
+    package[Leitmotif zip]
+    launch[desktop app launch]
+    commands[validate convert schema preview graph]
+
+    dist --> app --> package
+    dist --> cli --> package
+    package --> launch --> commands
+    cli --> commands
+```
+
+On Windows, the colocated CLI resolves from the application directory. On Linux and macOS, the dist script prints the `CHOREO_BIN` hint that points the app at the staged CLI.
+
 ## Suggestions
 
 ```mermaid

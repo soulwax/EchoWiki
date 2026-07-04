@@ -4,6 +4,19 @@ title: "Contribution Workflow"
 
 This is the practical path from idea to pull request.
 
+```mermaid
+flowchart LR
+    intent[Intent]
+    boundary[Boundary]
+    slice[Small slice]
+    modding[Modding check]
+    verify[Verification]
+    docs[Docs]
+    pr[PR shape]
+
+    intent --> boundary --> slice --> modding --> verify --> docs --> pr
+```
+
 ## 1. Start With Intent
 
 Before editing, write down the type of change:
@@ -98,6 +111,28 @@ cargo run
 
 See [Verification Guide](../verification-guide/) for a fuller matrix.
 
+```mermaid
+flowchart TD
+    changed[Files changed]
+    assets{Assets or Mods}
+    rust{Rust}
+    tools{Dist or tools}
+    wiki{Wiki}
+    pak[asset_pack dry run]
+    cargo[cargo check or test]
+    dist[dist script or tool build]
+    wikicheck[wiki audit and build]
+
+    changed --> assets
+    changed --> rust
+    changed --> tools
+    changed --> wiki
+    assets -- yes --> pak
+    rust -- yes --> cargo
+    tools -- yes --> dist
+    wiki -- yes --> wikicheck
+```
+
 ## 6. Document The Change
 
 Update docs in the same contribution when behavior changes.
@@ -108,6 +143,20 @@ Common destinations:
 - `Docs/TECHNICAL_NOTES.md` for architecture changes
 - `Docs/Wiki` submodule for contributor-facing main-code guidance
 - `CHANGELOG.md` for completed changes and version bumps
+
+```mermaid
+flowchart LR
+    behavior[Behavior changed]
+    modder[Modder surface]
+    architecture[Architecture or workflow]
+    contributor[Contributor route]
+    release[Release impact]
+
+    behavior --> modder --> moddingdoc[Docs MODDING]
+    behavior --> architecture --> technical[Technical notes]
+    behavior --> contributor --> wiki[Docs Wiki]
+    behavior --> release --> changelog[CHANGELOG]
+```
 
 ## 7. Pull Request Shape
 

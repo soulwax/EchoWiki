@@ -11,12 +11,14 @@ flowchart TB
     cutter[sprite_cutter]
     modcheck[mod_check]
     choreo[choreo]
+    audio[audio planned]
     shared[shared library modules]
 
     contributor --> assetpack --> shared
     contributor --> cutter --> shared
     contributor --> modcheck --> shared
     contributor --> choreo --> shared
+    contributor -. expected by Soundgarden .-> audio -. not in current main .-> shared
 ```
 
 ## `asset_pack`
@@ -130,12 +132,62 @@ flowchart LR
     schema[schema]
     convert[convert]
     preview[preview]
-    graph[graph]
+    storygraph[graph]
     model[choreography model]
 
     scenes --> validate --> model
     scenes --> convert --> model
     scenes --> preview --> model
-    scenes --> graph --> model
+    scenes --> storygraph --> model
     model --> schema
 ```
+
+## Release Scripts
+
+`scripts/dist.ps1` and `scripts/dist.sh` are the suite packaging front doors. They are not `src/bin` tools, but contributors should think of them as operational tools because they prove the shipped layout.
+
+```mermaid
+flowchart TB
+    dist[dist script]
+    profile[cargo build<br/>profile speed_trace<br/>locked]
+
+    subgraph gamepkg[EchoWarrior package]
+        game[EchoWarrior exe]
+        assetpack[data.pak<br/>identity.pak]
+    end
+
+    subgraph leitpkg[Leitmotif package]
+        leitmotif[Leitmotif Tauri build]
+        choreo[choreo CLI]
+    end
+
+    subgraph soundpkg[soundgarden package]
+        soundgarden[soundgarden Tauri build]
+        audio{audio CLI present}
+        warning[AUDIO_BIN warning<br/>when missing]
+    end
+
+    dist --> profile
+    profile --> game
+    profile --> choreo
+    profile -. when available .-> audio
+    dist --> assetpack
+    dist --> leitmotif
+    dist --> soundgarden
+    audio -- yes --> soundgarden
+    audio -- no --> warning --> soundgarden
+```
+
+Current launch commands:
+
+```powershell
+pwsh -NoLogo -File scripts/dist.ps1
+pwsh -NoLogo -File scripts/dist.ps1 -SkipTools
+```
+
+```sh
+bash scripts/dist.sh
+bash scripts/dist.sh --skip-tools
+```
+
+The default path stages EchoWarrior, Leitmotif, and soundgarden. The skip-tools path creates a game-only package.

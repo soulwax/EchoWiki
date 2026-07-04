@@ -83,6 +83,24 @@ In the current main checkout, `src/bin/audio.rs` is not present. That means:
 - `npm run tauri:dev` requires an `AUDIO_BIN` that does not currently build from this main checkout.
 - Open/save/export through the desktop shell is blocked until the CLI is implemented or restored.
 
+The release scripts know about this incomplete state:
+
+```mermaid
+flowchart TD
+    dist[dist scripts]
+    build[soundgarden Tauri build]
+    audio{audio CLI built}
+    stage[stage soundgarden package]
+    colocate[co-stage audio next to app]
+    warn[stage with warning and AUDIO_BIN note]
+
+    dist --> build --> audio
+    audio -- yes --> colocate --> stage
+    audio -- no --> warn --> stage
+```
+
+So soundgarden can now appear in the suite package even while the game-side `audio` CLI is still pending in this checkout. Treat that as a packaging convenience, not as proof that the full editor loop is complete.
+
 ## Repository Wiring Note
 
 `tools/soundgarden` exists locally, but the parent repo currently reports:
@@ -109,4 +127,3 @@ Risky current tasks:
 - Adding editor-only state that cannot round-trip through TOML.
 - Teaching runtime code to bypass manifests.
 - Storing Gemini keys in the repository.
-
