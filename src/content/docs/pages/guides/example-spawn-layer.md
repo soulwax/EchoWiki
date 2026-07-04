@@ -61,8 +61,8 @@ The hook returns a command table list. Rust applies the commands after the scrip
 
 ```mermaid
 sequenceDiagram
-    participant Base as spawn.lua
-    participant Layer as spawn.d/late_judge.lua
+    participant Base as spawn script
+    participant Layer as spawn layer file
     participant Lua as ScriptEngine
     participant Runtime as Runtime
 

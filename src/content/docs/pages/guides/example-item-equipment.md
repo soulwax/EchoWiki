@@ -66,7 +66,7 @@ Item effects are not the same as upgrade picks. Upgrade commands apply during th
 
 ```mermaid
 sequenceDiagram
-    participant TOML as items.toml
+    participant TOML as items manifest
     participant Loader as data loader
     participant Save as progression save
     participant Runtime as runtime start

@@ -217,4 +217,3 @@ In web-only mode:
 - dev-only `window.__lmLoad(json)` can load sample data for visual checks
 
 For real file open, save, preview, graph, validate, and export work, run the Tauri app with `CHOREO_BIN` set.
-

@@ -114,8 +114,8 @@ Use this when the game CLI exposes a new authoritative operation that the editor
 ```mermaid
 sequenceDiagram
     participant UI as UI module
-    participant Bridge as src/bridge.ts
-    participant Shell as src-tauri/src/main.rs
+    participant Bridge as TypeScript bridge
+    participant Shell as Tauri shell
     participant CLI as choreo
 
     UI->>Bridge: typed wrapper
@@ -158,4 +158,3 @@ flowchart LR
 ```
 
 The component should describe what happened. `main.ts` decides how that updates the document, refreshes selection, and rebuilds preview.
-

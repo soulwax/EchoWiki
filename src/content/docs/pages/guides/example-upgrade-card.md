@@ -78,10 +78,10 @@ This example reuses the `deep_roots` icon so there is no new asset to package. A
 
 ```mermaid
 sequenceDiagram
-    participant TOML as upgrades.toml
-    participant Data as src/data loader
-    participant Offer as offer director/runtime cards
-    participant Command as GameCommand::ModifyStat
+    participant TOML as upgrades manifest
+    participant Data as data loader
+    participant Offer as offer director cards
+    participant Command as ModifyStat command
     participant Runtime as player stat application
 
     TOML->>Data: load upgrade definitions

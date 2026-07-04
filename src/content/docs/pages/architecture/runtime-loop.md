@@ -12,9 +12,9 @@ At the highest level, each frame is:
 sequenceDiagram
     participant MQ as Macroquad
     participant RT as PrototypeRuntime
-    participant Input as runtime/input
-    participant Game as src/game helpers
-    participant UI as src/ui
+    participant Input as runtime input
+    participant Game as game helpers
+    participant UI as UI models
     participant Draw as runtime draw paths
 
     MQ->>RT: next frame

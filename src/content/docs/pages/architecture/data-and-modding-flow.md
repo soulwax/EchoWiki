@@ -37,9 +37,9 @@ Data loaders should:
 
 ```mermaid
 sequenceDiagram
-    participant File as Assets/Data/*.toml
-    participant Pack as asset_pack::read_to_string
-    participant Loader as src/data loader
+    participant File as Data TOML file
+    participant Pack as asset pack read string
+    participant Loader as data loader
     participant Runtime as PrototypeRuntime
     participant Tool as mod_check
 

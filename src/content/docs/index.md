@@ -53,13 +53,16 @@ It deliberately does not document every `src/game`, `src/runtime`, `src/data`, `
 - [Tiny Moddable Feature](pages/guides/tiny-moddable-feature/) for a slow, guided first implementation path.
 - [Architecture Chapter](pages/architecture/) for the big picture first, then progressively deeper details.
 - [Inside The Runtime](pages/architecture/inside-the-runtime/) when you want to trace how boot, modes, commands, simulation, and drawing fit together.
+- [Runtime Data Command Pipeline](pages/architecture/runtime-data-command-pipeline/) for how TOML, YAML, Lua, choreography, events, and commands converge.
 - [Protection And Tamper Boundaries](pages/architecture/protection-and-tamper-boundaries/) for what the game protects, what remains moddable, and what is deliberately not DRM.
+- [Pack Integrity Deep Dive](pages/architecture/pack-integrity-deep-dive/) when release verification or pack keys are involved.
 - [Leitmotif](pages/leitmotif/) if you want to work on the choreography authoring app.
 - [Soundgarden](pages/soundgarden/) if you want to work on audio manifests and the audio studio.
 - [Main Code Map](pages/main-code-map/) for a file-by-file reference to the main Rust files.
 - [Assets And Packaging](pages/assets-and-packaging/) before changing runtime asset discovery or release packs.
 - [Asset Pack Reference](pages/asset-pack-reference/) for the public pack API and read order.
 - [CLI Tools](pages/cli-tools/) before using `asset_pack`, `sprite_cutter`, `mod_check`, or `choreo`.
+- [Wiki Automation](pages/wiki-automation/) before adding larger page groups or graph-heavy architecture chapters.
 
 ## Contributor Promise
 

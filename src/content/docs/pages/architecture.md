@@ -8,13 +8,27 @@ The goal is not to memorize every file. The goal is to know where a change belon
 
 ## Chapter Path
 
+```mermaid
+flowchart TD
+    basics[Basics]
+    runtime[Runtime internals]
+    data[Data and commands]
+    packs[Assets, packs, protection]
+    systems[Gameplay systems]
+    quality[Quality and evolution]
+
+    basics --> runtime --> data --> packs --> systems --> quality
+```
+
 1. [Fundamentals](fundamentals/): the shortest possible architecture map.
 2. [Module Boundaries](module-boundaries/): which folder owns which kind of work.
 3. [Runtime Loop](runtime-loop/): how the Macroquad prototype advances a frame.
 3A. [Inside The Runtime](inside-the-runtime/): the deeper boot, mode, update, command, and draw flow.
+3B. [Runtime Data Command Pipeline](runtime-data-command-pipeline/): how data, Lua, choreography, events, and commands converge.
 4. [Data And Modding Flow](data-and-modding-flow/): how TOML, YAML, and Lua become game behavior.
 5. [Assets And Release Packs](assets-and-release-packs/): why loose files and `data.pak` both matter.
 5A. [Protection And Tamper Boundaries](protection-and-tamper-boundaries/): what the game protects, what remains moddable, and why this is not DRM.
+5B. [Pack Integrity Deep Dive](pack-integrity-deep-dive/): the pack format, key resolution, verification checks, and failure paths.
 6. [Choreography](choreography/): the single authored-beat engine.
 7. [Extension Patterns](extension-patterns/): where to add new behavior safely.
 8. [Commands And Events](commands-and-events/): how scripts, scenes, upgrades, runtime, and logs communicate.
@@ -81,9 +95,11 @@ EchoWarrior is built to keep content easy to modify while keeping core rules tes
 | where a module belongs | [Module Boundaries](module-boundaries/) |
 | frame update/drawing behavior | [Runtime Loop](runtime-loop/) |
 | understanding how the game really runs inside | [Inside The Runtime](inside-the-runtime/) |
+| tracing data into commands and runtime effects | [Runtime Data Command Pipeline](runtime-data-command-pipeline/) |
 | TOML/YAML/Lua content | [Data And Modding Flow](data-and-modding-flow/) |
 | release asset inclusion | [Assets And Release Packs](assets-and-release-packs/) |
 | tamper/protection boundaries | [Protection And Tamper Boundaries](protection-and-tamper-boundaries/) |
+| pack format and verification mechanics | [Pack Integrity Deep Dive](pack-integrity-deep-dive/) |
 | story beats, movement beats, scenes | [Choreography](choreography/) |
 | adding a new capability | [Extension Patterns](extension-patterns/) |
 | adding Lua/choreography/upgrades behavior | [Commands And Events](commands-and-events/) |

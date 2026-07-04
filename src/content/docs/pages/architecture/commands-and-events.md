@@ -48,7 +48,7 @@ Commands protect these boundaries:
 
 ```mermaid
 sequenceDiagram
-    participant Source as Lua / Choreography / Data
+    participant Source as Lua Choreography Data
     participant Command as GameCommand
     participant Runtime as PrototypeRuntime
     participant Systems as Runtime systems

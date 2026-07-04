@@ -39,8 +39,8 @@ The goal is not to erase runtime. The goal is to keep runtime focused on renderi
 sequenceDiagram
     participant Runtime as Runtime owner
     participant Bridge as Narrow bridge
-    participant Pure as Pure model/system
-    participant Tests as Tests/tools
+    participant Pure as Pure model system
+    participant Tests as Tests and tools
 
     Runtime->>Bridge: expose minimal state
     Bridge->>Pure: update/query pure model

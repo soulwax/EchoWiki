@@ -71,7 +71,7 @@ Macroquad currently accepts `.ogg` and `.wav` here. Do not add `.mp3` runtime au
 sequenceDiagram
     participant RT as PrototypeRuntime
     participant Track as LoopingTrack
-    participant Manifest as music.toml
+    participant Manifest as music manifest
     participant Audio as Macroquad audio
 
     RT->>Track: switch_to(defs, track_id)

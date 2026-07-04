@@ -56,7 +56,7 @@ Important boundary: `src/main.ts` renders and coordinates. It should not become 
 ```mermaid
 sequenceDiagram
     participant UI as TypeScript UI
-    participant Bridge as src/bridge.ts
+    participant Bridge as TypeScript bridge
     participant Shell as Tauri shell
     participant CLI as audio CLI
 
@@ -133,4 +133,3 @@ Before Soundgarden can be called complete in this checkout:
 3. Make `audio validate`, `convert`, `schema`, `assets`, and `scan` pass against current manifests.
 4. Fix the `tools/soundgarden` submodule mapping or intentionally vendor it.
 5. Run `npm test`, `npm run build`, and the game-side `audio` CLI checks.
-

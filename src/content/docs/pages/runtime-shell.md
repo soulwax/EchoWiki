@@ -44,9 +44,9 @@ At a high level, `runtime::run()` does this:
 
 ```mermaid
 sequenceDiagram
-    participant Main as src/main.rs
-    participant Run as runtime::run()
-    participant Data as Assets/Data loaders
+    participant Main as main entry
+    participant Run as runtime run
+    participant Data as Data loaders
     participant Loader as AssetLoader
     participant Loop as frame loop
 

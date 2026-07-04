@@ -88,8 +88,8 @@ Choreography `say` or `queue_dialogue` beats can also set `mini = true`.
 ```mermaid
 sequenceDiagram
     participant Data as Lua or TOML
-    participant Command as GameCommand::QueueDialogue
-    participant Runtime as runtime/mod.rs command handler
+    participant Command as QueueDialogue command
+    participant Runtime as runtime command handler
     participant UI as MiniDialogue drawing
 
     Data->>Command: speaker, text, mini=true

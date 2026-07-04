@@ -88,8 +88,8 @@ This keeps dirty tracking, undo/redo, and UI refreshes predictable.
 ```mermaid
 sequenceDiagram
     participant UI as TypeScript UI
-    participant Bridge as src/bridge.ts
-    participant Tauri as src-tauri/src/main.rs
+    participant Bridge as TypeScript bridge
+    participant Tauri as Tauri shell
     participant CLI as choreo
     participant Files as scene files
 
@@ -159,4 +159,3 @@ Before changing architecture-sensitive code, ask:
 - Does this degrade cleanly in web-only mode?
 - Does this stay testable without the desktop shell?
 - Does the UI still make invalid export hard?
-

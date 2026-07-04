@@ -6,17 +6,19 @@ This page is the slower, deeper walkthrough of how EchoWarrior actually runs fro
 
 Read this after [Runtime Loop](runtime-loop/) if you want to touch gameplay, input, scenes, audio, effects, or anything that happens once the window is open.
 
+For the deeper data/event side of the same flow, continue with [Runtime Data Command Pipeline](runtime-data-command-pipeline/).
+
 ## Boot To Frame
 
 The executable starts small:
 
 ```mermaid
 sequenceDiagram
-    participant Main as src/main.rs
-    participant Runtime as src/runtime/mod.rs
-    participant Pack as src/asset_pack.rs
-    participant Data as src/data
-    participant Loader as runtime/assets
+    participant Main as main entry
+    participant Runtime as runtime module
+    participant Pack as asset pack module
+    participant Data as data loaders
+    participant Loader as runtime assets
     participant Game as PrototypeRuntime
     participant MQ as Macroquad
 
@@ -154,7 +156,7 @@ sequenceDiagram
     participant Director as Director
     participant Actors as Runtime actors
     participant Grid as Enemy grid
-    participant Combat as Combat/update helpers
+    participant Combat as Combat update helpers
     participant ECS as ECS lifecycle bridge
     participant Save as Autosave
 

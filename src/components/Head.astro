@@ -1,0 +1,44 @@
+---
+const { head } = Astro.locals.starlightRoute;
+---
+
+{head.map(({ tag: Tag, attrs, content }) => <Tag {...attrs} set:html={content} />)}
+
+<script>
+  import mermaid from 'mermaid';
+
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    securityLevel: 'strict',
+    themeVariables: {
+      primaryColor: '#fff7ed',
+      primaryTextColor: '#172026',
+      primaryBorderColor: '#c47a30',
+      lineColor: '#5f6f73',
+      secondaryColor: '#e9f5f1',
+      tertiaryColor: '#f8fafc',
+      fontFamily: 'Inter, ui-sans-serif, system-ui, sans-serif',
+    },
+  });
+
+  async function renderMermaid() {
+    const diagrams = document.querySelectorAll<HTMLElement>(
+      'pre.mermaid:not([data-processed]), pre[data-language="mermaid"]:not([data-processed])',
+    );
+    if (!diagrams.length) return;
+    for (const diagram of diagrams) {
+      const copiedCode = diagram
+        .closest('.expressive-code')
+        ?.querySelector<HTMLButtonElement>('button[data-code]')
+        ?.dataset.code;
+      if (copiedCode) {
+        diagram.textContent = copiedCode.replaceAll('\x7f', '\n');
+      }
+    }
+    await mermaid.run({ nodes: Array.from(diagrams) });
+  }
+
+  window.addEventListener('load', renderMermaid);
+  document.addEventListener('astro:after-swap', renderMermaid);
+</script>

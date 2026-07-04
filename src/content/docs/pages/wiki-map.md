@@ -39,8 +39,9 @@ The structure follows a documentation pattern used by mature engine manuals: fir
 1. [Runtime Shell](runtime-shell/)
 2. [Runtime Loop](architecture/runtime-loop/)
 3. [Inside The Runtime](architecture/inside-the-runtime/)
-4. [Audio And Transitions](audio-and-transitions/)
-5. [Rendering And UI](architecture/rendering-and-ui/)
+4. [Runtime Data Command Pipeline](architecture/runtime-data-command-pipeline/)
+5. [Audio And Transitions](audio-and-transitions/)
+6. [Rendering And UI](architecture/rendering-and-ui/)
 
 ### Tooling Or Release Work
 
@@ -48,7 +49,8 @@ The structure follows a documentation pattern used by mature engine manuals: fir
 2. [Assets And Packaging](assets-and-packaging/)
 3. [Asset Pack Reference](asset-pack-reference/)
 4. [Protection And Tamper Boundaries](architecture/protection-and-tamper-boundaries/)
-5. [Vercel Deployment](vercel-deployment/)
+5. [Pack Integrity Deep Dive](architecture/pack-integrity-deep-dive/)
+6. [Vercel Deployment](vercel-deployment/)
 
 ### Leitmotif Work
 
@@ -80,3 +82,12 @@ Pages are intentionally small enough to answer one contributor question:
 - "What must degrade gracefully if content is missing?"
 
 When adding a page, prefer a practical contributor route over a large essay. If a page starts covering more than one workflow, split it and add the new page under the right sidebar dropdown.
+
+## Automation
+
+Run [Wiki Automation](wiki-automation/) checks when adding or reorganizing pages:
+
+```powershell
+npm run wiki:audit
+npm run build
+```

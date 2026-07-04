@@ -12,6 +12,8 @@ EchoWarrior is moddable by design. The protection model is therefore not "lock d
 
 This page explains what the game actually protects, what it intentionally leaves open, and where the code enforces each boundary.
 
+For the byte-level pack and verification mechanics behind these boundaries, continue with [Pack Integrity Deep Dive](pack-integrity-deep-dive/).
+
 ## One-Screen Boundary Map
 
 ```mermaid

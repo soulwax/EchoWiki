@@ -27,6 +27,9 @@ export default defineConfig({
         alt: 'EchoWarrior',
       },
       customCss: ['./src/styles/custom.css'],
+      components: {
+        Head: './src/components/Head.astro',
+      },
       editLink: {
         baseUrl: 'https://github.com/soulwax/EchoWiki/edit/main/',
       },
@@ -49,36 +52,6 @@ export default defineConfig({
         {
           tag: 'meta',
           attrs: { name: 'twitter:image', content: new URL('/Shisaku-2.png', site).toString() },
-        },
-        {
-          tag: 'script',
-          attrs: { type: 'module' },
-          content: `
-            import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-
-            mermaid.initialize({
-              startOnLoad: false,
-              theme: 'base',
-              themeVariables: {
-                primaryColor: '#fff7ed',
-                primaryTextColor: '#172026',
-                primaryBorderColor: '#c47a30',
-                lineColor: '#5f6f73',
-                secondaryColor: '#e9f5f1',
-                tertiaryColor: '#f8fafc',
-                fontFamily: 'Inter, ui-sans-serif, system-ui, sans-serif'
-              }
-            });
-
-            async function renderMermaid() {
-              const diagrams = document.querySelectorAll('.mermaid');
-              if (!diagrams.length) return;
-              await mermaid.run({ nodes: diagrams });
-            }
-
-            window.addEventListener('load', renderMermaid);
-            document.addEventListener('astro:after-swap', renderMermaid);
-          `,
         },
       ],
       sidebar: [
@@ -130,6 +103,10 @@ export default defineConfig({
                 { label: '3. Runtime Loop', slug: 'pages/architecture/runtime-loop' },
                 { label: '3A. Inside The Runtime', slug: 'pages/architecture/inside-the-runtime' },
                 {
+                  label: '3B. Runtime Data Command Pipeline',
+                  slug: 'pages/architecture/runtime-data-command-pipeline',
+                },
+                {
                   label: '4. Data And Modding Flow',
                   slug: 'pages/architecture/data-and-modding-flow',
                 },
@@ -140,6 +117,10 @@ export default defineConfig({
                 {
                   label: '5A. Protection And Tamper Boundaries',
                   slug: 'pages/architecture/protection-and-tamper-boundaries',
+                },
+                {
+                  label: '5B. Pack Integrity Deep Dive',
+                  slug: 'pages/architecture/pack-integrity-deep-dive',
                 },
               ],
             },
@@ -257,6 +238,7 @@ export default defineConfig({
           items: [
             { label: 'Contribution Workflow', slug: 'pages/contribution-workflow' },
             { label: 'Verification Guide', slug: 'pages/verification-guide' },
+            { label: 'Wiki Automation', slug: 'pages/wiki-automation' },
             { label: 'Vercel Deployment', slug: 'pages/vercel-deployment' },
           ],
         },

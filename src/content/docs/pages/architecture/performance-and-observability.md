@@ -30,7 +30,7 @@ sequenceDiagram
     participant Code as Instrumented code
     participant Scope as perf_scope
     participant Drop as Drop handler
-    participant Trace as tracing::warn
+    participant Trace as tracing warn
     participant Overlay as F1 logs
 
     Code->>Scope: create scope

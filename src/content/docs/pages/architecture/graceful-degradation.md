@@ -45,7 +45,7 @@ The fallback may be a built-in default, previous hot-reloaded state, a visible r
 ```mermaid
 sequenceDiagram
     participant File as Edited file
-    participant Watcher as Watcher/loader
+    participant Watcher as Watcher loader
     participant Previous as Previous good state
     participant Runtime as Runtime
 
