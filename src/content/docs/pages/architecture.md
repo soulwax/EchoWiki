@@ -11,8 +11,10 @@ The goal is not to memorize every file. The goal is to know where a change belon
 1. [Fundamentals](fundamentals/): the shortest possible architecture map.
 2. [Module Boundaries](module-boundaries/): which folder owns which kind of work.
 3. [Runtime Loop](runtime-loop/): how the Macroquad prototype advances a frame.
+3A. [Inside The Runtime](inside-the-runtime/): the deeper boot, mode, update, command, and draw flow.
 4. [Data And Modding Flow](data-and-modding-flow/): how TOML, YAML, and Lua become game behavior.
 5. [Assets And Release Packs](assets-and-release-packs/): why loose files and `data.pak` both matter.
+5A. [Protection And Tamper Boundaries](protection-and-tamper-boundaries/): what the game protects, what remains moddable, and why this is not DRM.
 6. [Choreography](choreography/): the single authored-beat engine.
 7. [Extension Patterns](extension-patterns/): where to add new behavior safely.
 8. [Commands And Events](commands-and-events/): how scripts, scenes, upgrades, runtime, and logs communicate.
@@ -78,8 +80,10 @@ EchoWarrior is built to keep content easy to modify while keeping core rules tes
 | any code for the first time | [Fundamentals](fundamentals/) |
 | where a module belongs | [Module Boundaries](module-boundaries/) |
 | frame update/drawing behavior | [Runtime Loop](runtime-loop/) |
+| understanding how the game really runs inside | [Inside The Runtime](inside-the-runtime/) |
 | TOML/YAML/Lua content | [Data And Modding Flow](data-and-modding-flow/) |
 | release asset inclusion | [Assets And Release Packs](assets-and-release-packs/) |
+| tamper/protection boundaries | [Protection And Tamper Boundaries](protection-and-tamper-boundaries/) |
 | story beats, movement beats, scenes | [Choreography](choreography/) |
 | adding a new capability | [Extension Patterns](extension-patterns/) |
 | adding Lua/choreography/upgrades behavior | [Commands And Events](commands-and-events/) |

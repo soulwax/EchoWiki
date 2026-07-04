@@ -52,6 +52,8 @@ It deliberately does not document every `src/game`, `src/runtime`, `src/data`, `
 - [Verification Guide](pages/verification-guide/) to choose the right checks.
 - [Tiny Moddable Feature](pages/guides/tiny-moddable-feature/) for a slow, guided first implementation path.
 - [Architecture Chapter](pages/architecture/) for the big picture first, then progressively deeper details.
+- [Inside The Runtime](pages/architecture/inside-the-runtime/) when you want to trace how boot, modes, commands, simulation, and drawing fit together.
+- [Protection And Tamper Boundaries](pages/architecture/protection-and-tamper-boundaries/) for what the game protects, what remains moddable, and what is deliberately not DRM.
 - [Leitmotif](pages/leitmotif/) if you want to work on the choreography authoring app.
 - [Soundgarden](pages/soundgarden/) if you want to work on audio manifests and the audio studio.
 - [Main Code Map](pages/main-code-map/) for a file-by-file reference to the main Rust files.

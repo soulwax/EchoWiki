@@ -128,6 +128,7 @@ export default defineConfig({
                 { label: '1. Fundamentals', slug: 'pages/architecture/fundamentals' },
                 { label: '2. Module Boundaries', slug: 'pages/architecture/module-boundaries' },
                 { label: '3. Runtime Loop', slug: 'pages/architecture/runtime-loop' },
+                { label: '3A. Inside The Runtime', slug: 'pages/architecture/inside-the-runtime' },
                 {
                   label: '4. Data And Modding Flow',
                   slug: 'pages/architecture/data-and-modding-flow',
@@ -135,6 +136,10 @@ export default defineConfig({
                 {
                   label: '5. Assets And Release Packs',
                   slug: 'pages/architecture/assets-and-release-packs',
+                },
+                {
+                  label: '5A. Protection And Tamper Boundaries',
+                  slug: 'pages/architecture/protection-and-tamper-boundaries',
                 },
               ],
             },
@@ -229,6 +234,10 @@ export default defineConfig({
                 { label: 'Assets And Packaging', slug: 'pages/assets-and-packaging' },
                 { label: 'Asset Pack Reference', slug: 'pages/asset-pack-reference' },
                 { label: 'Modding Boundary', slug: 'pages/modding-boundary' },
+                {
+                  label: 'Protection And Tamper Boundaries',
+                  slug: 'pages/architecture/protection-and-tamper-boundaries',
+                },
               ],
             },
             {

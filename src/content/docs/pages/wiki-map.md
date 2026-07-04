@@ -38,15 +38,17 @@ The structure follows a documentation pattern used by mature engine manuals: fir
 
 1. [Runtime Shell](runtime-shell/)
 2. [Runtime Loop](architecture/runtime-loop/)
-3. [Audio And Transitions](audio-and-transitions/)
-4. [Rendering And UI](architecture/rendering-and-ui/)
+3. [Inside The Runtime](architecture/inside-the-runtime/)
+4. [Audio And Transitions](audio-and-transitions/)
+5. [Rendering And UI](architecture/rendering-and-ui/)
 
 ### Tooling Or Release Work
 
 1. [CLI Tools](cli-tools/)
 2. [Assets And Packaging](assets-and-packaging/)
 3. [Asset Pack Reference](asset-pack-reference/)
-4. [Vercel Deployment](vercel-deployment/)
+4. [Protection And Tamper Boundaries](architecture/protection-and-tamper-boundaries/)
+5. [Vercel Deployment](vercel-deployment/)
 
 ### Leitmotif Work
 
