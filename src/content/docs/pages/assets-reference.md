@@ -8,6 +8,18 @@ This page documents `src/assets.rs`, the top-level asset metadata layer. Runtime
 
 `SpriteId` and `FontId` are small enums for assets that the code wants to name directly.
 
+```mermaid
+flowchart LR
+    code[Code needs stable asset]
+    sprite[SpriteId]
+    font[FontId]
+    manifest[AssetManifest]
+    runtime[Runtime loader]
+
+    code --> sprite --> manifest --> runtime
+    code --> font --> manifest
+```
+
 Current sprite ids:
 
 | Id | Default path |
@@ -40,6 +52,20 @@ Use these ids for stable engine-owned assets. For moddable content, prefer a TOM
 
 This manifest is not the full release-pack inventory. `src/asset_pack.rs` discovers release assets from directories and data manifests.
 
+```mermaid
+flowchart TB
+    app[EchoWarriorApp]
+    manifest[Default manifest]
+    release[Release pack inventory]
+    codeids[Stable code ids]
+    discovery[asset pack discovery]
+    datamanifests[Data manifests]
+
+    app --> manifest --> codeids
+    datamanifests --> discovery --> release
+    codeids -. subset of runtime assets .-> release
+```
+
 ## `SpriteMetadata`
 
 `SpriteMetadata` represents `Assets/Metadata/spritesheets.toml`.
@@ -59,6 +85,18 @@ Important methods:
 | `sheet(id)` | Finds one configured sheet by id. |
 | `validate()` | Validates sheet grids, tileset grids, and animation bounds. |
 
+```mermaid
+flowchart LR
+    file[spritesheets metadata]
+    load[load from path]
+    sheet[sheet lookup]
+    validate[validate]
+    cutter[sprite cutter]
+
+    file --> load --> sheet
+    load --> validate --> cutter
+```
+
 ## `SpritesheetMetadata`
 
 Each sheet declares:
@@ -76,6 +114,23 @@ Each sheet declares:
 ## `SpriteSheetDescriptor`
 
 `SpriteSheetDescriptor` represents per-sheet descriptor TOML files such as `Assets/Metadata/player_spritesheet.toml`.
+
+```mermaid
+flowchart TD
+    descriptor[Descriptor file]
+    sprites[Named sprites]
+    grid[Grid index rects]
+    explicit[Explicit rects]
+    animations[Animation frame names]
+    binding[SpriteSheetBinding]
+    draw[Runtime draw rect]
+
+    descriptor --> sprites
+    sprites --> grid --> binding
+    sprites --> explicit --> binding
+    descriptor --> animations --> binding
+    binding --> draw
+```
 
 It supports two sprite addressing modes:
 

@@ -6,6 +6,22 @@ title: "Modding Boundary"
 
 `src/modding.rs` is the main-code layer for selectable mod packs.
 
+```mermaid
+flowchart TB
+    manifest[mod toml manifest]
+    layer[ModLayer]
+    selected[selected mod layers]
+    asset[asset pack active layers]
+    save[save manifest entry]
+    namespace[content namespace]
+
+    manifest --> layer
+    layer --> selected
+    selected --> asset
+    selected --> namespace
+    manifest --> save
+```
+
 It defines:
 
 - `MODS_DIR = "Mods"`
@@ -43,17 +59,62 @@ It also checks vanilla `data.pak` for packed mod manifests. Loose manifests win 
 
 Discovered mods are sorted by id for stable presentation.
 
+```mermaid
+flowchart TD
+    root[repository root]
+    loose[Mods directory]
+    packed[data pack Mods entries]
+    loosemanifest[loose mod manifests]
+    packedmanifest[packed mod manifests]
+    dedupe{loose id already exists}
+    mods[stable sorted ModLayer list]
+
+    root --> loose --> loosemanifest --> mods
+    root --> packed --> packedmanifest --> dedupe
+    dedupe -- yes --> skip[skip packed duplicate]
+    dedupe -- no --> mods
+```
+
 ## Dependency Ordering
 
 `selected_mod_layers(root, selected_id)` returns the dependency-ordered layers for the selected mod. Dependencies are collected before the selected mod, so later layers can override earlier layers.
 
 Cycles are ignored safely by the visited/visiting sets rather than crashing.
 
+```mermaid
+flowchart LR
+    selected[Selected mod]
+    deps[Dependencies]
+    order[Layer order]
+    earlier[Earlier dependency layer]
+    later[Later selected layer]
+    result[Read winner]
+
+    selected --> deps --> order
+    selected --> order
+    order --> earlier --> result
+    order --> later --> result
+    later -. overrides same path .-> earlier
+```
+
 ## Save Namespace
 
 `content_namespace(layers)` uses the namespace of the final selected layer, or `base` when no mod layer is active.
 
 The manifest's `save_entry()` converts the active mod into the compact save metadata stored with run/account data.
+
+```mermaid
+flowchart TD
+    layers{active layers}
+    none[base namespace]
+    final[final layer namespace]
+    entry[save entry id version name]
+    save[run or account save]
+
+    layers -- none --> none --> save
+    layers -- present --> final --> save
+    layers -- present --> entry --> save
+```
 
 ## When To Edit This File
 

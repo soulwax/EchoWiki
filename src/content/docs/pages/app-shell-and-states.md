@@ -6,6 +6,22 @@ title: "App Shell And States"
 
 `EchoWarriorApp` is the small library-side app shell. It is not the full Macroquad runtime; it is a plain Rust model that captures the first-level application state.
 
+```mermaid
+flowchart TB
+    app[EchoWarriorApp]
+    state[AppState]
+    class[Selected class]
+    manifest[AssetManifest]
+    clock[RunClock]
+    bounds[WorldBounds]
+
+    app --> state
+    app --> class
+    app --> manifest
+    app --> clock
+    app --> bounds
+```
+
 ```rust
 pub struct EchoWarriorApp {
     pub state: AppState,
@@ -55,9 +71,55 @@ It has two policy helpers:
 - `pauses_simulation()` returns true for `LevelUp`, `GameOver`, `SkillTree`, and `Inventory`.
 - `accepts_game_input()` returns true only for `Playing`.
 
+```mermaid
+stateDiagram-v2
+    [*] --> Boot
+    Boot --> MainMenu
+    MainMenu --> ClassSelect
+    ClassSelect --> Loading
+    Loading --> Playing
+    Playing --> LevelUp
+    LevelUp --> Playing
+    Playing --> Inventory
+    Inventory --> Playing
+    Playing --> SkillTree
+    SkillTree --> Playing
+    Playing --> GameOver
+    GameOver --> MainMenu
+```
+
+```mermaid
+flowchart LR
+    state[AppState]
+    playing{Playing}
+    pause{Pause states}
+    other{Other shell states}
+    input[accept game input]
+    freeze[pause simulation]
+    shell[menu or boot policy]
+
+    state --> playing --> input
+    state --> pause --> freeze
+    state --> other --> shell
+```
+
 ## Relationship To Runtime Modes
 
 The live Macroquad prototype has a richer runtime mode model inside `src/runtime/`. Treat `AppState` as a lightweight shared shell model, not as the authoritative live runtime state machine.
+
+```mermaid
+flowchart TB
+    library[Library shell state]
+    runtime[RuntimeMode]
+    appstate[Boot MainMenu Playing LevelUp Inventory]
+    richer[StartScreen Intro Arena Paused Victory DeathTransition]
+    shared[shared tests and early app model]
+    live[live Macroquad behavior]
+
+    library --> appstate --> shared
+    runtime --> richer --> live
+    library -. mirrors only broad concepts .-> runtime
+```
 
 If you change the live runtime state model, update the runtime docs and only mirror that change here when the shared library state also changes.
 

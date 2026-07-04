@@ -6,6 +6,24 @@ This page documents the public surface of `src/asset_pack.rs`.
 
 ## Core Types
 
+```mermaid
+flowchart TB
+    kind[PackedAssetKind]
+    asset[PackedAsset]
+    pack[AssetPack]
+    key[UniversalKey]
+    layer[ActiveModAssetLayer]
+    error[AssetPackError]
+
+    kind --> asset
+    asset --> pack
+    key --> write[write pack]
+    key --> read[read pack]
+    layer --> layered[active layered reads]
+    error --> read
+    error --> write
+```
+
 | Type | Purpose |
 | --- | --- |
 | `PackedAssetKind` | Classification used for inventory and verification: data, metadata, dialogue, script, shader, texture, audio, font, other. |
@@ -17,6 +35,22 @@ This page documents the public surface of `src/asset_pack.rs`.
 
 ## Pack Writing
 
+```mermaid
+flowchart LR
+    paths[discovered paths]
+    entries[build pack entries]
+    key{key present}
+    plain[plain payload]
+    encrypted[encrypted payload]
+    file[data or identity pack]
+    verify[optional verify]
+
+    paths --> entries --> key
+    key -- no --> plain --> file
+    key -- yes --> encrypted --> file
+    file --> verify
+```
+
 | Function | Purpose |
 | --- | --- |
 | `write_pack(pack, key, path)` | Writes encrypted or unencrypted pack depending on whether `key` is present. |
@@ -26,6 +60,22 @@ This page documents the public surface of `src/asset_pack.rs`.
 `data.pak` can be encrypted when a repo-root `hwdruntime` key exists. `identity.pak` is always written with an explicit per-build key by release scripts.
 
 ## Pack Reading
+
+```mermaid
+flowchart TD
+    runtime[runtime request]
+    layered[read]
+    identity[read identity]
+    mod[active mod layers]
+    loose[loose vanilla file]
+    data[data pack]
+    identitypack[identity pack]
+
+    runtime --> layered
+    runtime --> identity
+    layered --> mod --> loose --> data
+    identity --> identitypack
+```
 
 | Function | Purpose |
 | --- | --- |
@@ -56,15 +106,45 @@ clear_active_mod_layers();
 
 Read order is intentionally layer-aware:
 
-```text
-selected mod assets
-  -> vanilla loose assets
-  -> data.pak
+```mermaid
+flowchart TD
+    request[requested path]
+    layers[active mod layers]
+    modloose[mod loose file]
+    modpack[mod entry inside data pack]
+    vanilla[vanilla loose file]
+    pack[data pack vanilla entry]
+    bytes[return bytes]
+    missing[missing error]
+
+    request --> layers
+    layers --> modloose
+    modloose -- found --> bytes
+    modloose -- missing --> modpack
+    modpack -- found --> bytes
+    modpack -- missing --> vanilla
+    vanilla -- found --> bytes
+    vanilla -- missing --> pack
+    pack -- found --> bytes
+    pack -- missing --> missing
 ```
 
 Later selected layers override earlier dependency layers.
 
 ## Discovery API
+
+```mermaid
+flowchart TB
+    used[discover used asset paths]
+    identity[discover identity asset paths]
+    runtime[ordinary runtime content]
+    studio[canonical studio media]
+    datapak[data pack]
+    identitypak[identity pack]
+
+    runtime --> used --> datapak
+    studio --> identity --> identitypak
+```
 
 | Function | Purpose |
 | --- | --- |
@@ -87,6 +167,21 @@ Prefer manifest-owned or directory-scanned assets first. Update explicit lists o
 ## Pack Format Notes
 
 `data.pak` uses an EchoWarrior-specific binary format with:
+
+```mermaid
+flowchart LR
+    header[Header]
+    payload[Payload]
+    entries[Entries]
+    checksum[Checksum]
+    key[Optional key]
+    pack[Pack file]
+
+    header --> pack
+    payload --> checksum --> header
+    payload --> key --> pack
+    payload --> entries
+```
 
 - pack magic
 - payload magic

@@ -4,6 +4,26 @@ title: "Change Routes"
 
 Use this page when you know the kind of contribution you want to make, but not where to start.
 
+```mermaid
+flowchart TD
+    change[Contribution idea]
+    bug[Fix a bug]
+    content[Add or tune content]
+    modding[Add modding surface]
+    runtime[Improve runtime]
+    tooling[Improve tooling]
+    choreo[Work on choreography]
+    wiki[Update wiki]
+
+    change --> bug
+    change --> content
+    change --> modding
+    change --> runtime
+    change --> tooling
+    change --> choreo
+    change --> wiki
+```
+
 ## I Want To Fix A Bug
 
 1. Reproduce it.
@@ -12,6 +32,18 @@ Use this page when you know the kind of contribution you want to make, but not w
 4. Run `cargo check` and the targeted test.
 
 Common starting points:
+
+```mermaid
+flowchart LR
+    bug[Bug]
+    reproduce[Reproduce]
+    classify[Classify owner]
+    test[Smallest useful test]
+    fix[Fix]
+    verify[Verify]
+
+    bug --> reproduce --> classify --> test --> fix --> verify
+```
 
 | Bug type | Start here |
 | --- | --- |
@@ -26,6 +58,18 @@ Common starting points:
 ## I Want To Add Or Tune Content
 
 Start in `Assets/`, not Rust.
+
+```mermaid
+flowchart TD
+    content[Content idea]
+    assets[Assets directory]
+    data[Data or script file]
+    check[mod_check]
+    pack[asset pack dry run]
+    play[play or preview]
+
+    content --> assets --> data --> check --> pack --> play
+```
 
 | Content | Data path |
 | --- | --- |
@@ -51,6 +95,18 @@ cargo run --bin asset_pack -- --dry-run --list
 
 A modding surface is any new field, command, hook, schema, or file a modder can use.
 
+```mermaid
+flowchart LR
+    schema[Data model and defaults]
+    load[Graceful loader]
+    apply[Runtime or pure application]
+    validate[mod_check validation]
+    discover[release discovery]
+    docs[modding docs]
+
+    schema --> load --> apply --> validate --> discover --> docs
+```
+
 Checklist:
 
 1. Add the data model and defaults.
@@ -65,6 +121,21 @@ Avoid adding a Rust-only shortcut if the goal is modder control.
 ## I Want To Improve The Runtime
 
 Runtime work usually lives under `src/runtime`.
+
+```mermaid
+flowchart TD
+    runtimechange[Runtime change]
+    pure{Pure rule}
+    game[src game]
+    ui[src ui]
+    runtime[src runtime]
+    verify[cargo check and run]
+
+    runtimechange --> pure
+    pure -- yes --> game --> verify
+    pure -- layout --> ui --> verify
+    pure -- needs rendering input audio --> runtime --> verify
+```
 
 Before editing, identify whether the logic can be pushed into a pure module:
 
