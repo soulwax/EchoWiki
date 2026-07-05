@@ -168,12 +168,14 @@ sequenceDiagram
     RT->>Actors: spawn and update enemies
     RT->>Grid: rebuild spatial grid
     RT->>Combat: attacks, abilities, XP, effects
-    RT->>ECS: sync enemy lifecycle state
+    RT->>ECS: batch sync enemy dynamic state
     RT->>Actors: cull dead enemies
     RT->>Save: update autosave timer
 ```
 
 The exact function list is long because the prototype is still live and feature-rich. The architectural point is simpler: input and timers happen before gameplay, gameplay mutates live actor state, ECS mirrors selected state, and drawing reads the finished frame state.
+
+The enemy ECS mirror is not a per-enemy full rewrite. During ordinary frames, the runtime collects a reusable batch of `(EntityId, EnemyDynamicState)` pairs and lets `EcsLifecycleBridge` update `Transform`, `Motion`, and `Health` in component passes. See [ECS Lifecycle Hot Lane](ecs-lifecycle-hot-lane/) for the deeper contract.
 
 ## Commands Are The Runtime Boundary
 

@@ -8,7 +8,7 @@ That creates a bridge architecture:
 
 - `PrototypeRuntime` still owns the live Macroquad actor lists used for drawing and input.
 - Pure modules in `src/game` own reusable rules and testable state machines.
-- The ECS lifecycle bridge mirrors key runtime entities into `EcsWorld`.
+- The ECS lifecycle bridge mirrors key runtime entities into `EcsWorld`, with a cold full snapshot lane and a batched hot lane for ordinary enemy frame sync.
 
 ## Current Ownership
 
@@ -41,8 +41,8 @@ sequenceDiagram
 
     Runtime->>Bridge: enemy spawned
     Bridge->>ECS: create entity + components
-    Runtime->>Bridge: frame sync position/health
-    Bridge->>ECS: update components
+    Runtime->>Bridge: collect dynamic enemy batch
+    Bridge->>ECS: update Transform, Motion, Health in passes
     Runtime->>Bridge: enemy dies/despawns
     Bridge->>ECS: retire entity
     Runtime->>Bridge: restore save
@@ -50,6 +50,29 @@ sequenceDiagram
 ```
 
 This bridge should stay narrow. Avoid creating a second entity ownership model beside it.
+
+For the deeper performance-sensitive contract, read [ECS Lifecycle Hot Lane](ecs-lifecycle-hot-lane/).
+
+## Hot And Cold Enemy Sync
+
+```mermaid
+flowchart TD
+    spawn[enemy spawn or save restore]
+    full[EnemyLifecycleSnapshot]
+    staticdata[identity, combat stats, XP value]
+    frame[ordinary frame]
+    dynamic[EnemyDynamicState]
+    batch[reused batch Vec]
+    passes[component storage passes]
+    ecs[EcsWorld mirror]
+
+    spawn --> full --> staticdata --> ecs
+    frame --> dynamic --> batch --> passes --> ecs
+```
+
+The hot lane mirrors only fields that change during ordinary play: position, velocity, current HP, and max HP. Identity and baseline combat data are written when the entity is created or explicitly cold-synced.
+
+That keeps runtime actors authoritative while still letting pure ECS queries grow safely.
 
 ## Pure Run Kernel
 

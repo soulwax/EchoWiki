@@ -33,6 +33,7 @@ flowchart TD
 7. [Extension Patterns](extension-patterns/): where to add new behavior safely.
 8. [Commands And Events](commands-and-events/): how scripts, scenes, upgrades, runtime, and logs communicate.
 9. [Simulation And ECS](simulation-and-ecs/): how pure run logic and the ECS bridge coexist with runtime actors.
+9A. [ECS Lifecycle Hot Lane](ecs-lifecycle-hot-lane/): how the runtime mirrors enemy state through cold full sync and batched dynamic sync.
 10. [Rendering And UI](rendering-and-ui/): how world rendering, effects, post-processing, and UI layers stack.
 11. [Persistence And State](persistence-and-state/): how saves, settings, progression, and mod metadata are separated.
 12. [Verification Architecture](verification-architecture/): how checks map to code and content boundaries.
@@ -104,6 +105,7 @@ EchoWarrior is built to keep content easy to modify while keeping core rules tes
 | adding a new capability | [Extension Patterns](extension-patterns/) |
 | adding Lua/choreography/upgrades behavior | [Commands And Events](commands-and-events/) |
 | touching actors, ECS, or pure run tests | [Simulation And ECS](simulation-and-ecs/) |
+| changing enemy ECS frame sync or mirrored components | [ECS Lifecycle Hot Lane](ecs-lifecycle-hot-lane/) |
 | changing draw order, effects, or HUD | [Rendering And UI](rendering-and-ui/) |
 | changing saves, settings, or account progress | [Persistence And State](persistence-and-state/) |
 | deciding which checks to run | [Verification Architecture](verification-architecture/) |

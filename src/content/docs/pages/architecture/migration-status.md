@@ -23,7 +23,7 @@ The goal is not to erase runtime. The goal is to keep runtime focused on renderi
 | Area | Status | Notes |
 | --- | --- | --- |
 | enemy/player/NPC live actors | runtime-owned | Drawing and per-frame Macroquad state still live in runtime actors. |
-| enemy ECS lifecycle | bridged | Spawn/sync/despawn/restore mirror through `EcsLifecycleBridge`. |
+| enemy ECS lifecycle | bridged | Spawn/despawn/restore mirror through `EcsLifecycleBridge`; ordinary frames use batched dynamic sync for `Transform`, `Motion`, and `Health`. |
 | run level / XP curve | mostly pure | Runtime delegates more arithmetic to shared run-level/run-sim code. |
 | level-up offers | pure | Offer director is deterministic and testable. |
 | dialogue model/loading | split | YAML loading is pure-ish; runtime owns presentation. |
@@ -62,7 +62,7 @@ Stable architectural direction:
 
 Not stable yet:
 
-- final ECS ownership model
+- final ECS ownership model beyond the current lifecycle bridge hot/cold lanes
 - final UI architecture
 - final scene/prop authoring model
 - final inventory/skill-tree UI shape

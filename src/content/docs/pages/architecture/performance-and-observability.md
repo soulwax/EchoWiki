@@ -79,6 +79,28 @@ Scopes are debug-only. Release builds keep the API but do no timing work.
 | save writes | frequent disk I/O or non-atomic writes |
 | weather/post-processing | oversized render targets or expensive shader passes |
 
+## Case Study: ECS Enemy Sync
+
+The enemy ECS lifecycle bridge is a good example of the preferred optimization style: keep behavior stable, then remove repeated work from the hot path.
+
+```mermaid
+flowchart TD
+    old[per-enemy dynamic sync]
+    oldlookup[storage lookup and downcast per component per enemy]
+    problem[scales poorly in benchmark swarms]
+    current[batched dynamic sync]
+    scratch[reuse ecs_sync_scratch]
+    passes[three component passes]
+    result[same mirror state, fewer repeated resolutions]
+
+    old --> oldlookup --> problem --> current
+    current --> scratch --> passes --> result
+```
+
+The current runtime still writes one dynamic state per enemy per frame. The improvement is that `sync_enemies_dynamic()` resolves `Transform`, `Motion`, and `Health` storage once each, then writes all enemies through those storages.
+
+When optimizing similar paths, look for repeated type lookup, allocation, string cloning, file reads, script work, or asset decode inside per-entity loops. Prefer batching, caching, and scratch reuse before reaching for broader rewrites.
+
 ## Performance Question Flow
 
 ```mermaid

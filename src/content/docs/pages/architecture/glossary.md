@@ -18,7 +18,9 @@ Shared vocabulary keeps architecture discussions short and less mysterious.
 | `identity.pak` | Separate protected canonical studio media pack. |
 | `GameCommand` | Shared request shape used by Lua, choreography, data, and runtime application. |
 | run event journal | Structured record of run events used by debug, Lua hooks, tests, and future tooling. |
-| ECS lifecycle bridge | Adapter that mirrors runtime enemy lifecycle into `EcsWorld`. |
+| ECS lifecycle bridge | Adapter that mirrors runtime enemy lifecycle into `EcsWorld` without making ECS the runtime owner. |
+| hot lane | Per-frame path that must stay allocation-light and avoid repeated expensive setup. |
+| cold sync | Full or infrequent synchronization used for spawn, restore, identity, or base-stat changes. |
 | scene project | A choreography TOML file under `Assets/Data/scenes`. |
 
 ## Flow Terms

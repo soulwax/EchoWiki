@@ -142,6 +142,7 @@ export default defineConfig({
                 { label: '7. Extension Patterns', slug: 'pages/architecture/extension-patterns' },
                 { label: '8. Commands And Events', slug: 'pages/architecture/commands-and-events' },
                 { label: '9. Simulation And ECS', slug: 'pages/architecture/simulation-and-ecs' },
+                { label: '9A. ECS Lifecycle Hot Lane', slug: 'pages/architecture/ecs-lifecycle-hot-lane' },
                 { label: '11. Persistence And State', slug: 'pages/architecture/persistence-and-state' },
               ],
             },

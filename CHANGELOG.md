@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.0.7] - 2026-07-05
+
+Release type: PATCH
+
+- Added a dedicated ECS lifecycle hot-lane chapter that documents the current cold full snapshot path and batched dynamic enemy sync.
+- Updated architecture, runtime, migration, performance, and glossary pages to reflect the new `sync_enemies_dynamic()` bridge contract.
+- Clarified contributor rules for extending mirrored enemy state without reintroducing per-frame static-data cloning or duplicate entity ownership.
+
 ## [v1.0.6] - 2026-07-05
 
 Release type: PATCH
