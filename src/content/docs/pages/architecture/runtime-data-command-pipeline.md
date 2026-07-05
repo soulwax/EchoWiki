@@ -117,29 +117,15 @@ sequenceDiagram
 ```mermaid
 flowchart TB
     command[GameCommand]
-    spawn[spawn_enemy]
-    stat[modify_stat]
-    xp[grant_xp]
-    hp[heal / damage]
-    status[apply_status]
-    flag[set_flag]
-    dialogue[queue_dialogue]
-    sfx[play_sfx]
-    weather[set_weather]
-    fx[spawn_fx]
-    sequence[play_sequence]
+    actor["Actors and world<br/>spawn_enemy<br/>apply_status<br/>spawn_fx"]
+    player["Player and run math<br/>modify_stat<br/>grant_xp<br/>heal / damage"]
+    presentation["Presentation<br/>queue_dialogue<br/>play_sfx<br/>set_weather"]
+    scene["Scene and state<br/>set_flag<br/>play_sequence"]
 
-    command --> spawn
-    command --> stat
-    command --> xp
-    command --> hp
-    command --> status
-    command --> flag
-    command --> dialogue
-    command --> sfx
-    command --> weather
-    command --> fx
-    command --> sequence
+    command --> actor
+    command --> player
+    command --> presentation
+    command --> scene
 ```
 
 `src/game/commands.rs` is renderer-agnostic. The type is intentionally broader than what every context can execute.
@@ -240,20 +226,16 @@ flowchart TD
     idea[new scriptable effect]
     pure{pure player/run math?}
     command[add GameCommand variant]
-    serde[derive serde fields and defaults]
-    runtime[apply in PrototypeRuntime]
-    runsim[apply in run_sim if pure]
-    lua[parse Lua table form]
-    modcheck[validate command payload and refs]
-    docs[document command]
-    tests[add pure/parser tests]
+    model["Model<br/>serde fields<br/>defaults"]
+    producers["Producers<br/>Lua table parser<br/>choreography/data source"]
+    appliers["Appliers<br/>PrototypeRuntime<br/>run_sim if pure"]
+    safety["Safety<br/>mod_check<br/>docs<br/>parser tests"]
 
-    idea --> pure --> command --> serde --> runtime
-    pure -- yes --> runsim
-    command --> lua
-    command --> modcheck
-    command --> docs
-    command --> tests
+    idea --> pure --> command
+    command --> model
+    command --> producers
+    command --> appliers
+    command --> safety
 ```
 
 Do not add a command only to Lua, only to choreography, or only to upgrades if it is meant to be a shared gameplay verb. Add it to the shared command model, then teach each source how to produce it and each applicable runtime/pure context how to apply it.
@@ -263,25 +245,21 @@ Do not add a command only to Lua, only to choreography, or only to upgrades if i
 ```mermaid
 flowchart TD
     bug[behavior missing]
-    content{content loaded?}
-    parse{schema parsed?}
-    command{command emitted?}
-    apply{runtime applies it?}
-    mode{mode allows effect?}
-    draw{draw reads resulting state?}
+    content["1. Content loaded?<br/>asset read order / pack discovery"]
+    parse["2. Schema parsed?<br/>serde defaults / loader warning"]
+    command["3. Command emitted?<br/>Lua, choreography, or event trigger"]
+    apply["4. Runtime applies it?<br/>apply_game_command support"]
+    mode["5. Mode allows effect?<br/>RuntimeMode gate"]
+    draw["6. Draw reads state?<br/>draw layer, camera, or UI"]
+    done[visible behavior]
 
     bug --> content
-    content -- no --> readpath[check asset read order and pack discovery]
-    content -- yes --> parse
-    parse -- no --> loader[check serde defaults and loader warning]
-    parse -- yes --> command
-    command -- no --> source[check Lua/choreography/event trigger]
-    command -- yes --> apply
-    apply -- no --> support[check apply_game_command support]
-    apply -- yes --> mode
-    mode -- no --> gate[check RuntimeMode gate]
-    mode -- yes --> draw
-    draw -- no --> visual[check draw layer/camera/UI]
+    content --> parse
+    parse --> command
+    command --> apply
+    apply --> mode
+    mode --> draw
+    draw --> done
 ```
 
 This graph is usually faster than searching randomly. Follow the bytes, then the typed data, then the command, then the mode gate, then the draw path.

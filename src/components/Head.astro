@@ -13,9 +13,9 @@ const { head } = Astro.locals.starlightRoute;
     securityLevel: 'strict',
     flowchart: {
       curve: 'basis',
-      diagramPadding: 18,
-      nodeSpacing: 42,
-      rankSpacing: 52,
+      diagramPadding: 22,
+      nodeSpacing: 48,
+      rankSpacing: 58,
       htmlLabels: true,
     },
     sequence: {
@@ -107,8 +107,13 @@ const { head } = Astro.locals.starlightRoute;
       if (naturalWidth > 0) {
         svg.style.setProperty('--ew-mermaid-width', `${naturalWidth}px`);
       }
-      if (kind === 'sequence' || naturalWidth > 820) {
+      if (kind === 'sequence' || naturalWidth > 600) {
         surface.dataset.layout = 'wide';
+      }
+      if ((kind === 'flowchart' || kind === 'state') && naturalWidth > 0 && naturalWidth <= 1400) {
+        surface.dataset.fit = 'contain';
+        svg.style.setProperty('--ew-mermaid-width', '100%');
+        svg.style.setProperty('max-width', '100%');
       }
     });
   }

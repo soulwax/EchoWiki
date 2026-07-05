@@ -1,5 +1,12 @@
 # Changelog
 
+## [v1.0.5] - 2026-07-05
+
+Release type: PATCH
+
+- Refined Mermaid flowchart rendering with broader wide-layout detection, contained scaling for medium graphs, and clearer connector-label styling.
+- Reshaped the runtime data command pipeline diagrams that Mermaid previously rendered as oversized horizontal fans.
+
 ## [v1.0.4] - 2026-07-05
 
 Release type: PATCH

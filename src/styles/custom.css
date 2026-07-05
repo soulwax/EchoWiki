@@ -189,6 +189,12 @@ pre.mermaid-rendered[data-diagram='sequence'] > svg[id^='mermaid-'] {
   max-width: 100% !important;
 }
 
+.mermaid-surface[data-fit='contain'] svg,
+pre.mermaid-rendered[data-fit='contain'] > svg[id^='mermaid-'] {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
 :is(.mermaid-surface, pre.mermaid-rendered) :is(.node rect, .node polygon, .node circle, .node ellipse) {
   filter:
     drop-shadow(0 5px 10px rgba(0, 0, 0, 0.18))
@@ -224,10 +230,29 @@ pre.mermaid-rendered[data-diagram='sequence'] > svg[id^='mermaid-'] {
   stroke-width: 0 !important;
 }
 
-:is(.mermaid-surface, pre.mermaid-rendered) .edgeLabel {
-  padding: 0.12rem 0.3rem;
+:is(.mermaid-surface, pre.mermaid-rendered) :is(.edgeLabels .labelBkg, .edgeLabel .labelBkg) {
+  padding: 0.04rem 0.34rem !important;
+  border: 1px solid color-mix(in srgb, var(--ew-diagram-teal) 42%, transparent);
   border-radius: 999px;
-  background: color-mix(in srgb, var(--ew-diagram-bg) 70%, white) !important;
+  background: color-mix(in srgb, var(--ew-diagram-bg) 82%, var(--ew-diagram-teal)) !important;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.12),
+    0 0 10px color-mix(in srgb, var(--ew-diagram-teal) 20%, transparent);
+  color: var(--ew-diagram-accent) !important;
+  font-size: 0.74rem;
+  font-weight: 700;
+  line-height: 1.15 !important;
+  letter-spacing: 0.02em !important;
+}
+
+:is(.mermaid-surface, pre.mermaid-rendered) :is(.edgeLabels .labelBkg p, .edgeLabel .labelBkg p) {
+  margin: 0;
+}
+
+:is(.mermaid-surface, pre.mermaid-rendered) :is(.edgeLabels span.edgeLabel, .edgeLabel span.edgeLabel) {
+  color: var(--ew-diagram-accent) !important;
+  fill: var(--ew-diagram-accent) !important;
+  background: transparent !important;
 }
 
 :is(.mermaid-surface, pre.mermaid-rendered) :is(.edgePath path, .flowchart-link, .messageLine0, .messageLine1, .transition, .relation) {
