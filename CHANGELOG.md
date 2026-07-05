@@ -1,5 +1,12 @@
 # Changelog
 
+## [v1.0.3] - 2026-07-05
+
+Release type: PATCH
+
+- Expanded the Soundgarden chapter with contributor-facing pages for the audio CLI contract, mod authoring overlays, audition playback, and safe first contribution slices.
+- Updated the existing Soundgarden pages to reflect the current split between available Tauri/TypeScript editor code and the still-missing game-side `audio` CLI in this checkout.
+
 ## [v1.0.2] - 2026-07-05
 
 Release type: PATCH

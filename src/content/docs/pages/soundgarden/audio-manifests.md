@@ -110,3 +110,26 @@ Use it when adding or removing many audio clips. Use Soundgarden when curating e
 - Do not store license text inside manifest entries; keep source license files beside asset packs.
 - Run manifest validation once the `audio` CLI is restored.
 
+## Overlay Shape
+
+Soundgarden's mod mode is built around overlay manifests rather than direct edits to vanilla files.
+
+```text
+Mods/<mod_id>/Assets/Data/sfx.d/<mod_id>.toml
+Mods/<mod_id>/Assets/Data/music.d/<mod_id>.toml
+Mods/<mod_id>/Assets/Data/voices.d/<mod_id>.toml
+```
+
+An overlay can add new entries, override entries with matching ids, or hide vanilla ids with `remove`.
+
+```toml
+remove = ["ui-audio-click1"]
+
+[[sfx]]
+id = "ui-audio-click2"
+asset = "Audio/MyMod/click_soft.ogg"
+category = "ui"
+duration = 0.21
+```
+
+The editor preserves that shape through `AudioDoc.remove` and the shared `{ kind, entries, remove }` manifest model.

@@ -189,10 +189,26 @@ export default defineConfig({
           items: [
             { label: 'Overview', slug: 'pages/soundgarden' },
             { label: 'Available Now', slug: 'pages/soundgarden/available-now' },
-            { label: 'Manifest Studio', slug: 'pages/soundgarden/manifest-studio' },
-            { label: 'Audio Manifests', slug: 'pages/soundgarden/audio-manifests' },
-            { label: 'Architecture', slug: 'pages/soundgarden/architecture' },
-            { label: 'Moddability', slug: 'pages/soundgarden/moddability' },
+            {
+              label: 'Authoring Workflows',
+              collapsed: false,
+              items: [
+                { label: 'Manifest Studio', slug: 'pages/soundgarden/manifest-studio' },
+                { label: 'Mod Authoring Mode', slug: 'pages/soundgarden/mod-authoring-mode' },
+                { label: 'Audition And Clips', slug: 'pages/soundgarden/audition-and-clips' },
+              ],
+            },
+            {
+              label: 'Contracts And Data',
+              collapsed: false,
+              items: [
+                { label: 'Audio Manifests', slug: 'pages/soundgarden/audio-manifests' },
+                { label: 'CLI Contract', slug: 'pages/soundgarden/cli-contract' },
+                { label: 'Architecture', slug: 'pages/soundgarden/architecture' },
+                { label: 'Moddability', slug: 'pages/soundgarden/moddability' },
+              ],
+            },
+            { label: 'Contributor Workflow', slug: 'pages/soundgarden/contributor-workflow' },
           ],
         },
         {

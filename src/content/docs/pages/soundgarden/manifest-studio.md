@@ -29,6 +29,7 @@ The UI is organized as:
 | Header ribbon | Open, save, export, undo, redo, AI assist when available, validation counts. |
 | Library | Manifest entries and unregistered clips. |
 | Inspector | Editable fields for the selected manifest entry. |
+| Mod selector | Vanilla/mod context switch plus new-mod action. |
 | Proposal panel | Optional Gemini suggestions for unregistered clips. |
 
 ## Document Model
@@ -67,6 +68,44 @@ Wire keys:
 | `sfx` | `sfx` |
 | `music` | `track` |
 | `voices` | `voice` |
+
+## Edit Ownership
+
+The most important implementation rule is that the UI does not mutate manifest arrays directly as its long-term state owner.
+
+```mermaid
+flowchart LR
+    gesture[User gesture]
+    ui[UI handler]
+    edit["AudioDoc edit"]
+    copy[Cloned manifest]
+    render[Render from document]
+
+    gesture --> ui --> edit --> copy --> render
+```
+
+Manual inspector edits, unregistered clip insertion, Gemini proposal application, hide/restore, and mod overlay changes all route through the same document model. That gives a contributor one place to reason about dirty state and undo/redo.
+
+## Mod-Aware Rows
+
+When a mod is active, Soundgarden renders an effective row list from vanilla entries plus the open overlay manifest.
+
+```mermaid
+flowchart TB
+    vanilla[Vanilla entries]
+    overlay[Mod overlay document]
+    effective[Effective rows]
+    badge[Origin badges]
+    edit[Copy-on-write edit]
+
+    vanilla --> effective
+    overlay --> effective
+    effective --> badge
+    effective --> edit
+    edit --> overlay
+```
+
+The pure helper is `computeEffective()` in `src/overlay.ts`. It is intentionally DOM-free so contributors can test row provenance without launching Tauri.
 
 ## Unregistered Clips
 
@@ -137,4 +176,3 @@ Proposals are apply/discard rows. Applying a proposal still routes through `Audi
 ## Current Limitation
 
 The UI and Tauri bridge are present, but the expected `audio` CLI is absent from current main. Until that is fixed, the studio can be inspected and tested at the pure TypeScript layer, but native open/validate/scan/export behavior is blocked.
-

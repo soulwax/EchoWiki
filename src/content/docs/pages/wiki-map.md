@@ -68,8 +68,12 @@ The structure follows a documentation pattern used by mature engine manuals: fir
 2. [Available Now](soundgarden/available-now/)
 3. [Manifest Studio](soundgarden/manifest-studio/)
 4. [Audio Manifests](soundgarden/audio-manifests/)
-5. [Soundgarden Architecture](soundgarden/architecture/)
-6. [Soundgarden Moddability](soundgarden/moddability/)
+5. [CLI Contract](soundgarden/cli-contract/)
+6. [Mod Authoring Mode](soundgarden/mod-authoring-mode/)
+7. [Audition And Clips](soundgarden/audition-and-clips/)
+8. [Contributor Workflow](soundgarden/contributor-workflow/)
+9. [Soundgarden Architecture](soundgarden/architecture/)
+10. [Soundgarden Moddability](soundgarden/moddability/)
 
 ## Page Granularity
 

@@ -31,6 +31,9 @@ Mods/<mod_id>/Assets/Audio/...
 Mods/<mod_id>/Assets/Data/sfx.toml
 Mods/<mod_id>/Assets/Data/music.toml
 Mods/<mod_id>/Assets/Data/voices.toml
+Mods/<mod_id>/Assets/Data/sfx.d/<mod_id>.toml
+Mods/<mod_id>/Assets/Data/music.d/<mod_id>.toml
+Mods/<mod_id>/Assets/Data/voices.d/<mod_id>.toml
 ```
 
 The same manifest concepts apply:
@@ -40,6 +43,7 @@ The same manifest concepts apply:
 | `sfx.toml` | New one-shots, UI sounds, hits, weather stingers, creature sounds. |
 | `music.toml` | New loops, ambience, intro music, gameplay tracks. |
 | `voices.toml` | New or overridden pseudo-speech profiles. |
+| `<kind>.d/<mod_id>.toml` | Soundgarden-owned overlay file for one mod and one manifest kind. |
 
 ## Stable Ids
 
@@ -92,6 +96,33 @@ flowchart TB
 
 The editor can suggest ids, but the manifest remains ordinary TOML.
 
+## Overlay Editing Contract
+
+Soundgarden should make mod edits without rewriting vanilla manifests.
+
+```mermaid
+flowchart LR
+    select[Select mod]
+    base[Load vanilla effective view]
+    overlay[Load mod overlay]
+    view[Show merged rows]
+    change{Edited row origin}
+    patch[Patch overlay row]
+    fork[Copy vanilla row into overlay]
+
+    select --> base --> view
+    select --> overlay --> view
+    view --> change
+    change -- mod or override --> patch
+    change -- vanilla --> fork
+    patch --> overlay
+    fork --> overlay
+```
+
+The visible row can be vanilla, mod, or override. The saved file is only the overlay. That protects base game files and gives modders a small diff they can inspect.
+
+Hiding a vanilla row writes its id to `remove`. Restoring removes that id from `remove`. Hidden vanilla rows stay visible in the tool as dimmed rows so the author can undo the decision instead of guessing what disappeared.
+
 ## AI Assist Boundaries
 
 Gemini assist is allowed to suggest metadata. It should not become the source of truth.
@@ -134,4 +165,3 @@ Until then, manual edits should be conservative and checked by loading the game.
 - Keep `AudioDoc` round trips lossless.
 - Validate with `audio validate` when the CLI exists.
 - Run `cargo run --bin mod_check` for pack-level confidence.
-

@@ -52,6 +52,8 @@ Available code:
 | `src/main.ts` | Library/inspector UI, unregistered list, validation chip, save/export controls. |
 | `src/doc.ts` | `AudioDoc`, dirty tracking, undo/redo, lossless top-level metadata preservation. |
 | `src/id.ts` | Suggested kebab-case ids from asset paths. |
+| `src/overlay.ts` | Pure effective-view and copy-on-write overlay helpers for mod authoring. |
+| `src/modmode.ts` | Pure overlay path and wire-key helpers for `sfx.d`, `music.d`, and `voices.d`. |
 | `src/bridge.ts` | Typed wrappers for expected Tauri commands. |
 | `src-tauri/src/main.rs` | Native shell that expects an `audio` CLI. |
 | `src-tauri/src/secrets.rs` | Gemini key lookup. |
@@ -75,13 +77,16 @@ audio convert <in> <out>
 audio schema --kind sfx|music|voices
 audio assets
 audio scan [--dir Assets/Audio]
+audio mods
+audio effective --kind sfx|music|voices [--mod <id>]
+audio init-mod <id> [--name <name>]
 ```
 
 In the current main checkout, `src/bin/audio.rs` is not present. That means:
 
 - `npm run dev` can show the web UI shell, but bridge calls cannot complete.
 - `npm run tauri:dev` requires an `AUDIO_BIN` that does not currently build from this main checkout.
-- Open/save/export through the desktop shell is blocked until the CLI is implemented or restored.
+- Open/save/export, mod switching, effective views, scanning, validation, and audition bridge flows are blocked until the CLI is implemented or restored.
 
 The release scripts know about this incomplete state:
 
@@ -117,6 +122,7 @@ Good current tasks:
 
 - Document the current manifest shapes.
 - Improve pure TypeScript tests around `AudioDoc` and id generation.
+- Improve pure TypeScript tests around `computeEffective`, `forkEntry`, hide/restore, and overlay path helpers.
 - Improve UI copy and layout in web-only mode.
 - Add or refine `Assets/Data/sfx.toml`, `music.toml`, or `voices.toml` entries manually.
 - Implement or restore the `audio` CLI contract.

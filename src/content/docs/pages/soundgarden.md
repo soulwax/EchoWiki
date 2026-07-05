@@ -34,8 +34,8 @@ What is available in this checkout:
 | Audio manifests | Available | `Assets/Data/sfx.toml`, `music.toml`, and `voices.toml` exist and are loaded by the game. |
 | Runtime audio | Available | `src/runtime/audio.rs` and `src/runtime/voice.rs` consume the manifest data. |
 | Manifest Rust types | Available | `SfxDef`, `TrackDef`, `VoiceDef`, and manifest wrappers live in `src/data/mod_data.rs`. |
-| Soundgarden app | Available | `tools/soundgarden` contains the Tauri/Vite app, document model, bridge wrappers, and tests. |
-| `audio` CLI | Not present in current main checkout | Soundgarden expects `audio validate`, `convert`, `schema`, `assets`, and `scan`, but `src/bin/audio.rs` is not currently present. |
+| Soundgarden app | Available | `tools/soundgarden` contains the Tauri/Vite app, document model, bridge wrappers, mod overlay helpers, audition bridge, and tests. |
+| `audio` CLI | Not present in current main checkout | Soundgarden expects `audio validate`, `convert`, `schema`, `assets`, `scan`, `mods`, `effective`, and `init-mod`, but `src/bin/audio.rs` is not currently present. |
 | Full desktop workflow | Blocked until CLI exists | Tauri bridge commands need `AUDIO_BIN` or an `audio` binary on `PATH`. |
 | Submodule mapping | Needs attention | `tools/soundgarden` exists locally, but `git submodule status` reports no `.gitmodules` mapping for it. |
 
@@ -70,8 +70,12 @@ Start here:
 1. [Available Now](soundgarden/available-now/) for the exact local capabilities and blockers.
 2. [Manifest Studio](soundgarden/manifest-studio/) for how the current app is shaped.
 3. [Audio Manifests](soundgarden/audio-manifests/) for the `sfx`, `music`, and `voices` data model.
-4. [Architecture](soundgarden/architecture/) for the app, bridge, CLI, and runtime boundaries.
-5. [Moddability](soundgarden/moddability/) for how audio content should stay mod-friendly.
+4. [CLI Contract](soundgarden/cli-contract/) for the game-owned command boundary the desktop shell expects.
+5. [Mod Authoring Mode](soundgarden/mod-authoring-mode/) for overlays, copy-on-write edits, and provenance badges.
+6. [Audition And Clips](soundgarden/audition-and-clips/) for preview playback and unregistered clip registration.
+7. [Contributor Workflow](soundgarden/contributor-workflow/) for practical slices a newcomer can take.
+8. [Architecture](soundgarden/architecture/) for the app, bridge, CLI, and runtime boundaries.
+9. [Moddability](soundgarden/moddability/) for how audio content should stay mod-friendly.
 
 ## Rule Of Thumb
 
@@ -83,4 +87,3 @@ When contributing to Soundgarden:
 - do not hardcode runtime audio paths in the editor
 - treat the game loaders and manifest structs as the source of truth
 - repair or implement `audio` before claiming the desktop export flow is complete
-

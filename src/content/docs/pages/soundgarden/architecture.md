@@ -26,6 +26,7 @@ The target contract is:
 
 - Rust data structs define the shape.
 - `audio` parses, validates, converts, scans, and emits schema.
+- `audio` also owns mod listing, effective overlay views, and mod scaffolding.
 - Soundgarden edits JSON in memory and exports TOML through `audio`.
 - The runtime reads the same TOML as before.
 
@@ -36,6 +37,8 @@ flowchart TB
     main[src/main.ts]
     doc[src/doc.ts<br/>AudioDoc]
     id[src/id.ts]
+    overlay[src/overlay.ts<br/>mod rows]
+    modmode[src/modmode.ts<br/>overlay paths]
     bridge[src/bridge.ts]
     shell[src-tauri/src/main.rs]
     secrets[src-tauri/src/secrets.rs]
@@ -43,6 +46,8 @@ flowchart TB
 
     main --> doc
     main --> id
+    main --> overlay
+    main --> modmode
     main --> bridge
     bridge --> shell
     shell --> secrets
@@ -98,9 +103,34 @@ Expected bridge commands:
 | `schema(kind)` | `audio_schema` | `audio schema --kind <kind>` |
 | `assets()` | `audio_assets` | `audio assets` |
 | `scan(dir)` | `audio_scan` | `audio scan [--dir]` |
+| `mods()` | `audio_mods` | `audio mods` |
+| `effective(kind, modId)` | `audio_effective` | `audio effective --kind <kind> [--mod <id>]` |
+| `initMod(id, name)` | `audio_init_mod` | `audio init-mod <id> [--name <name>]` |
+| `readClip(path, modId)` | `read_clip` | Shell resolves bytes from mod/vanilla `Assets/` |
 | `loadManifest(path)` | `load_manifest` | `audio convert <path> <tmp.json>` |
 | `saveManifest(path,json)` | `save_manifest` | `audio convert <tmp.json> <path>` |
 | `exportManifest(path,json)` | `export_manifest` | validate first, then convert |
+
+## Mod Mode Boundary
+
+```mermaid
+sequenceDiagram
+    participant UI as Soundgarden UI
+    participant Shell as Tauri shell
+    participant AudioCli as audio CLI
+    participant Doc as AudioDoc
+
+    UI->>Shell: audio_effective kind
+    Shell->>AudioCli: effective --kind kind
+    AudioCli-->>Shell: vanilla effective entries
+    Shell-->>UI: entries JSON
+    UI->>Shell: load overlay path
+    Shell->>AudioCli: convert overlay TOML to JSON
+    Shell-->>UI: overlay JSON or missing-file report
+    UI->>Doc: create overlay document
+```
+
+In mod mode, `doc` is the overlay document. Vanilla rows are a read-only base rendered behind it. Editing a vanilla row forks it into the overlay with `forkEntry()`.
 
 ## Export Safety
 
@@ -153,5 +183,6 @@ Before Soundgarden can be called complete in this checkout:
 1. Add or restore `src/bin/audio.rs`.
 2. Ensure `Cargo.toml` declares the `audio` binary if needed.
 3. Make `audio validate`, `convert`, `schema`, `assets`, and `scan` pass against current manifests.
-4. Fix the `tools/soundgarden` submodule mapping or intentionally vendor it.
-5. Run `npm test`, `npm run build`, and the game-side `audio` CLI checks.
+4. Add the Phase 1.5 commands the current Tauri shell already calls: `mods`, `effective`, `init-mod`, and the file read path needed by audition playback.
+5. Fix the `tools/soundgarden` submodule mapping or intentionally vendor it.
+6. Run `npm test`, `npm run build`, and the game-side `audio` CLI checks.
