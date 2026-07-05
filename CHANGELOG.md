@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.0.6] - 2026-07-05
+
+Release type: PATCH
+
+- Restored Mermaid sequence participant label contrast by targeting generated actor `tspan` text nodes directly.
+- Aligned Mermaid's actor, signal, and label seed colors with the dark wiki diagram surface so participant boxes do not render with hidden text.
+- Kept wide diagram frames inside the article lane while allowing natural-width sequence diagrams to scroll inside the surface instead of overlapping side navigation.
+
 ## [v1.0.5] - 2026-07-05
 
 Release type: PATCH

@@ -102,10 +102,11 @@ pre.mermaid-rendered {
   --ew-diagram-teal: #63bfae;
   --ew-diagram-blue: #70a2d2;
   --ew-diagram-warn: #d2a24e;
-  width: var(--ew-diagram-surface-width);
-  max-width: calc(100vw - 2rem);
+  box-sizing: border-box;
+  width: min(var(--ew-diagram-surface-width), 100%);
+  max-width: 100%;
   margin-block: 1.65rem;
-  margin-inline: calc((100% - var(--ew-diagram-surface-width)) / 2);
+  margin-inline: auto;
   border: 1px solid var(--ew-diagram-border);
   border-radius: 8px;
   background:
@@ -185,8 +186,8 @@ pre.mermaid-rendered > svg[id^='mermaid-'] {
 
 .mermaid-surface[data-diagram='sequence'] svg,
 pre.mermaid-rendered[data-diagram='sequence'] > svg[id^='mermaid-'] {
-  width: min(var(--ew-mermaid-width, 100%), 100%) !important;
-  max-width: 100% !important;
+  width: var(--ew-mermaid-width, 100%) !important;
+  max-width: none !important;
 }
 
 .mermaid-surface[data-fit='contain'] svg,
@@ -217,14 +218,14 @@ pre.mermaid-rendered[data-fit='contain'] > svg[id^='mermaid-'] {
   stroke: var(--ew-diagram-blue) !important;
 }
 
-:is(.mermaid-surface, pre.mermaid-rendered) :is(.nodeLabel, .edgeLabel, .label, .messageText, text.actor, .stateLabel, .loopText, .noteText) {
+:is(.mermaid-surface, pre.mermaid-rendered) :is(.nodeLabel, .edgeLabel, .label, .messageText, text.actor, text.actor-box, text.actor tspan, text.actor-box tspan, .actor-box tspan, .stateLabel, .loopText, .noteText) {
   color: var(--ew-diagram-text) !important;
   fill: var(--ew-diagram-text) !important;
   font-family: var(--sl-font) !important;
   letter-spacing: 0 !important;
 }
 
-:is(.mermaid-surface, pre.mermaid-rendered) :is(text.actor, .messageText, .loopText, .noteText, .labelText) {
+:is(.mermaid-surface, pre.mermaid-rendered) :is(text.actor, text.actor-box, text.actor tspan, text.actor-box tspan, .actor-box tspan, .messageText, .loopText, .noteText, .labelText) {
   paint-order: normal !important;
   stroke: transparent !important;
   stroke-width: 0 !important;
