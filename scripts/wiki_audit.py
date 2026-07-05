@@ -43,6 +43,38 @@ COMPLEX_TERMS = {
     "integrity",
 }
 RISKY_SEQUENCE_LABEL_CHARS = re.compile(r"[/:*().<>]")
+MERMAID_SEQUENCE_KEYWORDS = {
+    "activate",
+    "actor",
+    "alt",
+    "and",
+    "autonumber",
+    "break",
+    "critical",
+    "deactivate",
+    "else",
+    "end",
+    "loop",
+    "note",
+    "opt",
+    "option",
+    "par",
+    "participant",
+    "rect",
+}
+MERMAID_FLOWCHART_KEYWORDS = {
+    "call",
+    "class",
+    "classdef",
+    "click",
+    "direction",
+    "end",
+    "flowchart",
+    "graph",
+    "linkstyle",
+    "style",
+    "subgraph",
+}
 
 
 @dataclass
@@ -116,8 +148,8 @@ def complex_score(slug: str, title: str | None, text: str) -> int:
     return sum(1 for term in COMPLEX_TERMS if term in haystack)
 
 
-def risky_sequence_participants(text: str) -> list[tuple[int, str]]:
-    findings: list[tuple[int, str]] = []
+def risky_sequence_participants(text: str) -> list[tuple[int, str, str]]:
+    findings: list[tuple[int, str, str]] = []
     in_mermaid = False
     in_sequence = False
     for line_number, line in enumerate(text.splitlines(), start=1):
@@ -136,11 +168,50 @@ def risky_sequence_participants(text: str) -> list[tuple[int, str]]:
         if stripped == "sequenceDiagram":
             in_sequence = True
             continue
-        if not in_sequence or not stripped.startswith("participant ") or " as " not in stripped:
+        if not in_sequence or not stripped.startswith("participant "):
             continue
-        label = stripped.split(" as ", 1)[1].strip().strip('"')
-        if RISKY_SEQUENCE_LABEL_CHARS.search(label):
-            findings.append((line_number, label))
+        declaration = stripped.removeprefix("participant ").strip()
+        identifier, separator, label = declaration.partition(" as ")
+        if identifier.lower() in MERMAID_SEQUENCE_KEYWORDS:
+            findings.append((line_number, identifier, "reserved identifier"))
+        if separator:
+            display_label = label.strip().strip('"')
+            if RISKY_SEQUENCE_LABEL_CHARS.search(display_label):
+                findings.append((line_number, display_label, "risky label punctuation"))
+    return findings
+
+
+def risky_flowchart_nodes(text: str) -> list[tuple[int, str, str]]:
+    findings: list[tuple[int, str, str]] = []
+    in_mermaid = False
+    in_flowchart = False
+    node_pattern = re.compile(r"^([A-Za-z_][\w-]*)\s*([\[{])(.*)([\]}])$")
+    for line_number, line in enumerate(text.splitlines(), start=1):
+        stripped = line.strip()
+        if stripped.startswith("```"):
+            if not in_mermaid and stripped == "```mermaid":
+                in_mermaid = True
+                in_flowchart = False
+                continue
+            if in_mermaid:
+                in_mermaid = False
+                in_flowchart = False
+                continue
+        if not in_mermaid:
+            continue
+        if stripped.startswith(("flowchart ", "graph ")):
+            in_flowchart = True
+            continue
+        if not in_flowchart:
+            continue
+        match = node_pattern.match(stripped)
+        if not match:
+            continue
+        identifier, _, label, _ = match.groups()
+        if identifier.lower() in MERMAID_FLOWCHART_KEYWORDS:
+            findings.append((line_number, identifier, "reserved identifier"))
+        if "(" in label and not label.startswith('"'):
+            findings.append((line_number, label, "unquoted grammar punctuation"))
     return findings
 
 
@@ -186,10 +257,15 @@ def audit(root: Path, min_complex_diagrams: int) -> AuditReport:
 
         if title is None:
             errors.append(f"{slug or '/'}: missing frontmatter title")
-        for line_number, label in risky_sequence_participants(text):
+        for line_number, label, reason in risky_sequence_participants(text):
             errors.append(
-                f"{slug or '/'}:{line_number}: sequence participant label "
-                f"'{label}' uses Mermaid-risky punctuation"
+                f"{slug or '/'}:{line_number}: sequence participant '{label}' "
+                f"uses Mermaid-{reason}"
+            )
+        for line_number, label, reason in risky_flowchart_nodes(text):
+            errors.append(
+                f"{slug or '/'}:{line_number}: flowchart node '{label}' "
+                f"uses Mermaid-{reason}"
             )
         if slug.startswith("pages/architecture") and score >= 3 and diagrams < min_complex_diagrams:
             warnings.append(

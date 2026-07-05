@@ -130,11 +130,11 @@ On Windows, the colocated CLI resolves from the application directory. On Linux 
 ```mermaid
 flowchart LR
     ctx[SuggestContext]
-    engine[suggestions()]
+    engine["suggestions()"]
     providers[SuggestionProvider list]
     rules[RuleProvider]
     merged[deduped ranked suggestions]
-    doc[SceneDoc apply()]
+    doc["SceneDoc apply()"]
 
     ctx --> engine
     engine --> providers
@@ -157,15 +157,15 @@ flowchart TB
     project[Project.open]
     list[listSceneDir]
     docs[SceneDoc map]
-    graph[choreo graph --json]
+    graphCommand[choreo graph --json]
     canvas[story canvas]
     sidecar[.leitmotif/layout.json]
 
     folder --> project
     project --> list
     list --> docs
-    project --> graph
-    graph --> canvas
+    project --> graphCommand
+    graphCommand --> canvas
     sidecar --> canvas
 ```
 

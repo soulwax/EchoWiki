@@ -69,18 +69,18 @@ Most `src/data/mod_data.rs` loaders follow the same failure-tolerant shape:
 
 ```mermaid
 flowchart TD
-    call[load_x_from path]
-    read[asset_pack::read_to_string]
-    readok{read ok?}
-    parse[toml/serde parse]
-    parseok{parse ok?}
+    loadCall[load_x_from path]
+    read["asset_pack::read_to_string"]
+    readok{"read ok?"}
+    parse["toml/serde parse"]
+    parseok{"parse ok?"}
     validate[light local normalization]
     loaded[return loaded config]
     warn1[print cannot read]
     warn2[print parse error]
-    fallback[return default/fallback]
+    fallback["return default/fallback"]
 
-    call --> read --> readok
+    loadCall --> read --> readok
     readok -- yes --> parse --> parseok
     readok -- no --> warn1 --> fallback
     parseok -- yes --> validate --> loaded

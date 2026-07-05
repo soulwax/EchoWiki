@@ -10,7 +10,7 @@ title: "Runtime Shell"
 flowchart LR
     main[src/main.rs]
     config[src/runtime/config.rs]
-    run[src/runtime/mod.rs run()]
+    run["src/runtime/mod.rs run()"]
     assets[src/runtime/assets.rs]
     pure[src/game, src/data, src/ui, src/save]
     mq[Macroquad window, input, audio, draw]
@@ -48,13 +48,13 @@ sequenceDiagram
     participant Run as runtime run
     participant Data as Data loaders
     participant Loader as AssetLoader
-    participant Loop as frame loop
+    participant FrameLoop as frame loop
 
     Main->>Run: await runtime::run()
     Run->>Data: load settings, characters, music, world data
     Run->>Loader: phase-step RuntimeAssets
     Loader-->>Run: terrain, characters, effects, audio, fonts
-    Run->>Loop: build PrototypeRuntime and tick/draw frames
+    Run->>FrameLoop: build PrototypeRuntime and tick/draw frames
 ```
 
 Startup failures return `Err(String)`. `src/main.rs` prints the error and calls `runtime::show_error()` so failures are visible in the game window.

@@ -93,12 +93,12 @@ Story mode is for opening a folder of scenes and seeing how scene files chain.
 ```mermaid
 flowchart LR
     folder[Assets/Data/scenes]
-    graph[choreo graph --json]
+    graphCommand[choreo graph --json]
     canvas[Story canvas]
     layout[.leitmotif/layout.json]
 
-    folder --> graph
-    graph --> canvas
+    folder --> graphCommand
+    graphCommand --> canvas
     layout --> canvas
 ```
 

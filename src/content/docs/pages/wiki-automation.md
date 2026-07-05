@@ -83,12 +83,12 @@ flowchart TD
     simple[simple reference page]
     complex[complex architecture page]
     text[text may be enough]
-    graph[needs diagrams]
+    graphCheck[needs diagrams]
     warning[advisory warning]
     strict[strict mode can fail]
 
     simple --> text
-    complex --> graph --> warning --> strict
+    complex --> graphCheck --> warning --> strict
 ```
 
 The default audit is intentionally advisory. Some reference pages do not need diagrams. Complex pages about runtime, packs, commands, modding, choreography, or protection usually do.

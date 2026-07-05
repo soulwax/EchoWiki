@@ -10,13 +10,13 @@ title: "App Shell And States"
 flowchart TB
     app[EchoWarriorApp]
     state[AppState]
-    class[Selected class]
+    selectedClass[Selected class]
     manifest[AssetManifest]
     clock[RunClock]
     bounds[WorldBounds]
 
     app --> state
-    app --> class
+    app --> selectedClass
     app --> manifest
     app --> clock
     app --> bounds

@@ -116,17 +116,17 @@ flowchart LR
     convert[choreo convert]
     schema[choreo schema]
     preview[choreo preview]
-    graph[choreo graph]
+    graphCommand[choreo graph]
     gui[future authoring tools]
 
     toml --> validate
     toml --> convert
     toml --> preview
-    toml --> graph
+    toml --> graphCommand
     schema --> gui
     convert --> gui
     preview --> gui
-    graph --> gui
+    graphCommand --> gui
 ```
 
 Useful commands:
