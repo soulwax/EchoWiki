@@ -1,5 +1,12 @@
 # Changelog
 
+## [v1.0.4] - 2026-07-05
+
+Release type: PATCH
+
+- Improved Mermaid sequence diagram rendering so wide participant flows get a broader responsive surface and wrapped labels instead of cramped actor boxes.
+- Split sequence actor text styling from actor box and lifeline styling to prevent hollow or visually empty participant labels.
+
 ## [v1.0.3] - 2026-07-05
 
 Release type: PATCH
