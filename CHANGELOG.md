@@ -1,5 +1,12 @@
 # Changelog
 
+## [v1.0.8] - 2026-07-06
+
+Release type: PATCH
+
+- Refined Mermaid flowchart edge-label styling so small connector captions such as `yes` and `no` render as clean gold text instead of clipped background chips.
+- Made Mermaid edge-label backgrounds transparent at both theme and CSS layers, with visible foreign-object overflow and a subtle diagram-surface halo for readability.
+
 ## [v1.0.7] - 2026-07-05
 
 Release type: PATCH

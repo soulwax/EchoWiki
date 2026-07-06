@@ -231,29 +231,45 @@ pre.mermaid-rendered[data-fit='contain'] > svg[id^='mermaid-'] {
   stroke-width: 0 !important;
 }
 
+:is(.mermaid-surface, pre.mermaid-rendered) :is(.edgeLabel foreignObject, .edgeLabels foreignObject) {
+  overflow: visible !important;
+}
+
 :is(.mermaid-surface, pre.mermaid-rendered) :is(.edgeLabels .labelBkg, .edgeLabel .labelBkg) {
-  padding: 0.04rem 0.34rem !important;
-  border: 1px solid color-mix(in srgb, var(--ew-diagram-teal) 42%, transparent);
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--ew-diagram-bg) 82%, var(--ew-diagram-teal)) !important;
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.12),
-    0 0 10px color-mix(in srgb, var(--ew-diagram-teal) 20%, transparent);
+  display: block !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
   color: var(--ew-diagram-accent) !important;
-  font-size: 0.74rem;
-  font-weight: 700;
-  line-height: 1.15 !important;
-  letter-spacing: 0.02em !important;
+  font-family: var(--sl-font) !important;
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  letter-spacing: 0 !important;
 }
 
 :is(.mermaid-surface, pre.mermaid-rendered) :is(.edgeLabels .labelBkg p, .edgeLabel .labelBkg p) {
-  margin: 0;
+  display: inline-block;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  color: var(--ew-diagram-accent) !important;
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  letter-spacing: 0 !important;
+  text-shadow:
+    0 0 5px color-mix(in srgb, var(--ew-diagram-bg) 92%, transparent),
+    0 0 9px color-mix(in srgb, var(--ew-diagram-teal) 28%, transparent);
 }
 
 :is(.mermaid-surface, pre.mermaid-rendered) :is(.edgeLabels span.edgeLabel, .edgeLabel span.edgeLabel) {
+  display: inline-block !important;
   color: var(--ew-diagram-accent) !important;
   fill: var(--ew-diagram-accent) !important;
   background: transparent !important;
+  line-height: 1 !important;
 }
 
 :is(.mermaid-surface, pre.mermaid-rendered) :is(.edgePath path, .flowchart-link, .messageLine0, .messageLine1, .transition, .relation) {
