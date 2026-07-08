@@ -74,6 +74,10 @@ export default defineConfig({
               items: [
                 { label: 'Tiny Moddable Feature', slug: 'pages/guides/tiny-moddable-feature' },
                 { label: 'Tiny Rust-Backed Stat', slug: 'pages/guides/tiny-rust-backed-stat' },
+                {
+                  label: 'First Renderer Boundary Slice',
+                  slug: 'pages/guides/first-renderer-boundary-slice',
+                },
               ],
             },
             {
@@ -133,6 +137,7 @@ export default defineConfig({
                 { label: 'Audio And Transitions', slug: 'pages/audio-and-transitions' },
                 { label: '6. Choreography', slug: 'pages/architecture/choreography' },
                 { label: '10. Rendering And UI', slug: 'pages/architecture/rendering-and-ui' },
+                { label: '10A. Vulkan Renderer Path', slug: 'pages/architecture/vulkan-renderer-path' },
               ],
             },
             {

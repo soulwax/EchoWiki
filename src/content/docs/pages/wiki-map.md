@@ -34,6 +34,14 @@ The structure follows a documentation pattern used by mature engine manuals: fir
 3. [Asset Loading Pipeline](asset-loading-pipeline/)
 4. [Contribution Workflow](contribution-workflow/)
 
+### First Renderer Slice
+
+1. [First Renderer Boundary Slice](guides/first-renderer-boundary-slice/)
+2. [Rendering And UI](architecture/rendering-and-ui/)
+3. [Vulkan Renderer Path](architecture/vulkan-renderer-path/)
+4. [Main Code Map](main-code-map/)
+5. [Verification Guide](verification-guide/)
+
 ### Runtime Work
 
 1. [Runtime Shell](runtime-shell/)
@@ -42,6 +50,7 @@ The structure follows a documentation pattern used by mature engine manuals: fir
 4. [Runtime Data Command Pipeline](architecture/runtime-data-command-pipeline/)
 5. [Audio And Transitions](audio-and-transitions/)
 6. [Rendering And UI](architecture/rendering-and-ui/)
+7. [Vulkan Renderer Path](architecture/vulkan-renderer-path/)
 
 ### Tooling Or Release Work
 

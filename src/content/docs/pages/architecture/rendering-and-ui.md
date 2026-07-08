@@ -68,6 +68,26 @@ flowchart TB
 
 UI should be data-driven where practical. Text, colors, budgets, and common layout values should not drift into random runtime constants.
 
+## Renderer Boundary
+
+The current playable game still starts through Macroquad, but recent renderer work has added a neutral draw contract in `src/render.rs`. That boundary is the slow, deliberate path toward the owned [`soulwax/vk2d`](https://github.com/soulwax/vk2d) 2D renderer without forcing every draw site to change at once.
+
+```mermaid
+flowchart LR
+    feature[Runtime feature module]
+    neutral[src/render.rs<br/>Renderer2d verbs]
+    mq[src/runtime/renderer_mq.rs<br/>Macroquad adapter]
+    vk[crates/vk2d<br/>soulwax/vk2d checkout]
+    probe[src/bin/wgpu_probe.rs<br/>isolated test window]
+
+    feature --> neutral
+    neutral --> mq
+    neutral -. future backend .-> vk
+    probe --> vk
+```
+
+For contributors, the practical rule is simple: new renderer-migration slices should move draw intent toward `Renderer2d` verbs such as rectangles, sprites, text, lines, circles, targets, and materials. Gameplay and UI model code should not learn about `wgpu`, `winit`, or Macroquad resource types.
+
 ## Shader And VFX Flow
 
 ```mermaid
@@ -86,7 +106,43 @@ flowchart TD
     fallback --> effect
 ```
 
+Macroquad materials still support the shipping runtime path. The new `vk2d` crate loads WGSL material text through its own API for probe rendering, so shader work now has two important contracts:
+
+- gameplay and UI choose *what* effect should be drawn
+- the backend chooses *how* that material is loaded and presented
+
 Missing shader materials should degrade gracefully. A visible fallback is better than a crash or invisible gameplay signal.
+
+## Vulkan-Oriented Probe Path
+
+`src/bin/wgpu_probe.rs` is the safe place to test Vulkan-facing renderer work. It opens an isolated `winit` window, drives `src/wgpu_vulkan`, and consumes the checked-out `soulwax/vk2d` renderer crate at `crates/vk2d`. That keeps experimental GPU work away from the main Macroquad boot path until the contract is boring enough to rely on.
+
+```mermaid
+flowchart TD
+    probe[wgpu_probe]
+    consumer[src/wgpu_vulkan]
+    crate[crates/vk2d]
+    gpu[wgpu backend]
+    shader[WGSL material text]
+    assets[raw texture/font bytes]
+
+    probe --> consumer --> crate --> gpu
+    shader --> crate
+    assets --> crate
+```
+
+Use the probe for renderer library checks:
+
+```powershell
+cargo test -p vk2d
+cargo run --bin wgpu_probe -- --frames 3
+```
+
+Use the game for integration checks:
+
+```powershell
+cargo run
+```
 
 ## Modal Modes
 
@@ -114,6 +170,7 @@ When adding world-space labels, damage numbers, or banter, check how they behave
 - Is the draw call world-space or screen-space?
 - Does it need pixel snapping?
 - Does it respect current runtime mode?
+- Can the draw intent go through `Renderer2d` instead of raw Macroquad calls?
 - Does it have data-driven colors/tuning where practical?
 - Does a missing asset/shader have a fallback?
 - Does any new runtime asset ship in `data.pak`?

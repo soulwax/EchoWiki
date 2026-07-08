@@ -21,6 +21,10 @@ Shared vocabulary keeps architecture discussions short and less mysterious.
 | ECS lifecycle bridge | Adapter that mirrors runtime enemy lifecycle into `EcsWorld` without making ECS the runtime owner. |
 | hot lane | Per-frame path that must stay allocation-light and avoid repeated expensive setup. |
 | cold sync | Full or infrequent synchronization used for spawn, restore, identity, or base-stat changes. |
+| `Renderer2d` | Backend-neutral drawing trait in `src/render.rs`; runtime code should use it when a draw site is ready to migrate away from raw Macroquad calls. |
+| `MacroquadRenderer` | Adapter in `src/runtime/renderer_mq.rs` that implements `Renderer2d` using the current Macroquad runtime. |
+| `vk2d` | Standalone renderer project at [soulwax/vk2d](https://github.com/soulwax/vk2d), checked out locally as `crates/vk2d`. |
+| `wgpu_probe` | Isolated binary that drives EchoWarrior demo assets through `vk2d` without replacing the shipped Macroquad runtime. |
 | scene project | A choreography TOML file under `Assets/Data/scenes`. |
 
 ## Flow Terms

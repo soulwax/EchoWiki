@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.0.9] - 2026-07-08
+
+Release type: PATCH
+
+- Added a Vulkan renderer path chapter that explains the staged move from Macroquad draw calls toward `Renderer2d` and the standalone [soulwax/vk2d](https://github.com/soulwax/vk2d) renderer.
+- Added a beginner tutorial for moving one small draw site behind the renderer boundary without touching Vulkan directly.
+- Updated the architecture chapter, module boundaries, code map, glossary, and wiki map so contributors can discover `src/render.rs`, `src/runtime/renderer_mq.rs`, `src/bin/wgpu_probe.rs`, and the `crates/vk2d` checkout.
+
 ## [v1.0.8] - 2026-07-06
 
 Release type: PATCH
