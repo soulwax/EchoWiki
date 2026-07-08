@@ -41,6 +41,8 @@ Use this rule of thumb:
 | content values, enemies, upgrades, items, abilities | `Assets/Data` and `src/data` |
 | core gameplay rules that should be testable | `src/game` |
 | drawing, input, audio, Macroquad state | `src/runtime` |
+| renderer migration boundary | `src/render.rs`, `src/runtime/renderer_mq.rs`, then [Renderer Submodule Workflow](renderer-submodule-workflow/) |
+| reusable Vulkan renderer internals | `crates/vk2d` / [soulwax/vk2d](https://github.com/soulwax/vk2d) |
 | UI models/layout/theme | `src/ui` and `Assets/Data/ui.toml` |
 | Lua spawn/event hooks | `src/scripting` and `Assets/Scripts` |
 | dialogue | `Assets/Dialogue` and `src/game/dialogue_loader.rs` |
@@ -109,6 +111,19 @@ For runtime behavior:
 cargo run
 ```
 
+For the isolated Vulkan renderer path:
+
+```powershell
+cargo run --bin wgpu_probe -- --frames 3
+```
+
+For renderer-library work:
+
+```powershell
+cargo test -p vk2d
+cargo run -p vk2d --example hello_sprite -- --frames 3
+```
+
 See [Verification Guide](../verification-guide/) for a fuller matrix.
 
 ```mermaid
@@ -143,6 +158,8 @@ Common destinations:
 - `Docs/TECHNICAL_NOTES.md` for architecture changes
 - `Docs/Wiki` submodule for contributor-facing main-code guidance
 - `CHANGELOG.md` for completed changes and version bumps
+
+If a change touches `crates/vk2d`, commit and push inside the `soulwax/vk2d` submodule first. Then bump the EchoWarrior parent pointer deliberately, not as part of an unrelated game change.
 
 ```mermaid
 flowchart LR

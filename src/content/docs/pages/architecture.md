@@ -109,6 +109,7 @@ EchoWarrior is built to keep content easy to modify while keeping core rules tes
 | changing enemy ECS frame sync or mirrored components | [ECS Lifecycle Hot Lane](ecs-lifecycle-hot-lane/) |
 | changing draw order, effects, or HUD | [Rendering And UI](rendering-and-ui/) |
 | moving draw calls toward the owned renderer | [Vulkan Renderer Path](vulkan-renderer-path/) |
+| touching the `vk2d` renderer submodule | [Renderer Submodule Workflow](../renderer-submodule-workflow/) |
 | changing saves, settings, or account progress | [Persistence And State](persistence-and-state/) |
 | deciding which checks to run | [Verification Architecture](verification-architecture/) |
 | adding fallbacks or loader behavior | [Graceful Degradation](graceful-degradation/) |

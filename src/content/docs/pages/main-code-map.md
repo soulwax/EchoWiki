@@ -31,7 +31,7 @@ title: "Main Code Map"
 
 | Path | Role |
 | --- | --- |
-| `crates/vk2d` | Local checkout of [soulwax/vk2d](https://github.com/soulwax/vk2d), the standalone immediate-mode 2D renderer crate consumed by EchoWarrior's probe path. |
+| `crates/vk2d` | Git submodule checkout of [soulwax/vk2d](https://github.com/soulwax/vk2d), the standalone immediate-mode 2D renderer crate consumed by EchoWarrior's probe path. |
 
 ## What Is Not Covered Here
 

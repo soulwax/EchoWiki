@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.0.10] - 2026-07-08
+
+Release type: PATCH
+
+- Added a renderer submodule workflow page that explains how EchoWarrior consumes `soulwax/vk2d`, which repository owns which renderer changes, and how to avoid accidental parent gitlink bumps.
+- Refined the Vulkan renderer chapter and beginner renderer tutorial with the current `vk2d` requirements: immediate-mode frames, app-supplied bytes, WGSL material data, Result-based loading, opaque handles, and optional `egui`/`winit-input` features.
+- Updated contribution, verification, migration, anti-pattern, code-map, glossary, and rendering pages so contributors can pick the right checks for Macroquad slices, `wgpu_probe`, and `vk2d` library changes.
+
 ## [v1.0.9] - 2026-07-08
 
 Release type: PATCH

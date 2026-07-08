@@ -6,7 +6,7 @@ This tutorial is for a beginner who wants to help with the renderer migration wi
 
 Your first renderer contribution should not be a backend rewrite. It should be one small draw site moved behind the neutral `Renderer2d` boundary, while Macroquad output stays the same.
 
-The renderer project lives at [soulwax/vk2d](https://github.com/soulwax/vk2d). EchoWarrior keeps it checked out at `crates/vk2d` so contributors can test the game and renderer together without pretending the game repo owns renderer internals.
+The renderer project lives at [soulwax/vk2d](https://github.com/soulwax/vk2d). EchoWarrior keeps it checked out as the `crates/vk2d` submodule so contributors can test the game and renderer together without pretending the game repo owns renderer internals.
 
 ## The Goal
 
@@ -31,7 +31,13 @@ The success condition is boring: the screen should look the same, but the code n
 | `src/runtime/overlays.rs` | Example of a small screen-space panel going through `MacroquadRenderer`. |
 | `src/ui/layout.rs` | Shared rectangle type used by neutral rendering. |
 | `src/bin/wgpu_probe.rs` | Isolated Vulkan smoke entry point. |
-| `crates/vk2d/README.md` | The local checkout of the standalone `soulwax/vk2d` renderer direction. |
+| `crates/vk2d/README.md` | The local submodule checkout of the standalone `soulwax/vk2d` renderer direction. |
+
+If the checkout is fresh, initialize the renderer submodule first:
+
+```powershell
+git submodule update --init crates/vk2d
+```
 
 ## Pick A Good First Target
 
@@ -156,10 +162,23 @@ If you touched `crates/vk2d` or the probe:
 
 ```powershell
 cargo test -p vk2d
+cargo run -p vk2d --example hello_sprite -- --frames 3
 cargo run --bin wgpu_probe -- --frames 3
 ```
 
 If you only moved a tiny screen-space rectangle through `Renderer2d`, `cargo check` plus a visual `cargo run` smoke test is usually the right first gate.
+
+## Step 6: Watch The Submodule Boundary
+
+A first boundary slice should normally leave `crates/vk2d` untouched. If `git status --short` in the parent repo shows `m crates/vk2d`, stop and check whether you intentionally changed the renderer checkout.
+
+```powershell
+git status --short
+git -C crates/vk2d status --short
+git submodule status crates/vk2d
+```
+
+Only bump the parent submodule pointer after a renderer-library commit has been made and pushed in `soulwax/vk2d`.
 
 ## What A Good First PR Says
 
@@ -177,4 +196,4 @@ That tells reviewers the important thing: behavior stayed stable, but the migrat
 
 ## Next Tutorial
 
-After this, read [Vulkan Renderer Path](../architecture/vulkan-renderer-path/) to understand how the same neutral draw vocabulary connects to `vk2d` and the `wgpu_probe`.
+After this, read [Vulkan Renderer Path](../architecture/vulkan-renderer-path/) to understand how the same neutral draw vocabulary connects to `vk2d` and the `wgpu_probe`, then read [Renderer Submodule Workflow](../renderer-submodule-workflow/) before touching the renderer crate itself.

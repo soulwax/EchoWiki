@@ -260,6 +260,7 @@ export default defineConfig({
           items: [
             { label: 'Contribution Workflow', slug: 'pages/contribution-workflow' },
             { label: 'Verification Guide', slug: 'pages/verification-guide' },
+            { label: 'Renderer Submodule Workflow', slug: 'pages/renderer-submodule-workflow' },
             { label: 'Wiki Automation', slug: 'pages/wiki-automation' },
             { label: 'Vercel Deployment', slug: 'pages/vercel-deployment' },
           ],

@@ -57,7 +57,7 @@ flowchart TB
 | `src/ui` | UI models, theme/layout helpers, some draw helpers | gameplay ownership |
 | `src/render.rs` | backend-neutral 2D renderer vocabulary | Macroquad, wgpu, winit, game-specific asset paths |
 | `src/runtime/renderer_mq.rs` | adapter from `Renderer2d` verbs to Macroquad drawing | pure gameplay rules, renderer feature design |
-| `crates/vk2d` | local checkout of `soulwax/vk2d`, the standalone renderer crate | EchoWarrior gameplay assumptions or hardcoded `Assets/` paths |
+| `crates/vk2d` | git submodule checkout of `soulwax/vk2d`, the standalone renderer crate | EchoWarrior gameplay assumptions or hardcoded `Assets/` paths |
 | `src/save` | account/run save models and paths | rendering decisions |
 | `src/scripting` | Lua API and command buffers | direct rendering side effects |
 | `src/asset_pack.rs` | loose/packed reads and discovery | gameplay rules |

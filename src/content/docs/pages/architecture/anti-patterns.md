@@ -104,3 +104,43 @@ Prefer:
 - one focused runtime adapter
 
 Then verify and commit the slice.
+
+## Renderer Backend Leakage
+
+The renderer migration depends on a narrow contract.
+
+```mermaid
+flowchart LR
+    leak[Backend type leaks upward]
+    coupled[Game/UI coupled to one backend]
+    harder[Harder Macroquad to vk2d migration]
+    fix[Keep src/render.rs neutral]
+
+    leak --> coupled --> harder --> fix
+```
+
+Avoid:
+
+- `wgpu` types in `src/game`, `src/data`, or `src/ui`
+- `macroquad` resource types in renderer-neutral helpers
+- EchoWarrior asset paths inside `soulwax/vk2d`
+- one-off shader Rust modules when `MaterialDesc` plus WGSL data is enough
+
+## Accidental Submodule Bumps
+
+`crates/vk2d` is a git submodule. A changed submodule pointer means the parent repository now depends on a different renderer commit.
+
+```mermaid
+flowchart TD
+    status[git status shows m crates/vk2d]
+    intended{Renderer update intended?}
+    leave[Leave pointer unstaged]
+    commit[Commit and push soulwax/vk2d first]
+    bump[Then commit parent gitlink]
+
+    status --> intended
+    intended -- no --> leave
+    intended -- yes --> commit --> bump
+```
+
+Do not include a renderer pointer bump in a gameplay, wiki, or content commit unless that pointer bump is the actual point of the slice.

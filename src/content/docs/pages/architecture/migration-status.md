@@ -29,7 +29,8 @@ The goal is not to erase runtime. The goal is to keep runtime focused on renderi
 | dialogue model/loading | split | YAML loading is pure-ish; runtime owns presentation. |
 | Lua hooks | split | Lua returns commands; runtime applies them. |
 | choreography | split by design | Pure engine emits intents; runtime apply layer moves actors/camera/state. |
-| rendering/VFX/audio | runtime-owned | Should remain Macroquad-side, with data-driven manifests. |
+| rendering/VFX | split and migrating | Macroquad still ships the game, but selected UI/runtime draw sites are moving through `Renderer2d`; `crates/vk2d` is a submodule consumer path tested through `wgpu_probe`. |
+| audio | runtime-owned | Audio remains runtime-side, with data-driven manifests and Soundgarden tooling evolving separately. |
 | saves/progression | shared | Save models are library-side; runtime triggers writes/restores. |
 | mod validation | tooling | `mod_check` is the shipping gate for content references. |
 
@@ -64,6 +65,7 @@ Not stable yet:
 
 - final ECS ownership model beyond the current lifecycle bridge hot/cold lanes
 - final UI architecture
+- final renderer backend selection beyond the current Macroquad runtime plus `vk2d` probe path
 - final scene/prop authoring model
 - final inventory/skill-tree UI shape
 - future GUI authoring workflows
@@ -77,3 +79,5 @@ When touching transitional code:
 3. keep adapter code close to current runtime owner
 4. add tests around the pure piece
 5. avoid creating new parallel ownership models
+
+Renderer migration follows the same rule: move one draw site or one backend capability at a time, then verify the exact path affected.

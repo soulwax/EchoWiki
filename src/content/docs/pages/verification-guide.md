@@ -33,6 +33,7 @@ flowchart TD
 | `cargo fmt --check` | Rust code changed or before opening a PR. |
 | `cargo test --lib` | Pure library logic changed. |
 | `cargo test --bin echo_warrior` | Runtime binary tests changed. |
+| `cargo test -p vk2d` | Renderer crate changed or the workspace renderer dependency moved. |
 | `cargo test` | Broad gate when time/environment allows. |
 
 ## Content And Modding Checks
@@ -71,6 +72,18 @@ What to check depends on the change, but report concrete observations:
 - no obvious console errors
 - target interaction works
 - missing asset fallback behaves correctly
+
+For the isolated Vulkan-facing renderer path:
+
+```powershell
+cargo run --bin wgpu_probe -- --frames 3
+```
+
+For the renderer crate by itself:
+
+```powershell
+cargo run -p vk2d --example hello_sprite -- --frames 3
+```
 
 ## Release-Pack Checks
 

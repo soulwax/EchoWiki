@@ -23,7 +23,7 @@ Shared vocabulary keeps architecture discussions short and less mysterious.
 | cold sync | Full or infrequent synchronization used for spawn, restore, identity, or base-stat changes. |
 | `Renderer2d` | Backend-neutral drawing trait in `src/render.rs`; runtime code should use it when a draw site is ready to migrate away from raw Macroquad calls. |
 | `MacroquadRenderer` | Adapter in `src/runtime/renderer_mq.rs` that implements `Renderer2d` using the current Macroquad runtime. |
-| `vk2d` | Standalone renderer project at [soulwax/vk2d](https://github.com/soulwax/vk2d), checked out locally as `crates/vk2d`. |
+| `vk2d` | Standalone renderer project at [soulwax/vk2d](https://github.com/soulwax/vk2d), consumed by EchoWarrior as the `crates/vk2d` git submodule. |
 | `wgpu_probe` | Isolated binary that drives EchoWarrior demo assets through `vk2d` without replacing the shipped Macroquad runtime. |
 | scene project | A choreography TOML file under `Assets/Data/scenes`. |
 

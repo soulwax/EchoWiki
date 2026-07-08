@@ -77,7 +77,7 @@ flowchart LR
     feature[Runtime feature module]
     neutral[src/render.rs<br/>Renderer2d verbs]
     mq[src/runtime/renderer_mq.rs<br/>Macroquad adapter]
-    vk[crates/vk2d<br/>soulwax/vk2d checkout]
+    vk[crates/vk2d<br/>soulwax/vk2d submodule]
     probe[src/bin/wgpu_probe.rs<br/>isolated test window]
 
     feature --> neutral
@@ -115,7 +115,7 @@ Missing shader materials should degrade gracefully. A visible fallback is better
 
 ## Vulkan-Oriented Probe Path
 
-`src/bin/wgpu_probe.rs` is the safe place to test Vulkan-facing renderer work. It opens an isolated `winit` window, drives `src/wgpu_vulkan`, and consumes the checked-out `soulwax/vk2d` renderer crate at `crates/vk2d`. That keeps experimental GPU work away from the main Macroquad boot path until the contract is boring enough to rely on.
+`src/bin/wgpu_probe.rs` is the safe place to test Vulkan-facing renderer work. It opens an isolated `winit` window, drives `src/wgpu_vulkan`, and consumes the `soulwax/vk2d` renderer submodule at `crates/vk2d`. That keeps experimental GPU work away from the main Macroquad boot path until the contract is boring enough to rely on.
 
 ```mermaid
 flowchart TD
@@ -135,6 +135,7 @@ Use the probe for renderer library checks:
 
 ```powershell
 cargo test -p vk2d
+cargo run -p vk2d --example hello_sprite -- --frames 3
 cargo run --bin wgpu_probe -- --frames 3
 ```
 

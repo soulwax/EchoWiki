@@ -39,8 +39,9 @@ The structure follows a documentation pattern used by mature engine manuals: fir
 1. [First Renderer Boundary Slice](guides/first-renderer-boundary-slice/)
 2. [Rendering And UI](architecture/rendering-and-ui/)
 3. [Vulkan Renderer Path](architecture/vulkan-renderer-path/)
-4. [Main Code Map](main-code-map/)
-5. [Verification Guide](verification-guide/)
+4. [Renderer Submodule Workflow](renderer-submodule-workflow/)
+5. [Main Code Map](main-code-map/)
+6. [Verification Guide](verification-guide/)
 
 ### Runtime Work
 
