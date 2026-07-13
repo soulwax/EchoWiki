@@ -251,6 +251,7 @@ export default defineConfig({
               items: [
                 { label: 'Logging And Perf Reference', slug: 'pages/logging-and-perf-reference' },
                 { label: 'Observability', slug: 'pages/observability' },
+                { label: 'Performance Benchmarks', slug: 'pages/benchmarks' },
                 { label: 'CLI Tools', slug: 'pages/cli-tools' },
                 { label: 'Architecture Glossary', slug: 'pages/architecture/glossary' },
               ],
