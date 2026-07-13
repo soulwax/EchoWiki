@@ -198,3 +198,38 @@ bash scripts/dist.sh --skip-tools
 ```
 
 The default path stages EchoWarrior, Leitmotif, and soundgarden. The skip-tools path creates a game-only package.
+
+## Runtime Diagnostic Flags
+
+These flags are handled by the game binary rather than `src/bin/` tools, but they are operationally important for scripts and agents.
+
+### `--fps-probe=<seconds>`
+
+Runs any launch mode for a short measurement window and prints one frame-time summary line to stderr, then exits 0.
+
+```powershell
+cargo run -- --arena --fps-probe=10
+cargo run -- --new-run --fps-probe=8
+cargo run -- --fps-probe=5
+```
+
+Behavior:
+
+- combines with `--arena`, `--new-run`, `--continue`, or `--stress`
+- used alone, measures the title screen
+- waits through a fixed 2.0 second warmup before sampling
+- samples raw, unclamped wall-clock frame deltas, so slow-frame p95/p99/min_fps values are real
+- rejects non-finite, zero, negative, non-numeric, or duplicated probe flags before opening the window
+
+Use `--fps-probe` for quick checks. Use `--stress=exit` when you need the staged benchmark ladder, CSV, and HTML report.
+
+```mermaid
+flowchart LR
+    launch[launch mode]
+    warmup[2s warmup]
+    sample[sample raw frame deltas]
+    summary[stderr fps summary]
+    exit[exit 0]
+
+    launch --> warmup --> sample --> summary --> exit
+```

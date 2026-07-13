@@ -86,6 +86,21 @@ cargo run -p vk2d --example hello_sprite -- --frames 3
 cargo run -p vk2d --example shader_gallery -- --frames 3
 ```
 
+For a quick frame-time readout in any launch mode:
+
+```powershell
+cargo run -- --arena --fps-probe=10
+cargo run -- --fps-probe=5
+```
+
+`--fps-probe=<seconds>` waits through a fixed 2.0 second warmup, then samples raw, unclamped wall-clock frame deltas for the requested window and exits after printing one stderr line:
+
+```text
+[fps] mode=arena warmup_s=2.0 sample_s=10.0 frames=... avg_fps=... avg_ms=... p95_ms=... p99_ms=... min_fps=...
+```
+
+Use this for fast renderer, shader, UI, or launch-mode sanity checks. Use the full `--stress=exit` ladder when comparing builds or population-scaling behavior.
+
 For the manual vk2d shell construction spike:
 
 ```powershell

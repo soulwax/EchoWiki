@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.0.13] - 2026-07-13
+
+Release type: PATCH
+
+- Documented the new `--fps-probe=<seconds>` launch diagnostic in verification, CLI tooling, and performance reference pages.
+- Clarified that the FPS probe samples raw, unclamped frame deltas after a fixed warmup, making p95/p99/min_fps useful for slow-frame checks.
+- Updated the vk2d runtime usage chapter with the `Renderer2d::end_target` lifecycle requirement that prevents stale target bindings from swallowing later glow/composite passes.
+
 ## [v1.0.12] - 2026-07-13
 
 Release type: PATCH

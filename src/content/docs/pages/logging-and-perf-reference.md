@@ -98,3 +98,20 @@ $env:ECHO_WARRIOR_PERF_WARN_MS = "10"
 ```
 
 Invalid, non-finite, or non-positive values fall back to the default.
+
+## FPS Probe
+
+For one-shot frame-time measurements, use the runtime launch flag:
+
+```powershell
+cargo run -- --arena --fps-probe=10
+```
+
+The probe lives in `src/runtime/fps_probe.rs`. It is intentionally separate from `perf_scope!`:
+
+| Surface | Purpose |
+| --- | --- |
+| `perf_scope!` | debug-only named scope warnings for code paths |
+| `--fps-probe=<seconds>` | scriptable whole-frame statistics for any launch mode |
+
+The probe ignores boot/loading noise with a fixed 2.0 second warmup, then records raw frame deltas before the gameplay clamp. That means p95, p99, and min_fps expose actual slow frames instead of being capped by the simulation's 50 ms delta clamp.

@@ -103,6 +103,19 @@ flowchart TB
 
 For Macroquad, `begin_target` binds a `RenderTarget` camera. For a vk2d backend, the matching concept is `Context::begin_target_frame(target, clear)` plus `Frame::set_view(View2::window(..., y_up = true))`.
 
+`end_scene_target` must close this bracket through `Renderer2d::end_target`, not by calling a backend-native camera reset directly. The current Macroquad adapter stores the active target separately from the camera; if the scene target is not ended through the trait, later `set_world_view` or `set_screen_view` calls can accidentally reattach the stale scene target. That exact failure path hid the bloom-off emissive glow by drawing it into an already-composited scene buffer instead of the screen.
+
+```mermaid
+flowchart LR
+    begin[begin_target scene]
+    world[world draw]
+    finishTarget[end_target clears active target]
+    composite[screen composite]
+    glow[optional emissive glow]
+
+    begin --> world --> finishTarget --> composite --> glow
+```
+
 ## Camera Mapping
 
 The runtime now computes one neutral world view:
@@ -250,6 +263,8 @@ The probe is not the game runtime. It is the richer smoke surface proving that v
 | `set_world_view` | `Camera2D::from_display_rect` | `Frame::set_view(View2::window(...))` |
 
 The only awkward part is lifecycle: `Renderer2d` is a stateful trait used throughout one Macroquad frame, while `vk2d` models each render pass as a `Frame` value that must be finished. A vk2d runtime adapter will need to own that pass state carefully.
+
+The lifecycle rule is strict: every target begin must have a matching backend-visible target finish before screen-space work resumes. In the live adapter, that is `end_target`. In a vk2d adapter, it will be the point where the target `Frame` is finished and the next pass begins.
 
 ## Construction Spike
 
