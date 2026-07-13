@@ -57,6 +57,8 @@ Game-specific paths such as `Assets/Graphics/...` belong in EchoWarrior's probe 
 
 ## Renderer Library Requirements
 
+For the renderer module map and frame/material/target flow, read [vk2d Renderer Internals](architecture/vk2d-renderer-internals/).
+
 These are the current `vk2d` requirements that EchoWarrior docs and code should preserve:
 
 | Requirement | Meaning for contributors |
@@ -97,7 +99,7 @@ Do not stage a submodule pointer change as a side effect of unrelated game work.
 | --- | --- |
 | EchoWarrior draw-site migration | `cargo check`, then `cargo run` when behavior changed |
 | `wgpu_probe` demo change | `cargo run --bin wgpu_probe -- --frames 3` |
-| `vk2d` renderer library change | `cargo test -p vk2d`, `cargo run -p vk2d --example hello_sprite -- --frames 3` |
+| `vk2d` renderer library change | `cargo test -p vk2d`, `cargo run -p vk2d --example hello_sprite -- --frames 3`, `cargo run -p vk2d --example shader_gallery -- --frames 3` |
 | Shader data used by the probe | `cargo run --bin wgpu_probe -- --frames 3` and check shader fallback messages |
 | Wiki-only renderer docs | `npm run wiki:audit`, `npm run build` |
 

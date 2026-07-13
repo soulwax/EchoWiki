@@ -83,6 +83,7 @@ For the renderer crate by itself:
 
 ```powershell
 cargo run -p vk2d --example hello_sprite -- --frames 3
+cargo run -p vk2d --example shader_gallery -- --frames 3
 ```
 
 ## Release-Pack Checks

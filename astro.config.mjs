@@ -138,6 +138,7 @@ export default defineConfig({
                 { label: '6. Choreography', slug: 'pages/architecture/choreography' },
                 { label: '10. Rendering And UI', slug: 'pages/architecture/rendering-and-ui' },
                 { label: '10A. Vulkan Renderer Path', slug: 'pages/architecture/vulkan-renderer-path' },
+                { label: '10B. vk2d Renderer Internals', slug: 'pages/architecture/vk2d-renderer-internals' },
               ],
             },
             {

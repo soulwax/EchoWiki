@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.0.11] - 2026-07-13
+
+Release type: PATCH
+
+- Added a `vk2d` renderer internals page covering `Context`, `Frame`, draw ordering, batching, material uniforms/textures, offscreen targets, `View2`, and shader-gallery verification.
+- Linked the internals page from the architecture chapter, Vulkan renderer path, wiki map, sidebar, and renderer submodule workflow.
+- Updated verification guidance so renderer-library work includes both `hello_sprite` and `shader_gallery` smoke checks.
+
 ## [v1.0.10] - 2026-07-08
 
 Release type: PATCH

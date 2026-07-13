@@ -38,7 +38,7 @@ flowchart TB
 
 `src/bin/wgpu_probe.rs` is EchoWarrior's richer smoke example. It opens a winit window, uses `vk2d`, draws a sprite grid, WGSL effects, text, and an egui overlay, then can exit automatically with `--frames N`.
 
-For submodule commit rules, see [Renderer Submodule Workflow](../renderer-submodule-workflow/).
+For renderer internals, see [vk2d Renderer Internals](vk2d-renderer-internals/). For submodule commit rules, see [Renderer Submodule Workflow](../renderer-submodule-workflow/).
 
 ## Why This Exists
 
