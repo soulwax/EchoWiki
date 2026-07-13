@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.0.12] - 2026-07-13
+
+Release type: PATCH
+
+- Added a `vk2d` runtime usage chapter that shows how the live `Renderer2d` path uses scene targets, world views, death composites, emissive buffers, and bloom passes.
+- Linked the runtime-usage chapter from the renderer path, architecture index, wiki map, sidebar, rendering page, internals page, and submodule workflow.
+- Updated renderer verification guidance with the manual `vk_construction_spike` command for shell/cutover work.
+
 ## [v1.0.11] - 2026-07-13
 
 Release type: PATCH

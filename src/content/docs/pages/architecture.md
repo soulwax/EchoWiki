@@ -37,6 +37,7 @@ flowchart TD
 10. [Rendering And UI](rendering-and-ui/): how world rendering, effects, post-processing, and UI layers stack.
 10A. [Vulkan Renderer Path](vulkan-renderer-path/): how Renderer2d, Macroquad, wgpu_probe, and soulwax/vk2d fit together.
 10B. [vk2d Renderer Internals](vk2d-renderer-internals/): how the renderer crate records frames, compiles materials, batches draws, and runs shader parity checks.
+10C. [vk2d Runtime Usage](vk2d-runtime-usage/): how the current runtime uses `Renderer2d` targets, world views, bloom, and composites in ways a vk2d backend can answer.
 11. [Persistence And State](persistence-and-state/): how saves, settings, progression, and mod metadata are separated.
 12. [Verification Architecture](verification-architecture/): how checks map to code and content boundaries.
 13. [Graceful Degradation](graceful-degradation/): how missing or broken content should fail without taking down the game.
@@ -112,6 +113,7 @@ EchoWarrior is built to keep content easy to modify while keeping core rules tes
 | moving draw calls toward the owned renderer | [Vulkan Renderer Path](vulkan-renderer-path/) |
 | touching the `vk2d` renderer submodule | [Renderer Submodule Workflow](../renderer-submodule-workflow/) |
 | changing `vk2d` frame/material/target internals | [vk2d Renderer Internals](vk2d-renderer-internals/) |
+| understanding how vk2d maps onto the live runtime | [vk2d Runtime Usage](vk2d-runtime-usage/) |
 | changing saves, settings, or account progress | [Persistence And State](persistence-and-state/) |
 | deciding which checks to run | [Verification Architecture](verification-architecture/) |
 | adding fallbacks or loader behavior | [Graceful Degradation](graceful-degradation/) |

@@ -38,7 +38,7 @@ flowchart TB
 
 `src/bin/wgpu_probe.rs` is EchoWarrior's richer smoke example. It opens a winit window, uses `vk2d`, draws a sprite grid, WGSL effects, text, and an egui overlay, then can exit automatically with `--frames N`.
 
-For renderer internals, see [vk2d Renderer Internals](vk2d-renderer-internals/). For submodule commit rules, see [Renderer Submodule Workflow](../renderer-submodule-workflow/).
+For renderer internals, see [vk2d Renderer Internals](vk2d-renderer-internals/). For how the current runtime uses target/view/bloom verbs that a vk2d backend can answer, see [vk2d Runtime Usage](vk2d-runtime-usage/). For submodule commit rules, see [Renderer Submodule Workflow](../renderer-submodule-workflow/).
 
 ## Why This Exists
 
@@ -76,6 +76,34 @@ The boundary is the important part. Each draw site moved to `Renderer2d` becomes
 | `crates/vk2d` | git submodule checkout of `soulwax/vk2d`, the wgpu/Vulkan immediate renderer | no EchoWarrior asset paths or gameplay assumptions |
 | `src/wgpu_vulkan` + `wgpu_probe` | EchoWarrior demo consumer of `vk2d` | allowed to load game demo assets and shaders |
 
+## Runtime Usage Now
+
+```mermaid
+flowchart TB
+    runtime[PrototypeRuntime draw]
+    target[scene and fx TargetIds]
+    view[CameraView]
+    renderer[Renderer2d]
+    macroquad[MacroquadRenderer today]
+    vk2d[vk2d backend later]
+
+    runtime --> target --> renderer
+    runtime --> view --> renderer
+    renderer --> macroquad
+    renderer --> vk2d
+```
+
+The runtime already uses the neutral path for the big renderer migration pressure points:
+
+- scene target bind and world camera view in `begin_scene_target`
+- ambient-tint scene composite in `end_scene_target`
+- death transition positioned scene draw through `draw_target`
+- emissive layer render target bind through `begin_target` and `set_world_view`
+- bloom ping-pong passes through target ids, materials, uniforms, and target presents
+- routed HUD/dialogue/UI drawing through `src/ui/*`
+
+That means a future vk2d backend is mostly an adapter problem, not a gameplay rewrite.
+
 ## What Changed Recently
 
 The repository is now a Cargo workspace, and the renderer crate is a submodule:
@@ -89,6 +117,8 @@ src/
 The root game package depends on the local `crates/vk2d` submodule with its optional `egui` and `winit-input` features for the probe. The shipping Macroquad runtime does not use `wgpu` directly.
 
 The `wgpu_probe` no longer owns the renderer internals. It is now a consumer of `vk2d`. The renderer library owns context creation, textures, materials, text, shapes, render targets, egui overlay presentation, and the nearest-upscale scene blit.
+
+Recent Phase 6b work also grew the runtime boundary in the direction the vk2d backend needs: `CameraView`, `set_world_view`, `set_screen_view`, and positioned `draw_target` are now in `Renderer2d`. The live Macroquad adapter implements them today. The vk2d crate has the matching pieces on its side: `View2`, offscreen target frames, `target_sprite`, target/material texture binding, and `measure_text_ext`.
 
 From a fresh clone, initialize the renderer submodule before building:
 

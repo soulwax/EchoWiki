@@ -6,6 +6,8 @@ title: "10B. vk2d Renderer Internals"
 
 The short version: `vk2d` owns GPU setup, resource registries, frame recording, material compilation, batching, render targets, text, and optional overlays. EchoWarrior supplies decoded bytes, WGSL text, logical sizes, and draw calls.
 
+If you are trying to understand how these internals map back onto the live game frame, read [vk2d Runtime Usage](vk2d-runtime-usage/) after this page.
+
 ## Module Map
 
 | File | Owns |
@@ -173,6 +175,8 @@ frame.present();
 ```
 
 Do not bind the target currently being rendered into as a sampled texture. Render first, finish, then bind the finished target in a later pass.
+
+`Frame::target_sprite` is the positioned target-as-texture path. It is the vk2d-side match for EchoWarrior's `Renderer2d::draw_target` verb: draw a finished target at a destination position with `SpriteParams::dest_size`. It includes a self-sample guard so a frame cannot accidentally sample the target it is currently rendering into.
 
 ## View2
 

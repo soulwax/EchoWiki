@@ -139,6 +139,7 @@ export default defineConfig({
                 { label: '10. Rendering And UI', slug: 'pages/architecture/rendering-and-ui' },
                 { label: '10A. Vulkan Renderer Path', slug: 'pages/architecture/vulkan-renderer-path' },
                 { label: '10B. vk2d Renderer Internals', slug: 'pages/architecture/vk2d-renderer-internals' },
+                { label: '10C. vk2d Runtime Usage', slug: 'pages/architecture/vk2d-runtime-usage' },
               ],
             },
             {

@@ -86,6 +86,14 @@ cargo run -p vk2d --example hello_sprite -- --frames 3
 cargo run -p vk2d --example shader_gallery -- --frames 3
 ```
 
+For the manual vk2d shell construction spike:
+
+```powershell
+cargo test --test vk_construction_spike -- --ignored --nocapture
+```
+
+That spike is intentionally ignored because it documents which Macroquad-typed values can be constructed without a Macroquad window. Run it only when working on the shell/cutover problem and expect that some probes may abort the test process by design.
+
 ## Release-Pack Checks
 
 If a runtime asset path changed, verify the packed path:

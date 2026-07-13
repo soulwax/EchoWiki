@@ -88,6 +88,8 @@ flowchart LR
 
 For contributors, the practical rule is simple: new renderer-migration slices should move draw intent toward `Renderer2d` verbs such as rectangles, sprites, text, lines, circles, targets, and materials. Gameplay and UI model code should not learn about `wgpu`, `winit`, or Macroquad resource types.
 
+For the current target/view/bloom routing, read [vk2d Runtime Usage](vk2d-runtime-usage/). For the renderer crate internals, read [vk2d Renderer Internals](vk2d-renderer-internals/).
+
 ## Shader And VFX Flow
 
 ```mermaid
