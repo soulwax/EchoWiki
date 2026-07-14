@@ -38,7 +38,7 @@ flowchart TB
 
 `src/bin/wgpu_probe.rs` is EchoWarrior's richer smoke example. It opens a winit window, uses `vk2d`, draws a sprite grid, WGSL effects, text, and an egui overlay, then can exit automatically with `--frames N`.
 
-For renderer internals, see [vk2d Renderer Internals](vk2d-renderer-internals/). For how the current runtime uses target/view/bloom verbs that a vk2d backend can answer, see [vk2d Runtime Usage](vk2d-runtime-usage/). For submodule commit rules, see [Renderer Submodule Workflow](../renderer-submodule-workflow/).
+For renderer internals, see [vk2d Renderer Internals](vk2d-renderer-internals/). For how the current runtime uses target/view/bloom verbs that a vk2d backend can answer, see [vk2d Runtime Usage](vk2d-runtime-usage/). For command output and skip-log interpretation, see [Renderer Diagnostics](../renderer-diagnostics/). For submodule commit rules, see [Renderer Submodule Workflow](../renderer-submodule-workflow/).
 
 ## Why This Exists
 
@@ -205,6 +205,14 @@ cargo run
 ```
 
 `cargo run -p vk2d --example hello_sprite -- --frames 3` verifies the renderer crate by itself. `cargo run --bin wgpu_probe -- --frames 3` verifies EchoWarrior's isolated Vulkan consumer path. `cargo run` verifies the playable Macroquad path. A good renderer migration slice knows which one it affected.
+
+For the in-progress runtime shell, use:
+
+```powershell
+cargo run --features vk-shell -- --vk --arena
+```
+
+The shell is allowed to log current routing gaps such as terrain, weather, or egui panels being skipped. Those logs should be explicit; silent raw-Macroquad calls under the vk shell are bugs.
 
 ## Mental Model
 

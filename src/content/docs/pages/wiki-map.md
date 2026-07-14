@@ -42,9 +42,10 @@ The structure follows a documentation pattern used by mature engine manuals: fir
 3. [Vulkan Renderer Path](architecture/vulkan-renderer-path/)
 4. [vk2d Renderer Internals](architecture/vk2d-renderer-internals/)
 5. [vk2d Runtime Usage](architecture/vk2d-runtime-usage/)
-6. [Renderer Submodule Workflow](renderer-submodule-workflow/)
-7. [Main Code Map](main-code-map/)
-8. [Verification Guide](verification-guide/)
+6. [Renderer Diagnostics](renderer-diagnostics/)
+7. [Renderer Submodule Workflow](renderer-submodule-workflow/)
+8. [Main Code Map](main-code-map/)
+9. [Verification Guide](verification-guide/)
 
 ### Runtime Work
 
@@ -56,15 +57,17 @@ The structure follows a documentation pattern used by mature engine manuals: fir
 6. [Rendering And UI](architecture/rendering-and-ui/)
 7. [Vulkan Renderer Path](architecture/vulkan-renderer-path/)
 8. [vk2d Runtime Usage](architecture/vk2d-runtime-usage/)
+9. [Renderer Diagnostics](renderer-diagnostics/)
 
 ### Tooling Or Release Work
 
 1. [CLI Tools](cli-tools/)
 2. [Assets And Packaging](assets-and-packaging/)
 3. [Asset Pack Reference](asset-pack-reference/)
-4. [Protection And Tamper Boundaries](architecture/protection-and-tamper-boundaries/)
-5. [Pack Integrity Deep Dive](architecture/pack-integrity-deep-dive/)
-6. [Vercel Deployment](vercel-deployment/)
+4. [Renderer Diagnostics](renderer-diagnostics/)
+5. [Protection And Tamper Boundaries](architecture/protection-and-tamper-boundaries/)
+6. [Pack Integrity Deep Dive](architecture/pack-integrity-deep-dive/)
+7. [Vercel Deployment](vercel-deployment/)
 
 ### Leitmotif Work
 

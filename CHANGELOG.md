@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.0.15] - 2026-07-15
+
+Release type: PATCH
+
+- Added a Renderer Diagnostics page that explains the Macroquad runtime, experimental `--vk` shell, `wgpu_probe`, and `vk2d` example smoke surfaces.
+- Documented the current command matrix, the correct `cargo run --features vk-shell -- --vk --arena` form, and common renderer log lines such as vk-shell skip messages and debug perf warnings.
+- Linked the diagnostics page from the sidebar, wiki map, verification guide, and Vulkan/vk2d runtime chapters.
+
 ## [v1.0.14] - 2026-07-14
 
 Release type: PATCH

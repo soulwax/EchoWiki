@@ -299,3 +299,5 @@ Use this route when working on renderer migration:
 7. Verify the probe with `cargo run --bin wgpu_probe -- --frames 3` when the Vulkan-facing consumer changed.
 
 The target is not "Vulkan everywhere immediately". The target is a runtime that describes rendering once, then lets Macroquad and vk2d answer that contract without dragging gameplay code into either backend.
+
+For day-to-day smoke commands and how to read `--vk` skip logs, use [Renderer Diagnostics](../renderer-diagnostics/).

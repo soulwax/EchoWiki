@@ -79,6 +79,20 @@ For the isolated Vulkan-facing renderer path:
 cargo run --bin wgpu_probe -- --frames 3
 ```
 
+For the experimental vk shell path:
+
+```powershell
+cargo run --features vk-shell -- --vk --arena
+```
+
+The default build parses `--vk`, but rejects it before opening a window because the shell is feature-gated. That clean rejection is expected:
+
+```text
+error: this build has no vk shell (rebuild with --features vk-shell)
+```
+
+See [Renderer Diagnostics](renderer-diagnostics/) for the current vk-shell skip logs and command matrix.
+
 For the renderer crate by itself:
 
 ```powershell
