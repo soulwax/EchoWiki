@@ -15,6 +15,7 @@ The structure follows a documentation pattern used by mature engine manuals: fir
 | Manual | You need the big-picture architecture and runtime system explanations. |
 | Leitmotif | You want to work on the choreography authoring app and its screenshots. |
 | Soundgarden | You want to work on audio manifests, voice profiles, or the audio studio. |
+| Menage | You want to work on sprite sheets, atlas descriptors, cutting instructions, or asset audits. |
 | Reference | You need exact file boundaries, tools, assets, and diagnostics. |
 | Contributing And Operations | You are preparing a change, verifying it, or deploying the wiki. |
 
@@ -87,6 +88,15 @@ The structure follows a documentation pattern used by mature engine manuals: fir
 8. [Contributor Workflow](soundgarden/contributor-workflow/)
 9. [Soundgarden Architecture](soundgarden/architecture/)
 10. [Soundgarden Moddability](soundgarden/moddability/)
+
+### Menage Work
+
+1. [Menage Overview](menage/)
+2. [Menage Screenshots](menage/screenshots/)
+3. [Menage Getting Started](menage/getting-started/)
+4. [Menage Usage](menage/usage/)
+5. [Menage Asset Pipeline](menage/asset-pipeline/)
+6. [Menage Contributor Slices](menage/contributor-slices/)
 
 ## Page Granularity
 

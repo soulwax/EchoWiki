@@ -11,6 +11,7 @@ flowchart TB
     cutter[sprite_cutter]
     modcheck[mod_check]
     choreo[choreo]
+    sheets[sheets]
     audio[audio planned]
     shared[shared library modules]
 
@@ -18,6 +19,7 @@ flowchart TB
     contributor --> cutter --> shared
     contributor --> modcheck --> shared
     contributor --> choreo --> shared
+    contributor --> sheets --> shared
     contributor -. expected by Soundgarden .-> audio -. not in current main .-> shared
 ```
 
@@ -147,6 +149,29 @@ flowchart LR
     scenes --> preview --> model
     scenes --> storygraph --> model
     model --> schema
+```
+
+## `sheets`
+
+The sprite-sheet descriptor validator is the game-side authority used by [Menage](menage/).
+
+Common command:
+
+```powershell
+cargo run --bin sheets -- validate Assets/Metadata/spritesheets.toml --json --images
+```
+
+Menage calls this command through its Tauri shell when `Check` is pressed and before descriptor saves. The UI's live lint is deliberately advisory; `sheets` owns the current validation contract for image-backed sprite and descriptor metadata.
+
+```mermaid
+flowchart LR
+    menage[Menage]
+    metadata[metadata text<br/>saved or temp]
+    validate[sheets validate<br/>--json --images]
+    findings[findings array]
+    save[save gate]
+
+    menage --> metadata --> validate --> findings --> save
 ```
 
 ## Release Scripts

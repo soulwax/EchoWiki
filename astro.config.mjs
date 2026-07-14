@@ -220,6 +220,17 @@ export default defineConfig({
           ],
         },
         {
+          label: 'Menage',
+          items: [
+            { label: 'Overview', slug: 'pages/menage' },
+            { label: 'Screenshots', slug: 'pages/menage/screenshots' },
+            { label: 'Getting Started', slug: 'pages/menage/getting-started' },
+            { label: 'Usage', slug: 'pages/menage/usage' },
+            { label: 'Asset Pipeline', slug: 'pages/menage/asset-pipeline' },
+            { label: 'Contributor Slices', slug: 'pages/menage/contributor-slices' },
+          ],
+        },
+        {
           label: 'Reference',
           items: [
             {

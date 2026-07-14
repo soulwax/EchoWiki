@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.0.14] - 2026-07-14
+
+Release type: PATCH
+
+- Added a Menage wiki chapter covering the asset manager overview, getting started flow, usage loop, asset pipeline, screenshots, and safe contributor slices.
+- Documented the current Menage contract with `spritesheets.toml`, atlas/grid descriptor TOML files, `sprite_cutter`, `sheets validate`, and `asset_pack --dry-run --list`.
+- Linked Menage into the sidebar, wiki map, and CLI tools reference, with fresh UI screenshots captured from the current web shell.
+
 ## [v1.0.13] - 2026-07-13
 
 Release type: PATCH
