@@ -23,28 +23,23 @@ flowchart TB
 
 `logging::init()` sends logs to stderr and to the in-memory ring buffer used by the debug overlay.
 
-## Ship Trace Profile
+## Maximum-Performance Ship Profile
 
-The dist scripts build shipped binaries with the `speed_trace` cargo profile: release-grade optimization plus out-of-line debug information for external profilers.
+The dist scripts build shipped binaries with the `speed_trace` cargo profile: maximum runtime optimization using fat LTO and one codegen unit, with symbols and debug information removed.
 
 ```mermaid
 flowchart TB
     speed[speed_trace profile]
     release[release optimizations]
-    debuginfo[full debug info]
-    split[split debuginfo packed]
-    binary[lean staged binary]
-    symbols[PDB or DWARF side file]
-    traces[ETW WPA Tracy Superluminal perf]
+    fat[fat link-time optimization]
+    single[one codegen unit]
+    stripped[symbols and debug data stripped]
+    binary[staged binary]
 
-    speed --> release --> binary
-    speed --> debuginfo --> split
-    split --> symbols
-    binary --> traces
-    symbols --> traces
+    speed --> release --> fat --> single --> stripped --> binary
 ```
 
-The symbol side files stay in `target/` on the build machine and are not staged into the zip packages. That keeps package size stable while preserving trace readability.
+This profile prioritizes shipped runtime performance and compact artifacts over debugger and external-profiler readability. Use the in-game F1 frame profile for live diagnostics, or a locally overridden profile when symbolized external traces are required.
 
 ## Performance Scope Flow
 
