@@ -22,7 +22,7 @@ flowchart TD
 
 1. [Fundamentals](fundamentals/): the shortest possible architecture map.
 2. [Module Boundaries](module-boundaries/): which folder owns which kind of work.
-3. [Runtime Loop](runtime-loop/): how the Macroquad prototype advances a frame.
+3. [Runtime Loop](runtime-loop/): how the selected shell advances a frame.
 3A. [Inside The Runtime](inside-the-runtime/): the deeper boot, mode, update, command, and draw flow.
 3B. [Runtime Data Command Pipeline](runtime-data-command-pipeline/): how data, Lua, choreography, events, and commands converge.
 4. [Data And Modding Flow](data-and-modding-flow/): how TOML, YAML, and Lua become game behavior.
@@ -35,7 +35,7 @@ flowchart TD
 9. [Simulation And ECS](simulation-and-ecs/): how pure run logic and the ECS bridge coexist with runtime actors.
 9A. [ECS Lifecycle Hot Lane](ecs-lifecycle-hot-lane/): how the runtime mirrors enemy state through cold full sync and batched dynamic sync.
 10. [Rendering And UI](rendering-and-ui/): how world rendering, effects, post-processing, and UI layers stack.
-10A. [Vulkan Renderer Path](vulkan-renderer-path/): how Renderer2d, Macroquad, wgpu_probe, and soulwax/vk2d fit together.
+10A. [Canonical vk2d Renderer](vulkan-renderer-path/): how Renderer2d, the compatibility adapter, VkRenderer, and soulwax/vk2d fit together.
 10B. [vk2d Renderer Internals](vk2d-renderer-internals/): how the renderer crate records frames, compiles materials, batches draws, and runs shader parity checks.
 10C. [vk2d Runtime Usage](vk2d-runtime-usage/): how the current runtime uses `Renderer2d` targets, world views, bloom, and composites in ways a vk2d backend can answer.
 11. [Persistence And State](persistence-and-state/): how saves, settings, progression, and mod metadata are separated.
@@ -56,7 +56,7 @@ flowchart TB
     assets[Assets and Mods]
     bins[src/bin tools]
     lib[src/lib shared crate]
-    runtime[src/runtime Macroquad runtime]
+    runtime[src/runtime application and renderer adapters]
     game[src/game pure gameplay]
     data[src/data loaders]
     ui[src/ui UI models]
@@ -78,6 +78,7 @@ flowchart TB
     bins --> lib
     assets --> pack
     runtime --> pack
+    runtime --> renderer["vk2d canonical renderer"]
 ```
 
 ## North Star
@@ -87,7 +88,8 @@ EchoWarrior is built to keep content easy to modify while keeping core rules tes
 - content lives in `Assets/` and `Mods/` when practical
 - pure rules live in `src/game`
 - data schemas and fallback loading live in `src/data`
-- Macroquad rendering/input/audio live in `src/runtime`
+- runtime owns draw intent, shell integration, input, and audio
+- `crates/vk2d` owns the canonical GPU renderer; Macroquad is compatibility
 - release asset discovery lives in `src/asset_pack.rs`
 - shipping confidence comes from `mod_check`, `asset_pack`, tests, and `cargo check`
 
@@ -110,7 +112,7 @@ EchoWarrior is built to keep content easy to modify while keeping core rules tes
 | touching actors, ECS, or pure run tests | [Simulation And ECS](simulation-and-ecs/) |
 | changing enemy ECS frame sync or mirrored components | [ECS Lifecycle Hot Lane](ecs-lifecycle-hot-lane/) |
 | changing draw order, effects, or HUD | [Rendering And UI](rendering-and-ui/) |
-| moving draw calls toward the owned renderer | [Vulkan Renderer Path](vulkan-renderer-path/) |
+| moving draw calls toward the owned renderer | [Canonical vk2d Renderer](vulkan-renderer-path/) |
 | touching the `vk2d` renderer submodule | [Renderer Submodule Workflow](../renderer-submodule-workflow/) |
 | changing `vk2d` frame/material/target internals | [vk2d Renderer Internals](vk2d-renderer-internals/) |
 | understanding how vk2d maps onto the live runtime | [vk2d Runtime Usage](vk2d-runtime-usage/) |

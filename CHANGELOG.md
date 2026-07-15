@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.0.17] - 2026-07-15
+
+Release type: PATCH
+
+- Reframed the renderer architecture around `soulwax/vk2d` as EchoWarrior's canonical GPU standard, with Macroquad documented as a compatibility backend.
+- Rewrote the Vulkan path and runtime usage chapters to explain `VkRenderer` command recording, target replay, world views, asset registration, WGSL materials, and the live `--vk` shell.
+- Updated the architecture map, beginner onboarding, diagnostics, verification, rendering/UI, migration, and source-of-truth guidance so contributors are not sent toward the obsolete Macroquad-first direction.
+
 ## [v1.0.16] - 2026-07-15
 
 Release type: PATCH

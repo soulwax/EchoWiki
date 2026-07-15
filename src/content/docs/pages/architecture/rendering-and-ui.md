@@ -70,23 +70,26 @@ UI should be data-driven where practical. Text, colors, budgets, and common layo
 
 ## Renderer Boundary
 
-The current playable game still starts through Macroquad, but recent renderer work has added a neutral draw contract in `src/render.rs`. That boundary is the slow, deliberate path toward the owned [`soulwax/vk2d`](https://github.com/soulwax/vk2d) 2D renderer without forcing every draw site to change at once.
+The game-facing draw contract is neutral, but its architectural destination is no longer undecided: [`soulwax/vk2d`](https://github.com/soulwax/vk2d) is the canonical 2D renderer. The Macroquad adapter remains because old paths still need a compatibility implementation while the route is completed.
 
 ```mermaid
 flowchart LR
     feature[Runtime feature module]
     neutral[src/render.rs<br/>Renderer2d verbs]
-    mq[src/runtime/renderer_mq.rs<br/>Macroquad adapter]
-    vk[crates/vk2d<br/>soulwax/vk2d submodule]
-    probe[src/bin/wgpu_probe.rs<br/>isolated test window]
+    backend[src/runtime/renderer_backend.rs<br/>backend switch]
+    mq[src/runtime/renderer_mq.rs<br/>compatibility adapter]
+    vk[src/runtime/renderer_vk.rs<br/>VkRenderer recorder]
+    crate[crates/vk2d<br/>canonical renderer submodule]
+    probe[src/bin/wgpu_probe.rs<br/>consumer smoke surface]
 
     feature --> neutral
-    neutral --> mq
-    neutral -. future backend .-> vk
-    probe --> vk
+    neutral --> backend
+    backend --> mq
+    backend --> vk --> crate
+    probe --> crate
 ```
 
-For contributors, the practical rule is simple: new renderer-migration slices should move draw intent toward `Renderer2d` verbs such as rectangles, sprites, text, lines, circles, targets, and materials. Gameplay and UI model code should not learn about `wgpu`, `winit`, or Macroquad resource types.
+For contributors, the practical rule is simple: new renderer slices should move draw intent toward `Renderer2d` verbs such as rectangles, sprites, text, lines, circles, targets, and materials. Gameplay and UI model code should not learn about `wgpu`, `winit`, or Macroquad resource types. When the verb is insufficient, extend `vk2d` first and then adapt the contract.
 
 For the current target/view/bloom routing, read [vk2d Runtime Usage](vk2d-runtime-usage/). For the renderer crate internals, read [vk2d Renderer Internals](vk2d-renderer-internals/).
 
@@ -96,8 +99,8 @@ For the current target/view/bloom routing, read [vk2d Runtime Usage](vk2d-runtim
 flowchart TD
     manifest[Assets/Data/shaders.toml]
     sources[shader source files]
-    loader[runtime/assets shader loader]
-    material[Macroquad Material]
+    loader[backend-specific asset loader]
+    material[vk2d MaterialId or compatibility material]
     effect[Runtime effect owner]
     fallback[Fallback shape if missing]
 
@@ -108,7 +111,7 @@ flowchart TD
     fallback --> effect
 ```
 
-Macroquad materials still support the shipping runtime path. The new `vk2d` crate loads WGSL material text through its own API for probe rendering, so shader work now has two important contracts:
+`vk2d` is the canonical material path and loads WGSL through its own API. Macroquad GLSL materials remain for compatibility, so shader work now has two important contracts:
 
 - gameplay and UI choose *what* effect should be drawn
 - the backend chooses *how* that material is loaded and presented
@@ -117,18 +120,20 @@ Missing shader materials should degrade gracefully. A visible fallback is better
 
 ## Vulkan-Oriented Probe Path
 
-`src/bin/wgpu_probe.rs` is the safe place to test Vulkan-facing renderer work. It opens an isolated `winit` window, drives `src/wgpu_vulkan`, and consumes the `soulwax/vk2d` renderer submodule at `crates/vk2d`. That keeps experimental GPU work away from the main Macroquad boot path until the contract is boring enough to rely on.
+`src/bin/wgpu_probe.rs` is a focused consumer smoke surface for Vulkan-facing renderer work. The canonical runtime surface is the winit/vk2d shell selected with `--vk`; the probe remains useful because it isolates library and material issues from game-state complexity.
 
 ```mermaid
 flowchart TD
-    probe[wgpu_probe]
-    consumer[src/wgpu_vulkan]
-    crate[crates/vk2d]
+    shell[--vk runtime shell]
+    probe[wgpu_probe consumer]
+    consumer[src/wgpu_vulkan app glue]
+    crate[crates/vk2d canonical library]
     gpu[wgpu backend]
     shader[WGSL material text]
     assets[raw texture/font bytes]
 
-    probe --> consumer --> crate --> gpu
+    shell --> consumer --> crate --> gpu
+    probe --> crate
     shader --> crate
     assets --> crate
 ```

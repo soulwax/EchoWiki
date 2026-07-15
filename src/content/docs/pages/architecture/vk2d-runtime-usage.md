@@ -2,302 +2,248 @@
 title: "10C. vk2d Runtime Usage"
 ---
 
-This page shows how the current runtime is being shaped so `vk2d` can become a real renderer backend.
+This page follows one game frame through the canonical `vk2d` runtime path.
+The runtime does not rebuild gameplay for Vulkan. It emits the same neutral
+rendering vocabulary, while `VkRenderer` records that vocabulary and replays it
+into `vk2d` passes at present time.
 
-The important truth first: `vk2d` is not the live gameplay renderer yet. The playable runtime still presents through Macroquad. The runtime already draws large parts of the frame through the backend-neutral `Renderer2d` contract, and `vk2d` now has the matching renderer primitives: views, offscreen target frames, target sprites, material texture slots, and baseline text metrics.
-
-## Current Runtime Path
+## Live Shell Path
 
 ```mermaid
-flowchart TB
-    loop[macroquad frame loop]
-    runtime[PrototypeRuntime::draw]
-    scene[begin_scene_target]
-    world[draw_world_scene]
-    compose[end_scene_target]
-    fx[draw_emissive_and_bloom]
-    ui[HUD dialogue overlays]
-    mq[MacroquadRenderer]
-    screen[window]
+sequenceDiagram
+    participant Main as main entry
+    participant Shell as vk_shell
+    participant Runtime as PrototypeRuntime
+    participant Backend as Vulkan backend
+    participant Vk as VkRenderer
+    participant GPU as vk2d Context and Frame
 
-    loop --> runtime
-    runtime --> scene --> world --> compose
-    compose --> fx --> ui
-    scene --> mq
-    world --> mq
-    compose --> mq
-    fx --> mq
-    ui --> mq
-    mq --> screen
+    Main->>Shell: --vk dispatch
+    Shell->>GPU: create Context and register assets
+    Shell->>Runtime: install Vk backend
+    loop every window redraw
+        Shell->>Runtime: input snapshot and delta
+        Runtime->>Runtime: handle_input, update, draw
+        Runtime->>Backend: neutral Renderer2d verbs
+        Backend->>Vk: record VkCmd values
+        Shell->>Vk: present()
+        Vk->>GPU: replay target passes and screen pass
+    end
 ```
 
-The live call stack is in `src/runtime/mod.rs`:
+Run it with:
+
+```powershell
+cargo run --features vk-shell -- --vk --arena
+```
+
+The shell owns the winit event loop and resize events. `PrototypeRuntime` owns
+game modes, data, simulation, and draw intent. `VkRenderer` owns the translation
+from that intent to `vk2d` calls.
+
+## The Same Runtime Sequence
+
+The `--vk` shell deliberately mirrors the normal runtime order:
 
 ```rust
-self.begin_scene_target();
-self.draw_world_scene(assets, render_time);
-self.end_scene_target(assets);
-self.draw_emissive_and_bloom(assets);
-self.draw_hud(assets);
-self.draw_dialogue(assets);
+input.update(&runtime.settings.controls);
+runtime.handle_input(delta, &input, &assets);
+runtime.update(delta, &assets, &input);
+runtime.poll_mode_changed_event(&assets);
+runtime.draw(&assets, &input);
+vk_renderer.present()?;
 ```
 
-That shape matters because the future Vulkan runtime does not need to reinvent the game loop. It needs a backend that can satisfy the same renderer verbs the runtime already calls.
+That is the key integration seam. A new gameplay system should not branch on
+Vulkan. A new draw path should use `Renderer2d`, and the backend can then replay
+it through `vk2d`.
 
-## The Boundary In The Middle
+## Why Commands Are Recorded
 
-`src/render.rs` defines the runtime-facing API. It contains only neutral values and opaque handles:
-
-- `Color`, `Point`, `Rect2`
-- `TextureId`, `MaterialId`, `FontId`, `TargetId`
-- `SpriteParams`, `TextParams`, `TextMetrics`
-- `CameraView`
-- `Renderer2d`
+`vk2d::Frame` borrows its `Context` for the lifetime of a render pass. The
+runtime's `Renderer2d` methods are called independently by many modules, so
+holding one live `Frame` inside every method would create impossible Rust
+borrows. `VkRenderer` records an ordered command log instead.
 
 ```mermaid
 flowchart LR
-    runtime[Runtime feature modules]
-    contract[src/render.rs<br/>Renderer2d]
-    macroquad[src/runtime/renderer_mq.rs]
-    vkadapter[future vk2d adapter]
-    vkcrate[crates/vk2d]
+    calls["runtime draw calls"]
+    log["VkCommandLog\nordered VkCmd values"]
+    targets["target brackets\nreplayed first in order"]
+    screen["one merged screen stream"]
+    targetframes["vk2d begin_target_frame\nfinish"]
+    screenframe["vk2d begin_frame\npresent"]
 
-    runtime --> contract
-    contract --> macroquad
-    contract --> vkadapter
-    vkadapter --> vkcrate
+    calls --> log
+    log --> targets --> targetframes
+    log --> screen --> screenframe
 ```
 
-Contributors should follow the contract, not the backend. If a draw site can express itself as `draw_sprite`, `fill_rect`, `draw_text`, `set_world_view`, `begin_target`, `draw_target`, or `present_target`, it belongs behind `Renderer2d`.
+Target work finishes before a later screen or target pass samples it. The
+recording layer also gives us pure tests for command order and replay
+partitioning without requiring a GPU in every test.
 
-## Scene Target Usage
+## Scene Target And World View
 
-`src/runtime/render_scene.rs::begin_scene_target` is the cleanest example of the current shape:
+The world scene is rendered into an offscreen target. The target may be larger
+than the window when render scaling is enabled, but the logical camera window
+remains the window's world extent.
+
+```mermaid
+flowchart TD
+    screen["logical screen size"]
+    scale["render_scale"]
+    target["scene TargetId\npossibly supersampled"]
+    camera["CameraView\ncenter and zoom"]
+    view["View2::window\nY-up world mapping"]
+    world["terrain, actors, world FX"]
+    composite["target_sprite or material composite"]
+    surface["swapchain surface"]
+
+    screen --> target
+    scale --> target
+    camera --> view
+    target --> world
+    view --> world
+    world --> composite --> surface
+```
+
+The adapter keeps two sizes distinct:
+
+- the logical screen size defines how much world space the camera sees;
+- the target's texel size defines how many pixels the pass renders into.
+
+Conflating them makes supersampled scenes drift away from screen-space labels
+and damage numbers. `view2_from_world` in `renderer_vk.rs` carries this rule.
+
+## Scene Pass In Code
+
+The runtime-side code remains backend-neutral:
 
 ```rust
 let screen = self.renderer.screen_size();
-self.fx_targets.ensure(&mut self.renderer, screen.x, screen.y, self.settings.gfx.render_scale);
-
-let scene_id = self.fx_targets.scene_id();
-let view = self.world_view();
-self.renderer.begin_target(scene_id);
-self.renderer.set_world_view(view);
-```
-
-That reads like a renderer-agnostic version of "draw the world into an offscreen scene texture through a world camera".
-
-```mermaid
-flowchart TB
-    size[renderer screen_size]
-    ensure[FxTargets ensure buffers]
-    sceneid[scene TargetId]
-    view[world_view CameraView]
-    begin[Renderer2d begin_target]
-    camera[Renderer2d set_world_view]
-    draws[world draw calls]
-
-    size --> ensure --> sceneid --> begin
-    view --> camera
-    begin --> camera --> draws
-```
-
-For Macroquad, `begin_target` binds a `RenderTarget` camera. For a vk2d backend, the matching concept is `Context::begin_target_frame(target, clear)` plus `Frame::set_view(View2::window(..., y_up = true))`.
-
-`end_scene_target` must close this bracket through `Renderer2d::end_target`, not by calling a backend-native camera reset directly. The current Macroquad adapter stores the active target separately from the camera; if the scene target is not ended through the trait, later `set_world_view` or `set_screen_view` calls can accidentally reattach the stale scene target. That exact failure path hid the bloom-off emissive glow by drawing it into an already-composited scene buffer instead of the screen.
-
-```mermaid
-flowchart LR
-    begin[begin_target scene]
-    world[world draw]
-    finishTarget[end_target clears active target]
-    composite[screen composite]
-    glow[optional emissive glow]
-
-    begin --> world --> finishTarget --> composite --> glow
-```
-
-## Camera Mapping
-
-The runtime now computes one neutral world view:
-
-```rust
-pub(crate) fn world_view(&self) -> CameraView {
-    let center = snap_world_camera_center(center, self.renderer.screen_size());
-    CameraView {
-        center: Point::new(center.x, center.y),
-        zoom,
-    }
-}
-```
-
-`MacroquadRenderer::set_world_view` turns that into `Camera2D::from_display_rect`. `vk2d` does not know about cameras, but it has `View2`:
-
-```mermaid
-flowchart LR
-    camera[CameraView<br/>center + zoom]
-    rect[world window]
-    view[View2::window]
-    frame[Frame::set_view]
-    draw[recorded draw calls]
-
-    camera --> rect --> view --> frame --> draw
-```
-
-The likely vk2d adapter rule is:
-
-| Renderer2d concept | vk2d concept |
-| --- | --- |
-| `CameraView { center, zoom }` | compute a world window from logical size and zoom |
-| Y-up world space | `View2::window(..., y_up = true)` |
-| `set_screen_view()` | `Frame::reset_view()` |
-| sprites and shapes after the view bind | recorded through the active `Frame` |
-
-This is why `View2` was added to `vk2d`: it lets EchoWarrior keep world-camera math in the game while the renderer only applies a generic coordinate transform.
-
-## Death Zoom Composite
-
-The runtime also uses positioned target drawing. During death transition, the already-rendered scene target is drawn back to the screen with a shrinking or shifting destination rectangle:
-
-```rust
-self.renderer.draw_target(
-    self.fx_targets.scene_id(),
-    Rect2::new(death_texture_x(progress, sw), death_texture_y(progress, sh), size.x, size.y),
-    SpriteParams { tint: from_mq(death_texture_tint(progress)), ..Default::default() },
+self.fx_targets.ensure(
+    &mut self.renderer,
+    screen.x,
+    screen.y,
+    self.settings.gfx.render_scale,
 );
+
+let scene = self.fx_targets.scene_id();
+self.renderer.begin_target(scene);
+self.renderer.set_world_view(self.world_view());
+self.draw_world_scene(assets, render_time);
+self.renderer.end_target();
 ```
+
+On the canonical path, `VkRenderer` maps this bracket to
+`Context::begin_target_frame`, `Frame::set_view(View2)`, the queued world
+commands, and `Frame::finish()`.
+
+## Screen Composite And Death Zoom
+
+When the world target is complete, the runtime switches to screen coordinates.
+Death transition, UI, and post-processing then operate in window space.
 
 ```mermaid
 flowchart LR
-    scene[scene TargetId]
-    progress[death progress]
-    dest[dest Rect2]
-    tint[tint]
-    draw[Renderer2d draw_target]
-    screen[screen composite]
+    scene["finished scene target"]
+    death["death progress and tint"]
+    dest["destination Rect2"]
+    target["Renderer2d::draw_target"]
+    screen["vk2d Frame::target_sprite"]
+    ui["HUD, dialogue, overlays"]
 
-    scene --> draw
-    progress --> dest --> draw
-    tint --> draw
-    draw --> screen
+    scene --> target --> screen
+    death --> dest --> target
+    screen --> ui
 ```
 
-The vk2d-side sibling is `Frame::target_sprite(target, pos, params)`. It can draw a finished target at a position, with destination size supplied through `SpriteParams`.
+The runtime does not need to know whether a target is a Macroquad render
+texture or a `vk2d::TargetId`; it only supplies the destination rectangle and
+sprite parameters.
 
-## Bloom Usage
+## Bloom And Material Passes
 
-`src/runtime/render_fx.rs::FxTargets::run_bloom` is the current multi-pass example. It routes target-to-target work through `Renderer2d`:
+The emissive and bloom path is a sequence of finished target dependencies:
 
 ```mermaid
 flowchart TB
-    hdr[fx_hdr target]
-    pre[bloom_prefilter material]
-    a[bloom_a target]
-    blur[bloom_blur material]
-    b[bloom_b target]
-    out[finished bloom target]
+    hdr["fx_hdr"]
+    pre["bloom prefilter material"]
+    ping["bloom_a"]
+    blur1["blur material"]
+    pong["bloom_b"]
+    blur2["blur material"]
+    composite["screen composite"]
 
-    hdr --> pre --> a
-    a --> blur --> b
-    b --> blur --> a
-    a --> out
+    hdr --> pre --> ping --> blur1 --> pong --> blur2 --> ping --> composite
 ```
 
-Internally, each pass uses the same small verb vocabulary:
+At the neutral layer the operation is still expressed with target ids,
+materials, uniforms, and `present_target`. On `vk2d`, the replay layer binds a
+finished source target with `bind_material_target` and uses
+`material_fullscreen`, or uses `target_sprite` when the pass is a positioned
+blit.
 
-```rust
-r.begin_target(dst);
-r.clear(Color::TRANSPARENT);
-r.use_material(material);
-r.present_target(src, SpriteParams { dest_size: Some(Point::new(w, h)), flip_y: true, ..Default::default() });
-r.use_default_material();
-r.end_target();
-```
+Never sample a target while the same target is being rendered. Finish the write
+pass first, then bind the target in a later pass.
 
-For vk2d, that maps to offscreen target frames. The source target can be sampled either as a material texture with `bind_material_target` or as a positioned sprite with `target_sprite`, depending on whether the pass needs shader work.
+## Asset Registration
 
-## vk2d Probe Usage
-
-`src/bin/wgpu_probe.rs` and `src/wgpu_vulkan/` are the place where EchoWarrior already uses `vk2d` directly.
+The canonical asset loader is separate from Macroquad's `RuntimeAssets`:
 
 ```mermaid
-flowchart TB
-    winit[winit window]
-    probe[wgpu_probe]
-    state[GpuProbeState]
-    ctx[vk2d Context]
-    assets[decoded images fonts WGSL]
-    frame[vk2d Frame]
-    overlay[egui overlay]
+flowchart LR
+    source["loose files, Mods, or data.pak"]
+    read["asset_pack read gateway"]
+    decode["RGBA, TTF, WGSL bytes"]
+    register["vk_assets registration"]
+    ids["opaque vk2d handles"]
+    draw["VkRenderer replay"]
 
-    winit --> probe --> state --> ctx
-    assets --> ctx
-    ctx --> frame --> overlay
+    source --> read --> decode --> register --> ids --> draw
 ```
 
-The probe:
+`vk2d` receives bytes, not EchoWarrior paths. `vk_assets.rs` registers fonts,
+textures, materials, and target resources against stable game-facing keys so
+the runtime can keep its `TextureId`, `FontId`, and `MaterialId` values.
 
-- creates `vk2d::Context` with `Backend::Vulkan`
-- uploads decoded RGBA sprite bytes with `load_texture_rgba`
-- loads WGSL materials with `MaterialDesc`
-- bakes a TTF with `load_font`
-- begins a `Frame`
-- draws sprites, fullscreen materials, and text
-- presents with `present_with_egui`
+## What Is Still Being Routed
 
-The probe is not the game runtime. It is the richer smoke surface proving that vk2d can draw the ingredients the runtime needs.
-
-## Verb Mapping
-
-| Runtime verb | Current live backend | vk2d equivalent |
-| --- | --- | --- |
-| `screen_size()` | Macroquad `screen_width/height` | adapter logical output size |
-| `clear(color)` | `clear_background` | pass clear at `begin_frame` / `begin_target_frame` |
-| `draw_sprite` | `draw_texture_ex` | `Frame::sprite` |
-| `fill_rect`, `line`, `circle`, `triangle` | Macroquad primitives | `Frame` shape methods |
-| `draw_text`, `measure_text` | Macroquad text APIs | `Frame::text`, `Context::measure_text_ext` |
-| `set_uniform` | Macroquad `Material::set_uniform` | `Context::set_material_uniform` or frame wrapper |
-| `use_material` + fullscreen target draw | Macroquad material bind | `Frame::material_fullscreen` or material-backed blit |
-| `begin_target` / `end_target` | Macroquad `RenderTarget` camera bind | `Context::begin_target_frame` / `Frame::finish` |
-| `present_target` | draw target texture fullscreen | `Frame::target_sprite` or scene blit |
-| `draw_target` | draw target texture into `Rect2` | `Frame::target_sprite` with `dest_size` |
-| `set_world_view` | `Camera2D::from_display_rect` | `Frame::set_view(View2::window(...))` |
-
-The only awkward part is lifecycle: `Renderer2d` is a stateful trait used throughout one Macroquad frame, while `vk2d` models each render pass as a `Frame` value that must be finished. A vk2d runtime adapter will need to own that pass state carefully.
-
-The lifecycle rule is strict: every target begin must have a matching backend-visible target finish before screen-space work resumes. In the live adapter, that is `end_target`. In a vk2d adapter, it will be the point where the target `Frame` is finished and the next pass begins.
-
-## Construction Spike
-
-`tests/vk_construction_spike.rs` documents why the cutover needs a shell-first plan. It probes which Macroquad-typed values can be constructed without a Macroquad window.
-
-The finding to preserve: a vk2d runtime should not build a `PrototypeRuntime` that eagerly creates Macroquad `Material`, `RenderTarget`, or `Font` values off-context. The backend split needs a runtime asset layer whose resource creation belongs to the active renderer.
+The canonical path is real, but parity work is explicit and ongoing. Current
+known gaps include terrain chunks, weather overlays, audio, egui panels, and
+HiDPI input scaling. The shell logs a skip when a subsystem is intentionally
+not available rather than calling raw Macroquad globals.
 
 ```mermaid
-flowchart TB
-    build[PrototypeRuntime construction]
-    pure[pure gameplay and data fields]
-    risky[backend resource fields]
-    shell[vk2d shell]
-    assets[renderer-specific asset loader]
+flowchart TD
+    requested["runtime requests feature"]
+    neutral{ "neutral route exists?" }
+    vk["replay through vk2d"]
+    fallback["visible/logged fallback"]
+    bug["silent raw Macroquad call\nregression"]
 
-    build --> pure
-    build --> risky
-    risky --> assets
-    shell --> assets
+    requested --> neutral
+    neutral -- yes --> vk
+    neutral -- no --> fallback
+    fallback -. must never become .-> bug
 ```
 
-## Contributor Rules
+Treat a new skip line as a routing task. Treat a panic, black region, or
+unexplained missing effect as a regression.
 
-Use this route when working on renderer migration:
+## Adding A New Draw Feature
 
-1. Move game draw intent through `Renderer2d` first.
-2. Keep `src/render.rs` free of Macroquad and wgpu types.
-3. Keep `vk2d` free of EchoWarrior asset paths and game camera concepts.
-4. Add or update `vk2d` features only when a real runtime verb needs them.
-5. Verify game behavior with `cargo run` when the Macroquad path changed.
-6. Verify renderer-library behavior with `cargo test -p vk2d` and the vk2d examples when the submodule changed.
-7. Verify the probe with `cargo run --bin wgpu_probe -- --frames 3` when the Vulkan-facing consumer changed.
+For a new renderer-backed feature:
 
-The target is not "Vulkan everywhere immediately". The target is a runtime that describes rendering once, then lets Macroquad and vk2d answer that contract without dragging gameplay code into either backend.
+1. Put gameplay meaning and configuration in `src/game`, `src/data`, or
+   `Assets/` as appropriate.
+2. Build a renderer-neutral description in the owning runtime/UI module.
+3. Use an existing `Renderer2d` verb if it expresses the feature.
+4. If a real GPU capability is missing, add it to `vk2d` first and keep the
+   public inputs neutral.
+5. Add the `VkRenderer` replay mapping and a pure command test.
+6. Run the canonical shell, then the compatibility path if it was touched.
 
-For day-to-day smoke commands and how to read `--vk` skip logs, use [Renderer Diagnostics](../renderer-diagnostics/).
+For submodule ownership and signed pointer updates, see [Renderer Submodule Workflow](../renderer-submodule-workflow/).

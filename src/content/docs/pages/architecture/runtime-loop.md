@@ -2,7 +2,9 @@
 title: "3. Runtime Loop"
 ---
 
-The playable prototype runs through Macroquad. `src/main.rs` calls `runtime::run().await`, and the runtime owns the frame loop.
+The runtime owns one game-frame sequence, while the selected shell supplies
+window events and the renderer presents the result. The canonical shell is
+`winit + vk2d`; the Macroquad loop remains available as a compatibility path.
 
 ## Frame Shape
 
@@ -10,21 +12,21 @@ At the highest level, each frame is:
 
 ```mermaid
 sequenceDiagram
-    participant MQ as Macroquad
+    participant Shell as Macroquad or vk2d shell
     participant RT as PrototypeRuntime
     participant Input as runtime input
     participant Game as game helpers
     participant UI as UI models
     participant Draw as runtime draw paths
 
-    MQ->>RT: next frame
+    Shell->>RT: input and delta
     RT->>Input: handle_input()
     RT->>RT: update timers and mode state
     RT->>Game: call pure helpers where available
     RT->>RT: apply commands, scripts, saves, audio
     RT->>Draw: draw world, actors, effects
     RT->>UI: draw HUD, cards, dialogue, overlays
-    RT->>MQ: present frame
+    RT->>Shell: present through selected backend
 ```
 
 ## Runtime Modes

@@ -12,7 +12,7 @@ title: "Main Code Map"
 | `src/assets.rs` | Stable asset identifiers, sprite/font manifest defaults, sprite metadata parsing, and spritesheet descriptor binding. |
 | `src/asset_pack.rs` | Asset pack format, loose file reads, active mod overlay reads, default pack reads, identity pack reads, and release asset discovery. |
 | `src/modding.rs` | `Mods/<mod_id>/mod.toml` discovery, dependency ordering, namespace selection, and save manifest conversion. |
-| `src/render.rs` | Renderer-neutral 2D drawing contract, value types, handles, and material/uniform verbs used by the Macroquad adapter and future renderer work. |
+| `src/render.rs` | Renderer-neutral 2D drawing contract, value types, handles, and material/uniform verbs used by the canonical vk2d adapter and Macroquad compatibility path. |
 | `src/logging.rs` | `tracing` subscriber initialization and last-50-line ring buffer for the debug overlay. |
 | `src/perf.rs` | Debug-only performance scope helper and `perf_scope!` macro. |
 
@@ -25,7 +25,7 @@ title: "Main Code Map"
 | `src/bin/sprite_cutter.rs` | CLI for cutting spritesheets described by `Assets/Metadata/spritesheets.toml`. |
 | `src/bin/mod_check.rs` | Shipping gate for data, scripts, shaders, commands, mod packs, and cross-file references. |
 | `src/bin/choreo.rs` | Contract CLI for choreography validation, JSON/TOML conversion, schema generation, preview sampling, graph export, and GUI picker ids. |
-| `src/bin/wgpu_probe.rs` | Isolated `winit` smoke entry for the `soulwax/vk2d` renderer path; useful for Vulkan-facing checks without booting the shipping Macroquad runtime. |
+| `src/bin/wgpu_probe.rs` | Focused `winit` consumer smoke entry for `soulwax/vk2d`; useful for renderer checks without booting the full game-state shell. |
 
 ## Workspace Crates
 

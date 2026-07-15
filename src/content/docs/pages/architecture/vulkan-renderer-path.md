@@ -1,233 +1,271 @@
 ---
-title: "10A. Vulkan Renderer Path"
+title: "10A. Canonical vk2d Renderer"
 ---
 
-EchoWarrior is moving toward an owned Vulkan-capable 2D renderer without breaking the playable Macroquad runtime.
+`vk2d` is now EchoWarrior's canonical renderer standard.
 
-The renderer itself lives in [soulwax/vk2d](https://github.com/soulwax/vk2d). In this repository, `crates/vk2d` is a git submodule and workspace member used by EchoWarrior so the game can compile, test, and probe against the renderer while the renderer remains its own project.
+It is a renderer we own, evolve, and can extend at the GPU boundary. The crate
+lives in its own repository, [soulwax/vk2d](https://github.com/soulwax/vk2d),
+and EchoWarrior consumes it through the `crates/vk2d` git submodule. Macroquad
+still exists as a compatibility backend while the remaining presentation paths
+are moved deliberately, but new renderer architecture should target `vk2d`.
 
-The important beginner takeaway: this is not a big renderer swap yet. It is a staged migration with two parallel tracks:
+## The Big Picture
 
-- the shipping game still runs through Macroquad
-- new renderer work is isolated behind `Renderer2d`, `MacroquadRenderer`, the `soulwax/vk2d` submodule, and `wgpu_probe`
-
-## Current Shape
-
-```mermaid
-flowchart TB
-    game[EchoWarrior game code]
-    neutral[src/render.rs Renderer2d]
-    mq[src/runtime/renderer_mq.rs]
-    runtime[src/runtime Macroquad game]
-    vkcrate[crates/vk2d<br/>soulwax/vk2d]
-    probe[src/bin/wgpu_probe]
-    wgsl[Assets/Shaders/wgsl]
-
-    game --> neutral
-    neutral --> mq --> runtime
-    probe --> vkcrate
-    wgsl --> vkcrate
-    vkcrate --> probe
-```
-
-`src/render.rs` is the neutral contract. It defines plain value types and opaque handles: `Color`, `Point`, `Rect2`, `TextureId`, `MaterialId`, `FontId`, and `TargetId`.
-
-`src/runtime/renderer_mq.rs` implements that contract on top of Macroquad. It lets existing draw sites move onto the neutral API while the shipped game still renders exactly where it already does.
-
-`crates/vk2d` is the `soulwax/vk2d` renderer submodule. It is game-agnostic, uses wgpu with a Vulkan preference, and loads WGSL material shaders as data.
-
-`src/bin/wgpu_probe.rs` is EchoWarrior's richer smoke example. It opens a winit window, uses `vk2d`, draws a sprite grid, WGSL effects, text, and an egui overlay, then can exit automatically with `--frames N`.
-
-For renderer internals, see [vk2d Renderer Internals](vk2d-renderer-internals/). For how the current runtime uses target/view/bloom verbs that a vk2d backend can answer, see [vk2d Runtime Usage](vk2d-runtime-usage/). For command output and skip-log interpretation, see [Renderer Diagnostics](../renderer-diagnostics/). For submodule commit rules, see [Renderer Submodule Workflow](../renderer-submodule-workflow/).
-
-## Why This Exists
-
-The old renderer problem was not just API taste. EchoWarrior wants:
-
-- owned sprite batching and render-target control
-- data-authored WGSL effects instead of one Rust file per shader
-- startup shader compilation errors with source locations
-- a renderer that stays reusable outside the game repository
-- a migration path that does not halt game development
+The game describes a frame through the neutral `Renderer2d` vocabulary. The
+active backend then turns that vocabulary into GPU work.
 
 ```mermaid
 flowchart LR
-    raw[Raw Macroquad draw calls]
-    boundary[Renderer2d boundary]
-    mq[Macroquad backend]
-    vk[vk2d backend]
-    future[Future runtime backend choice]
+    state["game state and UI models"]
+    intent["Renderer2d draw intent"]
+    choice{"active backend"}
+    mq["Macroquad compatibility adapter"]
+    vk["VkRenderer recorder"]
+    frame["vk2d Context and Frame"]
+    gpu["wgpu device and queue\nVulkan preferred"]
 
-    raw --> boundary
-    boundary --> mq
-    boundary --> vk
-    mq --> future
-    vk --> future
+    state --> intent --> choice
+    choice --> mq
+    choice --> vk --> frame --> gpu
 ```
 
-The boundary is the important part. Each draw site moved to `Renderer2d` becomes easier to run through Macroquad today and a Vulkan backend later.
+The important ownership rule is simple:
 
-## The Four Pieces
+- EchoWarrior owns game intent, asset lookup, camera policy, layout, and the
+  adapter that maps game values into renderer values.
+- `vk2d` owns GPU context creation, resource registries, draw batching, target
+  passes, text, materials, and submission.
+- Macroquad is a fallback and compatibility implementation of the same
+  neutral contract. It is not the renderer design to extend for new GPU work.
 
-| Piece | Role | Beginner rule |
-| --- | --- | --- |
-| `src/render.rs` | neutral drawing trait and value types | no `macroquad`, no `wgpu`, no game constants |
-| `src/runtime/renderer_mq.rs` | Macroquad implementation of `Renderer2d` | maps neutral verbs to existing Macroquad calls |
-| `crates/vk2d` | git submodule checkout of `soulwax/vk2d`, the wgpu/Vulkan immediate renderer | no EchoWarrior asset paths or gameplay assumptions |
-| `src/wgpu_vulkan` + `wgpu_probe` | EchoWarrior demo consumer of `vk2d` | allowed to load game demo assets and shaders |
+## What “Canonical” Means
 
-## Runtime Usage Now
+Canonical describes the direction and the contract, not a claim that every old
+call site has already disappeared.
 
-```mermaid
-flowchart TB
-    runtime[PrototypeRuntime draw]
-    target[scene and fx TargetIds]
-    view[CameraView]
-    renderer[Renderer2d]
-    macroquad[MacroquadRenderer today]
-    vk2d[vk2d backend later]
+| Question | Current answer |
+| --- | --- |
+| Where should a new renderer capability be designed? | `soulwax/vk2d` first, then the EchoWarrior adapter. |
+| Where should gameplay and UI describe drawing? | `src/render.rs` and `Renderer2d` values/verbs. |
+| Which backend owns GPU features such as WGSL materials and target passes? | `vk2d`. |
+| What is the compatibility path? | `MacroquadRenderer` in `src/runtime/renderer_mq.rs`. |
+| How is the Vulkan shell selected today? | Build with `vk-shell`, then pass `--vk`. |
+| Is Macroquad-only code allowed? | Only for an existing compatibility path or an explicitly isolated legacy subsystem. |
 
-    runtime --> target --> renderer
-    runtime --> view --> renderer
-    renderer --> macroquad
-    renderer --> vk2d
-```
-
-The runtime already uses the neutral path for the big renderer migration pressure points:
-
-- scene target bind and world camera view in `begin_scene_target`
-- ambient-tint scene composite in `end_scene_target`
-- death transition positioned scene draw through `draw_target`
-- emissive layer render target bind through `begin_target` and `set_world_view`
-- bloom ping-pong passes through target ids, materials, uniforms, and target presents
-- routed HUD/dialogue/UI drawing through `src/ui/*`
-
-That means a future vk2d backend is mostly an adapter problem, not a gameplay rewrite.
-
-## What Changed Recently
-
-The repository is now a Cargo workspace, and the renderer crate is a submodule:
-
-```text
-Cargo.toml
-crates/vk2d/
-src/
-```
-
-The root game package depends on the local `crates/vk2d` submodule with its optional `egui` and `winit-input` features for the probe. The shipping Macroquad runtime does not use `wgpu` directly.
-
-The `wgpu_probe` no longer owns the renderer internals. It is now a consumer of `vk2d`. The renderer library owns context creation, textures, materials, text, shapes, render targets, egui overlay presentation, and the nearest-upscale scene blit.
-
-Recent Phase 6b work also grew the runtime boundary in the direction the vk2d backend needs: `CameraView`, `set_world_view`, `set_screen_view`, and positioned `draw_target` are now in `Renderer2d`. The live Macroquad adapter implements them today. The vk2d crate has the matching pieces on its side: `View2`, offscreen target frames, `target_sprite`, target/material texture binding, and `measure_text_ext`.
-
-From a fresh clone, initialize the renderer submodule before building:
-
-```powershell
-git submodule update --init crates/vk2d
-```
-
-## Current Library Contract
-
-```mermaid
-flowchart TB
-    app[Application supplies data]
-    ctx[Context]
-    frame[Frame]
-    draw[Immediate draw calls]
-    present[Present scene]
-    result[Result for setup and loading]
-    handles[Opaque handles]
-
-    app --> ctx --> frame --> draw --> present
-    ctx --> result
-    ctx --> handles
-    handles --> draw
-```
-
-`vk2d` is not an engine layer. It is a small renderer library:
-
-- the app supplies decoded RGBA texture bytes, TTF bytes, logical resolution, sprite source rectangles, and WGSL shader text
-- setup and resource loading return `Result<_, Vk2dError>`
-- per-frame draw calls are infallible and skip bad handles
-- public draw inputs stay neutral: `Color`, `Point`, `Rect2`, and opaque handles
-- `egui` and `winit-input` are optional feature integrations
-- the scene renders at a fixed logical size and nearest-upscales to the window
-
-## Shader Contract
-
-```mermaid
-flowchart TD
-    wgsl[WGSL shader file]
-    desc[MaterialDesc]
-    naga[naga parse and validate]
-    spirv[SPIR-V module]
-    material[vk2d MaterialId]
-    frame[Frame set_uniform and draw]
-
-    wgsl --> desc --> naga --> spirv --> material --> frame
-```
-
-For `vk2d`, shaders are content. A material is a `.wgsl` string plus a blend mode and a uniform declaration. The app pushes uniform values by name.
-
-That is different from the old pattern where a new shader could imply a new Rust module. The direction is: fewer shader-specific Rust files, more shader data.
-
-EchoWarrior-specific shader file paths belong in `src/wgpu_vulkan` or game asset manifests. The renderer crate should receive WGSL text, not know where EchoWarrior stores it.
-
-## What Not To Do
-
-Do not:
-
-- import `wgpu` into `src/game`, `src/data`, or `src/ui`
-- put game-specific paths such as `Assets/Graphics/...` inside `soulwax/vk2d`
-- add backend-specific types to `src/render.rs`
-- move a large render subsystem all at once
-- treat `wgpu_probe` as the shipped game runtime
-- commit an EchoWarrior submodule pointer before the `soulwax/vk2d` commit it points at is pushed
-
-Do:
-
-- move draw sites through `Renderer2d` in small slices
-- keep gameplay and layout data backend-neutral
-- use `cargo run --bin wgpu_probe -- --frames 3` for probe smoke checks
-- use `cargo run -p vk2d --example hello_sprite -- --frames 3` when the renderer library itself changed
-- keep `cargo run` as the Macroquad runtime smoke check
-
-## Verification
-
-Use the narrowest check for the slice:
-
-```powershell
-cargo check
-cargo test -p vk2d
-cargo run -p vk2d --example hello_sprite -- --frames 3
-cargo run --bin wgpu_probe -- --frames 3
-cargo run
-```
-
-`cargo run -p vk2d --example hello_sprite -- --frames 3` verifies the renderer crate by itself. `cargo run --bin wgpu_probe -- --frames 3` verifies EchoWarrior's isolated Vulkan consumer path. `cargo run` verifies the playable Macroquad path. A good renderer migration slice knows which one it affected.
-
-For the in-progress runtime shell, use:
+The current command is therefore honest about both facts:
 
 ```powershell
 cargo run --features vk-shell -- --vk --arena
 ```
 
-The shell is allowed to log current routing gaps such as terrain, weather, or egui panels being skipped. Those logs should be explicit; silent raw-Macroquad calls under the vk shell are bugs.
+That launches `src/runtime/vk_shell.rs`, creates a `vk2d::Context`, installs a
+`RendererBackend::Vk`, and runs the same runtime input/update/draw order as the
+older shell. A future build-profile change may make that path implicit, but a
+contributor should already treat it as the canonical path.
 
-## Mental Model
+## Repository Map
 
 ```mermaid
 flowchart TB
-    content[Game content and state]
-    layout[UI layout and screen rectangles]
-    commands[Renderer2d verbs]
-    backend{Backend}
-    macroquad[Macroquad today]
-    vulkan[vk2d path]
+    game["EchoWarrior main package"]
+    contract["src/render.rs\nRenderer2d and neutral handles"]
+    backend["src/runtime/renderer_backend.rs\nbackend switch point"]
+    recorder["src/runtime/renderer_vk.rs\nVkCmd log and replay"]
+    assets["src/runtime/vk_assets.rs\nasset and material registration"]
+    shell["src/runtime/vk_shell.rs\nwinit application shell"]
+    mq["src/runtime/renderer_mq.rs\ncompatibility adapter"]
+    crate["crates/vk2d\ngit submodule"]
+    probe["src/bin/wgpu_probe.rs\nstandalone consumer"]
 
-    content --> layout --> commands --> backend
-    backend -- shipped runtime --> macroquad
-    backend -- probe and future --> vulkan
+    game --> contract --> backend
+    backend --> mq
+    backend --> recorder
+    shell --> recorder
+    assets --> recorder
+    recorder --> crate
+    probe --> crate
 ```
 
-The game should increasingly describe what to draw in neutral terms. The backend decides how those requests become GPU work.
+The `src/wgpu_vulkan/` directory and `wgpu_probe` binary remain useful as an
+example consumer and smoke surface. They are not a second renderer project.
+The reusable implementation belongs in `vk2d`.
+
+## One Frame, Two Phases
+
+`Renderer2d` is called by many runtime modules, so it cannot hold a live
+`vk2d::Frame<'_>` across every individual method call. `VkRenderer` solves that
+borrow/lifetime mismatch by recording commands first and replaying once per
+present.
+
+```mermaid
+sequenceDiagram
+    participant Runtime as PrototypeRuntime
+    participant Vk as VkRenderer
+    participant Log as VkCommandLog
+    participant Ctx as vk2d Context
+    participant Frame as vk2d Frame
+    participant GPU as wgpu queue
+
+    Runtime->>Vk: clear, targets, sprites, text, materials
+    Vk->>Log: append ordered VkCmd values
+    Runtime->>Vk: present()
+    Vk->>Ctx: begin_target_frame for target brackets
+    Ctx->>Frame: open offscreen frame
+    Frame->>Frame: replay world and effect commands
+    Frame->>GPU: finish target pass
+    Vk->>Ctx: begin_frame for screen commands
+    Ctx->>Frame: open one screen frame
+    Frame->>Frame: replay composites and UI
+    Frame->>GPU: present swapchain
+```
+
+This preserves draw order while respecting `vk2d`'s resource borrowing model.
+Target brackets finish before a later pass samples their textures. The result
+is still one game frame, even though it contains several GPU passes.
+
+## The Runtime Boundary
+
+The game-side contract intentionally contains no `wgpu`, `winit`, or
+`macroquad::Texture2D` values:
+
+```rust
+pub trait Renderer2d {
+    fn draw_sprite(&mut self, texture: TextureId, pos: Point, params: SpriteParams);
+    fn draw_text(&mut self, text: &str, pos: Point, params: TextParams);
+    fn begin_target(&mut self, target: TargetId);
+    fn end_target(&mut self);
+    fn set_world_view(&mut self, view: CameraView);
+    fn set_screen_view(&mut self);
+    fn draw_target(&mut self, target: TargetId, dest: Rect2, params: SpriteParams);
+}
+```
+
+The actual trait contains the complete shape/material vocabulary. The snippet
+shows the architectural idea: a runtime feature says what should happen, and
+the backend decides how that becomes GPU work.
+
+```mermaid
+flowchart TD
+    feature["render_scene, render_fx, overlays, ui"]
+    values["Color, Point, Rect2, opaque resource ids"]
+    verbs["sprites, shapes, text, targets, materials, views"]
+    adapter["RendererBackend"]
+    vk["VkRenderer\nrecord and replay"]
+    macro["MacroquadRenderer\nlegacy compatibility"]
+
+    feature --> values --> verbs --> adapter
+    adapter --> vk
+    adapter --> macro
+```
+
+Do not leak renderer-native types upward. If a new helper needs a GPU device,
+texture view, sampler, or winit event, it belongs in `vk2d`, `renderer_vk.rs`,
+`vk_assets.rs`, or the shell boundary.
+
+## What `vk2d` Owns
+
+The standalone crate is deliberately small, but it owns the difficult part of
+the problem:
+
+| `vk2d` area | Responsibility |
+| --- | --- |
+| `Context` | instance, adapter selection, device, queue, surface, registries, resize |
+| `Frame` | ordered immediate draw calls and pass completion |
+| `sprite` | RGBA uploads, source rectangles, flips, texture batching |
+| `shapes` | batched rectangles, lines, circles, outlines, triangles |
+| `text` | TTF rasterization, per-size atlas buckets, metrics |
+| `material` | WGSL validation/compilation, named uniforms, texture slots, pipelines |
+| `target` | offscreen targets, filtering, scene composition |
+| `view` | CPU-side world-to-output transform, including Y-up coordinates |
+| optional integrations | egui overlay and winit input collection |
+
+```mermaid
+flowchart LR
+    bytes["decoded RGBA and TTF bytes"]
+    wgsl["WGSL source and MaterialDesc"]
+    ctx["vk2d Context"]
+    handles["TextureId, FontId, MaterialId, TargetId"]
+    frame["Frame draw calls"]
+    passes["scene, target, composite passes"]
+    gpu["GPU submission"]
+
+    bytes --> ctx
+    wgsl --> ctx
+    ctx --> handles --> frame --> passes --> gpu
+```
+
+`vk2d` does not know EchoWarrior's asset paths or gameplay concepts. It
+receives bytes and neutral values. The game-side loader resolves loose files,
+mods, or packed assets before registration.
+
+## Shader Direction
+
+New GPU effects should be expressed as WGSL materials where the renderer can
+own the pipeline contract and the game can own the content path.
+
+```mermaid
+flowchart TD
+    source["Assets/Shaders/wgsl or mod WGSL"]
+    desc["MaterialDesc\nblend, uniforms, texture slots"]
+    validate["naga validation and SPIR-V generation"]
+    material["vk2d MaterialId"]
+    bind["named uniforms and target/texture bindings"]
+    draw["material_sprite or material_fullscreen"]
+
+    source --> desc --> validate --> material --> bind --> draw
+```
+
+The renderer should not grow one Rust module per effect. A Rust adapter is
+appropriate when the *rendering capability* is missing; a new spell shape or
+palette should normally be data and WGSL.
+
+## Contributor Workflow
+
+When you need a renderer change, use this order:
+
+1. Express the game-side need as a neutral `Renderer2d` verb or a concrete
+   renderer capability.
+2. Decide whether the capability belongs in `vk2d` or only in the EchoWarrior
+   adapter. Reusable GPU behavior belongs in `vk2d`.
+3. Change and test `crates/vk2d` in its own repository first.
+4. Push the renderer commit before updating EchoWarrior's submodule pointer.
+5. Update `renderer_vk.rs`, asset registration, and runtime routing in the
+   parent repository.
+6. Verify the canonical shell and the compatibility path when both are
+   affected.
+
+The detailed submodule sequence lives in [Renderer Submodule Workflow](../renderer-submodule-workflow/).
+
+## Verification Matrix
+
+```powershell
+# renderer library
+cargo test -p vk2d
+cargo run -p vk2d --example hello_sprite -- --frames 3
+cargo run -p vk2d --example shader_gallery -- --frames 3
+
+# EchoWarrior consumer and canonical shell
+cargo run --bin wgpu_probe -- --frames 3
+cargo run --features vk-shell -- --vk --arena
+
+# compatibility path, when its adapter or legacy route changed
+cargo run -- --arena
+```
+
+The three surfaces answer different questions. `vk2d` examples prove the
+library. `wgpu_probe` proves EchoWarrior can consume it. `--vk` proves the
+runtime shell, command recorder, asset registration, and live game route.
+Macroquad is a compatibility regression check, not the architectural finish
+line.
+
+## Current Limits
+
+The canonical direction does not mean parity is complete. Known migration work
+includes terrain and weather paths, audio under the winit shell, egui under the
+vk runtime, HiDPI input scaling, and any remaining raw Macroquad calls that
+cannot safely execute without a Macroquad context.
+
+Each gap must be explicit and logged. A missing capability should degrade to a
+visible or logged fallback; it must not silently call a Macroquad global from
+the `--vk` path.

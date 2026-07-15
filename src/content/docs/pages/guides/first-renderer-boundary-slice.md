@@ -147,7 +147,9 @@ flowchart LR
     bad --> wg
 ```
 
-If a helper takes `macroquad::Color`, it is still Macroquad-specific. If it takes `echo_warrior::render::Color`, it can be implemented by Macroquad today and `vk2d` later.
+If a helper takes `macroquad::Color`, it is still Macroquad-specific. If it
+takes `echo_warrior::render::Color`, it belongs to the neutral contract and can
+be answered by the canonical `vk2d` backend or the compatibility adapter.
 
 ## Step 5: Verify The Right Thing
 
@@ -189,11 +191,11 @@ Moved the run reward panel background through Renderer2d.
 
 The Macroquad backend still renders the same rectangles and outlines, but the
 draw site now depends on the neutral renderer boundary instead of direct
-Macroquad primitives.
+Macroquad primitives. New GPU capabilities belong in `vk2d`.
 ```
 
 That tells reviewers the important thing: behavior stayed stable, but the migration moved one step forward.
 
 ## Next Tutorial
 
-After this, read [Vulkan Renderer Path](../architecture/vulkan-renderer-path/) to understand how the same neutral draw vocabulary connects to `vk2d` and the `wgpu_probe`, then read [Renderer Submodule Workflow](../renderer-submodule-workflow/) before touching the renderer crate itself.
+After this, read [Canonical vk2d Renderer](../architecture/vulkan-renderer-path/) to understand how the same neutral draw vocabulary connects to `vk2d` and the `wgpu_probe`, then read [Renderer Submodule Workflow](../renderer-submodule-workflow/) before touching the renderer crate itself.

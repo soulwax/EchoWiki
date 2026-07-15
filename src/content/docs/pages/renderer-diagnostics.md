@@ -2,15 +2,17 @@
 title: "Renderer Diagnostics"
 ---
 
-Renderer work now has three different smoke surfaces. This page helps you pick the right one and interpret the output without chasing the wrong problem.
+Renderer work has three complementary smoke surfaces. The canonical runtime is
+the `--vk` shell; the compatibility runtime and standalone examples answer
+different regression questions.
 
 ## The Three Doors
 
 ```mermaid
 flowchart TB
     task[What are you checking?]
-    mq[Playable Macroquad runtime]
-    vk[Experimental vk shell]
+    mq[Compatibility Macroquad runtime]
+    vk[Canonical vk2d runtime shell]
     crate[vk2d renderer crate]
 
     task --> mq
@@ -26,20 +28,20 @@ flowchart TB
 
 | Surface | Use it when | What success means |
 | --- | --- | --- |
-| Macroquad runtime | You changed normal gameplay, UI, audio, assets, or `Renderer2d` routing that still presents through Macroquad. | The playable game starts, enters the requested mode, and shows no new runtime errors. |
-| vk shell | You changed `--vk`, `renderer_vk.rs`, `vk_assets.rs`, backend guards, or target/view routing intended for the live shell. | The shell boots far enough to show first-light output and logs explicit gaps instead of panicking. |
+| Macroquad runtime | You changed a compatibility route or need a comparison run. | The playable game starts, enters the requested mode, and shows no new runtime errors. |
+| vk shell | You changed `--vk`, `renderer_vk.rs`, `vk_assets.rs`, backend guards, or target/view routing. | The canonical shell boots, presents through `vk2d`, and logs explicit gaps instead of panicking. |
 | `vk2d` examples | You changed the reusable renderer crate or its public drawing/material API. | The renderer crate can create a window/frame, draw examples, and exit automatically. |
 
 ## Command Matrix
 
 | Command | Expected path |
 | --- | --- |
-| `cargo run` | Macroquad title screen. |
-| `cargo run -- --arena` | Macroquad runtime, Arena jumpstart, studio intro skipped. |
-| `cargo run -- --arena --fps-probe=10` | Macroquad Arena with a timed `[fps] ...` stderr summary, then exit. |
+| `cargo run --features vk-shell -- --vk` | Canonical winit/vk2d title screen. |
+| `cargo run --features vk-shell -- --vk --arena` | Canonical vk2d runtime, Arena jumpstart. |
+| `cargo run -- --arena --fps-probe=10` | Compatibility Macroquad Arena with a timed `[fps] ...` stderr summary, then exit. |
 | `cargo run -- --vk` | Default build rejects the flag with `this build has no vk shell`. That is expected unless `vk-shell` is enabled. |
 | `cargo run --features vk-shell -- --vk --arena` | Experimental winit/vk2d shell, Arena jumpstart. |
-| `cargo run --bin wgpu_probe -- --frames 3` | Older isolated Vulkan-facing probe path, separate from the current `--vk` runtime shell. |
+| `cargo run --bin wgpu_probe -- --frames 3` | Focused vk2d consumer smoke path, separate from game-state integration. |
 | `cargo run -p vk2d --example shader_gallery -- --frames 3` | Renderer crate self-check, independent of EchoWarrior runtime state. |
 
 There is no `--features-check` launch flag. If you see:

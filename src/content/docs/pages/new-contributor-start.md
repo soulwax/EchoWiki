@@ -24,7 +24,7 @@ cargo check
 3. Run the prototype once:
 
 ```powershell
-cargo run
+    cargo run --features vk-shell -- --vk --arena
 ```
 
 4. Skim [Visual Orientation](../visual-orientation/) so the main screens, debug surfaces, and scene UI have names before you read deeper architecture pages.
@@ -58,10 +58,13 @@ Assets/ and Mods/
   -> data, dialogue, scripts, shaders, audio, metadata
 
 src/data, src/game, src/ui, src/save, src/scripting
-  -> shared library code, ideally renderer-agnostic
+  -> shared library code, renderer-agnostic
 
 src/runtime
-  -> Macroquad-specific playable prototype
+  -> application shell, game state, draw intent, and backend adapters
+
+crates/vk2d (git submodule)
+  -> canonical GPU renderer: frames, batching, targets, WGSL, text
 
 src/bin
   -> tools contributors run before shipping content or releases
@@ -82,7 +85,7 @@ Avoid starting with:
 
 - broad rewrites of `src/runtime/mod.rs`
 - new dependencies
-- new renderer frameworks
+- a replacement renderer inside EchoWarrior; extend `soulwax/vk2d` instead
 - new choreography systems
 - hardcoded stats or content that should live in `Assets/`
 
@@ -94,6 +97,10 @@ Avoid starting with:
 - Runtime-loaded assets must be included by asset-pack discovery.
 - One YAML file per NPC.
 - Use the existing choreography engine for scene beats.
+- Treat `vk2d` as the canonical renderer standard. Macroquad is a compatibility
+  path, not the place for new GPU architecture.
+- Keep renderer-native types below `Renderer2d` and keep EchoWarrior paths out
+  of the `vk2d` crate.
 
 ## Where To Ask "Where Does This Go?"
 

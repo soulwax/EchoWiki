@@ -20,9 +20,10 @@ sequenceDiagram
     participant Data as data loaders
     participant Loader as runtime assets
     participant Game as PrototypeRuntime
-    participant MQ as Macroquad
+    participant Shell as selected runtime shell
+    participant Vk as vk2d when --vk
 
-    Main->>Runtime: runtime::run().await
+    Main->>Runtime: select --vk shell or compatibility loop
     Runtime->>Runtime: init tracing + F1 ring buffer
     Runtime->>Pack: configure selected mod layers
     Runtime->>Data: load characters, voices, music, settings
@@ -30,19 +31,24 @@ sequenceDiagram
     Loader->>Pack: read loose/mod/packed assets
     Runtime->>Game: construct PrototypeRuntime
     loop every frame
-        MQ->>Runtime: input + delta
+        Shell->>Runtime: input + delta
         Runtime->>Game: handle_input()
         Runtime->>Game: update(delta)
         Runtime->>Game: draw()
-        Runtime->>MQ: next_frame()
+        Runtime->>Shell: present selected backend
     end
 ```
 
-`src/main.rs` only asks Macroquad to create the window and calls `runtime::run().await`. If startup fails, the runtime displays an error screen. The real application shell lives in `src/runtime/mod.rs`.
+`src/main.rs` selects the winit/vk2d shell for `--vk` and retains the
+Macroquad loop as a compatibility path. If startup fails, the selected shell
+reports the error. The shared application logic lives in `src/runtime`.
 
 ## Startup Phases
 
-Startup is deliberately frame-driven. The loader draws a loading shell, performs one load phase, draws again, then continues. That keeps the game from sitting on a black window while Macroquad uploads textures on the main thread.
+Startup is deliberately staged. The active renderer loader registers the
+resources it can support, performs one load phase, presents again, then
+continues. The Macroquad loader and `vk_assets` loader share the asset lookup
+contract but create backend-specific handles.
 
 ```mermaid
 flowchart TD
@@ -53,7 +59,7 @@ flowchart TD
     layers[selected_mod_layers]
     settings[load settings]
     intro{studio intro enabled?}
-    loader[AssetLoader phases]
+    loader[AssetLoader or vk_assets phases]
     preload[StartupPreload]
     runtime[PrototypeRuntime::new]
     frame[enter frame loop]
@@ -78,7 +84,7 @@ That does not mean all rules should stay there.
 flowchart TB
     runtime[PrototypeRuntime]
     player[player/enemies/NPC runtime structs]
-    draw[draw paths and Macroquad handles]
+    draw[draw intent and backend handles]
     audio[runtime audio handles]
     scripts[Lua runtime bridge]
     choreo[runtime choreography adapter]

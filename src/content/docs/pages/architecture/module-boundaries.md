@@ -25,7 +25,7 @@ flowchart TB
     save[src/save]
     scripting[src/scripting]
     bins[src/bin]
-    vk2d[crates/vk2d<br/>soulwax/vk2d]
+    vk2d[crates/vk2d<br/>soulwax/vk2d canonical renderer]
 
     main --> runtime
     runtime --> lib
@@ -51,13 +51,15 @@ flowchart TB
 | Area | Owns | Should avoid |
 | --- | --- | --- |
 | `src/main.rs` | Macroquad entry and error display path | game logic |
-| `src/runtime` | draw/input/audio/window/live actor presentation | reusable pure rules |
+| `src/runtime` | application shell, draw intent, backend selection, input/audio/live actor presentation | reusable pure rules |
 | `src/game` | pure gameplay models and systems | Macroquad, file I/O where avoidable |
 | `src/data` | serde models, TOML loading, fallbacks | rendering, live runtime state |
 | `src/ui` | UI models, theme/layout helpers, some draw helpers | gameplay ownership |
 | `src/render.rs` | backend-neutral 2D renderer vocabulary | Macroquad, wgpu, winit, game-specific asset paths |
-| `src/runtime/renderer_mq.rs` | adapter from `Renderer2d` verbs to Macroquad drawing | pure gameplay rules, renderer feature design |
-| `crates/vk2d` | git submodule checkout of `soulwax/vk2d`, the standalone renderer crate | EchoWarrior gameplay assumptions or hardcoded `Assets/` paths |
+| `src/runtime/renderer_mq.rs` | compatibility adapter from `Renderer2d` verbs to Macroquad drawing | new GPU feature design |
+| `src/runtime/renderer_vk.rs` | command recorder and replay adapter from `Renderer2d` to `vk2d` | reusable renderer internals |
+| `src/runtime/vk_assets.rs` | EchoWarrior-specific resource lookup and registration | generic GPU pipelines |
+| `crates/vk2d` | git submodule checkout of `soulwax/vk2d`, the canonical standalone renderer crate | EchoWarrior gameplay assumptions or hardcoded `Assets/` paths |
 | `src/save` | account/run save models and paths | rendering decisions |
 | `src/scripting` | Lua API and command buffers | direct rendering side effects |
 | `src/asset_pack.rs` | loose/packed reads and discovery | gameplay rules |
@@ -112,12 +114,13 @@ Renderer work now has its own boundary. `src/render.rs` describes what a frame w
 flowchart LR
     game[Runtime or UI code]
     boundary[src/render.rs<br/>Renderer2d]
-    mq[src/runtime/renderer_mq.rs<br/>Macroquad today]
-    vk[crates/vk2d<br/>soulwax/vk2d path]
+    mq[src/runtime/renderer_mq.rs<br/>compatibility]
+    vk[src/runtime/renderer_vk.rs<br/>canonical adapter]
+    crate[crates/vk2d<br/>soulwax/vk2d]
 
     game --> boundary
     boundary --> mq
-    boundary -. migration target .-> vk
+    boundary --> vk --> crate
 ```
 
 Do not pass backend types upward. If a helper takes `macroquad::Texture2D`, `wgpu::Device`, or `winit` window state, it belongs in a backend adapter or probe, not in gameplay, data, or UI model code.

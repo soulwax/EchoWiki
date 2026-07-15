@@ -2,10 +2,11 @@
 title: "1. Fundamentals"
 ---
 
-EchoWarrior is a Rust desktop game with two personalities:
+EchoWarrior is a Rust desktop game with three deliberately separated layers:
 
-- a playable Macroquad prototype
-- a renderer-agnostic library of game rules, data models, save models, scripts, and tools
+- a shared library of game rules, data models, save models, scripts, and tools
+- a runtime that emits renderer-neutral draw intent
+- a canonical `vk2d` GPU path, with Macroquad retained as compatibility support
 
 The architecture exists to make the game moddable without trapping important rules inside rendering code.
 
@@ -13,7 +14,7 @@ The architecture exists to make the game moddable without trapping important rul
 
 ```mermaid
 flowchart LR
-    runtime["src/runtime<br/>Macroquad: window, input, draw, audio"]
+    runtime["src/runtime<br/>window, input, draw intent, audio"]
     library["src/lib.rs<br/>shared crate surface"]
     pure["Pure-ish modules<br/>game, data, ui, save, scripting"]
     content["Assets and Mods<br/>TOML, YAML, Lua, shaders, media"]
@@ -22,6 +23,7 @@ flowchart LR
     library --> pure
     pure --> content
     runtime --> content
+    runtime --> renderer["vk2d / RendererBackend"]
 ```
 
 ## What Each Side Should Feel Like
@@ -31,7 +33,8 @@ Runtime code answers:
 - What did the player press?
 - What textures/shaders/sounds are loaded?
 - What should be drawn this frame?
-- What Macroquad state is needed?
+- What backend-neutral draw commands are needed?
+- Which renderer-specific resources must be registered?
 
 Shared library code answers:
 
@@ -59,7 +62,7 @@ flowchart TB
     data -. must not import .-> macroquad
 ```
 
-If a pure module wants positions or vectors, use its own simple data model or shared game types. If code needs `Texture2D`, `Color`, cameras, draw calls, input polling, or Macroquad audio, it belongs in `src/runtime`.
+If a pure module wants positions or vectors, use its own simple data model or shared game types. If code needs GPU resources, cameras, draw calls, input polling, or audio, it belongs at the runtime boundary. Renderer-native implementation belongs in `crates/vk2d` or an adapter, not in `src/game` or `src/data`.
 
 ## Content Is The Source Of Truth
 

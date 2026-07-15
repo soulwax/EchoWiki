@@ -73,13 +73,13 @@ What to check depends on the change, but report concrete observations:
 - target interaction works
 - missing asset fallback behaves correctly
 
-For the isolated Vulkan-facing renderer path:
+For the focused vk2d consumer path:
 
 ```powershell
 cargo run --bin wgpu_probe -- --frames 3
 ```
 
-For the experimental vk shell path:
+For the canonical vk2d shell path:
 
 ```powershell
 cargo run --features vk-shell -- --vk --arena
