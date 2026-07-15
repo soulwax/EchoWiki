@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1160 520" role="img" aria-label="Smooth Ceilings And Top Stage">
+<defs>
+<linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#10181c"/>
+<stop offset="1" stop-color="#0d1118"/>
+</linearGradient>
+<filter id="glow" x="-25%" y="-25%" width="150%" height="150%">
+<feGaussianBlur stdDeviation="2.2" result="blur"/>
+<feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+</filter>
+</defs>
+<rect width="100%" height="100%" rx="14" fill="url(#panel)"/>
+<rect x="0.5" y="0.5" width="99.9%" height="99.9%" rx="14" fill="none" stroke="#2d5552"/>
+<text x="34" y="42" fill="#f7efe4" font-size="22" font-weight="700" font-family="Inter, Segoe UI, sans-serif">Smooth Ceilings And Top Stage</text>
+<text x="34" y="68" fill="#8aa09f" font-size="13" font-family="Inter, Segoe UI, sans-serif">Bars show the largest stage each run kept under 60 fps and 120 fps; labels show the last measured stage.</text>
+<text x="92" y="120" fill="#f7efe4" font-size="13" font-weight="700" font-family="Inter, Segoe UI, sans-serif">v0.73.4 old Macroquad release</text>
+<rect x="92" y="130" width="760" height="10" rx="5" fill="#111b20"/>
+<rect x="92" y="130" width="501.8" height="10" rx="5" fill="#64dcc5" opacity="0.86"/>
+<text x="864" y="139" fill="#bac9c8" font-size="12" font-family="Inter, Segoe UI, sans-serif">smooth 60: 2000</text>
+<rect x="92" y="148" width="760" height="10" rx="5" fill="#111b20"/>
+<rect x="92" y="148" width="456.0" height="10" rx="5" fill="#f1c56b" opacity="0.86"/>
+<text x="864" y="157" fill="#bac9c8" font-size="12" font-family="Inter, Segoe UI, sans-serif">smooth 120: 1000</text>
+<text x="864" y="174" fill="#f1c56b" font-size="12" font-family="Inter, Segoe UI, sans-serif">last: 100,000 @ 56.0 ms</text>
+<text x="92" y="182" fill="#f7efe4" font-size="13" font-weight="700" font-family="Inter, Segoe UI, sans-serif">v0.73.4 old Macroquad debug</text>
+<rect x="92" y="192" width="760" height="10" rx="5" fill="#111b20"/>
+<rect x="92" y="192" width="501.8" height="10" rx="5" fill="#64dcc5" opacity="0.86"/>
+<text x="864" y="201" fill="#bac9c8" font-size="12" font-family="Inter, Segoe UI, sans-serif">smooth 60: 2000</text>
+<rect x="92" y="210" width="760" height="10" rx="5" fill="#111b20"/>
+<rect x="92" y="210" width="410.2" height="10" rx="5" fill="#f1c56b" opacity="0.86"/>
+<text x="864" y="219" fill="#bac9c8" font-size="12" font-family="Inter, Segoe UI, sans-serif">smooth 120: 500</text>
+<text x="864" y="236" fill="#b792ff" font-size="12" font-family="Inter, Segoe UI, sans-serif">last: 100,000 @ 95.1 ms</text>
+<text x="92" y="244" fill="#f7efe4" font-size="13" font-weight="700" font-family="Inter, Segoe UI, sans-serif">v0.74.8 prior pure-Macroquad release</text>
+<rect x="92" y="254" width="760" height="10" rx="5" fill="#111b20"/>
+<rect x="92" y="254" width="501.8" height="10" rx="5" fill="#64dcc5" opacity="0.86"/>
+<text x="864" y="263" fill="#bac9c8" font-size="12" font-family="Inter, Segoe UI, sans-serif">smooth 60: 2000</text>
+<rect x="92" y="272" width="760" height="10" rx="5" fill="#111b20"/>
+<rect x="92" y="272" width="456.0" height="10" rx="5" fill="#f1c56b" opacity="0.86"/>
+<text x="864" y="281" fill="#bac9c8" font-size="12" font-family="Inter, Segoe UI, sans-serif">smooth 120: 1000</text>
+<text x="864" y="298" fill="#e08a48" font-size="12" font-family="Inter, Segoe UI, sans-serif">last: 50,000 @ 62.1 ms</text>
+<text x="92" y="306" fill="#f7efe4" font-size="13" font-weight="700" font-family="Inter, Segoe UI, sans-serif">v0.74.9 debug executable</text>
+<rect x="92" y="316" width="760" height="10" rx="5" fill="#111b20"/>
+<rect x="92" y="316" width="501.8" height="10" rx="5" fill="#64dcc5" opacity="0.86"/>
+<text x="864" y="325" fill="#bac9c8" font-size="12" font-family="Inter, Segoe UI, sans-serif">smooth 60: 2000</text>
+<rect x="92" y="334" width="760" height="10" rx="5" fill="#111b20"/>
+<rect x="92" y="334" width="456.0" height="10" rx="5" fill="#f1c56b" opacity="0.86"/>
+<text x="864" y="343" fill="#bac9c8" font-size="12" font-family="Inter, Segoe UI, sans-serif">smooth 120: 1000</text>
+<text x="864" y="360" fill="#78a8ff" font-size="12" font-family="Inter, Segoe UI, sans-serif">last: 50,000 @ 77.5 ms</text>
+<text x="92" y="368" fill="#f7efe4" font-size="13" font-weight="700" font-family="Inter, Segoe UI, sans-serif">v0.74.9 speed_trace release executable</text>
+<rect x="92" y="378" width="760" height="10" rx="5" fill="#111b20"/>
+<rect x="92" y="378" width="501.8" height="10" rx="5" fill="#64dcc5" opacity="0.86"/>
+<text x="864" y="387" fill="#bac9c8" font-size="12" font-family="Inter, Segoe UI, sans-serif">smooth 60: 2000</text>
+<rect x="92" y="396" width="760" height="10" rx="5" fill="#111b20"/>
+<rect x="92" y="396" width="456.0" height="10" rx="5" fill="#f1c56b" opacity="0.86"/>
+<text x="864" y="405" fill="#bac9c8" font-size="12" font-family="Inter, Segoe UI, sans-serif">smooth 120: 1000</text>
+<text x="864" y="422" fill="#64dcc5" font-size="12" font-family="Inter, Segoe UI, sans-serif">last: 100,000 @ 62.7 ms</text>
+<text x="92" y="482" fill="#8aa09f" font-size="12" font-family="Inter, Segoe UI, sans-serif">Scale is logarithmic by entity count; partial runs are still useful but should not be compared at missing stages.</text>
+</svg>

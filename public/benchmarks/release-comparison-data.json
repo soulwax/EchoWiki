@@ -1,0 +1,716 @@
+[
+  {
+    "key": "old_release",
+    "label": "v0.73.4 old Macroquad release",
+    "source": "D:\\Workspace\\Rust\\EchoWarrior\\.claude\\skills\\bench-builds-workspace\\iteration-1\\full-ladder-release-vs-debug\\without_skill\\outputs\\release_stress-1783954142.csv",
+    "meta": {
+      "started_unix": "1783954142",
+      "build": "v0.73.4 (release)",
+      "resolution": "1584x861",
+      "gfx": "render_scale 2.0"
+    },
+    "summary": {
+      "smooth_60_up_to": "2000",
+      "smooth_120_up_to": "1000",
+      "vsync_suspected": "false"
+    },
+    "rows": [
+      {
+        "entities": 1.0,
+        "avg_ms": 3.498,
+        "p95_ms": 3.939,
+        "p99_ms": 6.727,
+        "avg_fps": 285.9,
+        "draw_calls": 59.0
+      },
+      {
+        "entities": 2.0,
+        "avg_ms": 3.617,
+        "p95_ms": 4.185,
+        "p99_ms": 4.5,
+        "avg_fps": 276.5,
+        "draw_calls": 57.0
+      },
+      {
+        "entities": 5.0,
+        "avg_ms": 3.539,
+        "p95_ms": 4.16,
+        "p99_ms": 4.456,
+        "avg_fps": 282.6,
+        "draw_calls": 54.0
+      },
+      {
+        "entities": 10.0,
+        "avg_ms": 3.449,
+        "p95_ms": 3.949,
+        "p99_ms": 4.251,
+        "avg_fps": 289.9,
+        "draw_calls": 59.0
+      },
+      {
+        "entities": 20.0,
+        "avg_ms": 3.579,
+        "p95_ms": 4.461,
+        "p99_ms": 4.888,
+        "avg_fps": 279.4,
+        "draw_calls": 55.0
+      },
+      {
+        "entities": 50.0,
+        "avg_ms": 3.526,
+        "p95_ms": 4.091,
+        "p99_ms": 4.306,
+        "avg_fps": 283.6,
+        "draw_calls": 51.0
+      },
+      {
+        "entities": 100.0,
+        "avg_ms": 4.051,
+        "p95_ms": 5.857,
+        "p99_ms": 8.549,
+        "avg_fps": 246.8,
+        "draw_calls": 53.0
+      },
+      {
+        "entities": 200.0,
+        "avg_ms": 4.45,
+        "p95_ms": 6.918,
+        "p99_ms": 12.38,
+        "avg_fps": 224.7,
+        "draw_calls": 54.0
+      },
+      {
+        "entities": 500.0,
+        "avg_ms": 4.118,
+        "p95_ms": 4.958,
+        "p99_ms": 5.26,
+        "avg_fps": 242.8,
+        "draw_calls": 64.0
+      },
+      {
+        "entities": 1000.0,
+        "avg_ms": 4.864,
+        "p95_ms": 6.482,
+        "p99_ms": 7.484,
+        "avg_fps": 205.6,
+        "draw_calls": 84.0
+      },
+      {
+        "entities": 2000.0,
+        "avg_ms": 6.739,
+        "p95_ms": 12.665,
+        "p99_ms": 26.052,
+        "avg_fps": 148.4,
+        "draw_calls": 78.0
+      },
+      {
+        "entities": 5000.0,
+        "avg_ms": 22.851,
+        "p95_ms": 40.37,
+        "p99_ms": 44.724,
+        "avg_fps": 43.8,
+        "draw_calls": 114.0
+      },
+      {
+        "entities": 10000.0,
+        "avg_ms": 14.89,
+        "p95_ms": 29.366,
+        "p99_ms": 32.189,
+        "avg_fps": 67.2,
+        "draw_calls": 170.0
+      },
+      {
+        "entities": 20000.0,
+        "avg_ms": 23.653,
+        "p95_ms": 46.736,
+        "p99_ms": 48.016,
+        "avg_fps": 42.3,
+        "draw_calls": 309.0
+      },
+      {
+        "entities": 50000.0,
+        "avg_ms": 45.469,
+        "p95_ms": 119.774,
+        "p99_ms": 122.259,
+        "avg_fps": 22.0,
+        "draw_calls": 1233.0
+      },
+      {
+        "entities": 100000.0,
+        "avg_ms": 56.007,
+        "p95_ms": 83.971,
+        "p99_ms": 90.677,
+        "avg_fps": 17.9,
+        "draw_calls": 1020.0
+      }
+    ]
+  },
+  {
+    "key": "old_debug",
+    "label": "v0.73.4 old Macroquad debug",
+    "source": "D:\\Workspace\\Rust\\EchoWarrior\\.claude\\skills\\bench-builds-workspace\\iteration-1\\full-ladder-release-vs-debug\\with_skill\\outputs\\stress-debug.csv",
+    "meta": {
+      "started_unix": "1783953740",
+      "build": "v0.73.4 (debug)",
+      "resolution": "1584x861",
+      "gfx": "render_scale 2.0"
+    },
+    "summary": {
+      "smooth_60_up_to": "2000",
+      "smooth_120_up_to": "500",
+      "vsync_suspected": "false"
+    },
+    "rows": [
+      {
+        "entities": 1.0,
+        "avg_ms": 3.719,
+        "p95_ms": 4.459,
+        "p99_ms": 7.077,
+        "avg_fps": 268.9,
+        "draw_calls": 58.0
+      },
+      {
+        "entities": 2.0,
+        "avg_ms": 3.825,
+        "p95_ms": 4.377,
+        "p99_ms": 4.74,
+        "avg_fps": 261.4,
+        "draw_calls": 58.0
+      },
+      {
+        "entities": 5.0,
+        "avg_ms": 3.72,
+        "p95_ms": 4.358,
+        "p99_ms": 4.832,
+        "avg_fps": 268.8,
+        "draw_calls": 57.0
+      },
+      {
+        "entities": 10.0,
+        "avg_ms": 3.62,
+        "p95_ms": 4.062,
+        "p99_ms": 4.258,
+        "avg_fps": 276.2,
+        "draw_calls": 62.0
+      },
+      {
+        "entities": 20.0,
+        "avg_ms": 3.688,
+        "p95_ms": 4.41,
+        "p99_ms": 4.719,
+        "avg_fps": 271.1,
+        "draw_calls": 58.0
+      },
+      {
+        "entities": 50.0,
+        "avg_ms": 3.574,
+        "p95_ms": 3.984,
+        "p99_ms": 4.189,
+        "avg_fps": 279.8,
+        "draw_calls": 59.0
+      },
+      {
+        "entities": 100.0,
+        "avg_ms": 4.209,
+        "p95_ms": 6.141,
+        "p99_ms": 8.964,
+        "avg_fps": 237.6,
+        "draw_calls": 60.0
+      },
+      {
+        "entities": 200.0,
+        "avg_ms": 4.657,
+        "p95_ms": 7.409,
+        "p99_ms": 12.132,
+        "avg_fps": 214.7,
+        "draw_calls": 67.0
+      },
+      {
+        "entities": 500.0,
+        "avg_ms": 4.314,
+        "p95_ms": 5.314,
+        "p99_ms": 5.732,
+        "avg_fps": 231.8,
+        "draw_calls": 67.0
+      },
+      {
+        "entities": 1000.0,
+        "avg_ms": 7.334,
+        "p95_ms": 15.754,
+        "p99_ms": 28.371,
+        "avg_fps": 136.3,
+        "draw_calls": 81.0
+      },
+      {
+        "entities": 2000.0,
+        "avg_ms": 6.489,
+        "p95_ms": 9.976,
+        "p99_ms": 10.806,
+        "avg_fps": 154.1,
+        "draw_calls": 74.0
+      },
+      {
+        "entities": 5000.0,
+        "avg_ms": 11.38,
+        "p95_ms": 17.054,
+        "p99_ms": 22.055,
+        "avg_fps": 87.9,
+        "draw_calls": 130.0
+      },
+      {
+        "entities": 10000.0,
+        "avg_ms": 20.965,
+        "p95_ms": 29.337,
+        "p99_ms": 31.364,
+        "avg_fps": 47.7,
+        "draw_calls": 184.0
+      },
+      {
+        "entities": 20000.0,
+        "avg_ms": 38.606,
+        "p95_ms": 56.187,
+        "p99_ms": 58.949,
+        "avg_fps": 25.9,
+        "draw_calls": 250.0
+      },
+      {
+        "entities": 50000.0,
+        "avg_ms": 72.954,
+        "p95_ms": 114.712,
+        "p99_ms": 129.08,
+        "avg_fps": 13.7,
+        "draw_calls": 1168.0
+      },
+      {
+        "entities": 100000.0,
+        "avg_ms": 95.108,
+        "p95_ms": 112.979,
+        "p99_ms": 144.059,
+        "avg_fps": 10.5,
+        "draw_calls": 783.0
+      }
+    ]
+  },
+  {
+    "key": "prior_pure_release",
+    "label": "v0.74.8 prior pure-Macroquad release",
+    "source": "C:\\Users\\soulwax\\AppData\\Roaming\\EchoWarrior\\benchmarks\\stress-1784129892.csv",
+    "meta": {
+      "started_unix": "1784129892",
+      "build": "v0.74.8 (release)",
+      "resolution": "1568x822",
+      "gfx": "render_scale 2.0"
+    },
+    "summary": {
+      "smooth_60_up_to": "2000",
+      "smooth_120_up_to": "1000",
+      "vsync_suspected": "false"
+    },
+    "rows": [
+      {
+        "entities": 1.0,
+        "avg_ms": 3.359,
+        "p95_ms": 4.324,
+        "p99_ms": 4.749,
+        "avg_fps": 297.7,
+        "draw_calls": 57.0
+      },
+      {
+        "entities": 2.0,
+        "avg_ms": 3.907,
+        "p95_ms": 4.861,
+        "p99_ms": 5.861,
+        "avg_fps": 256.0,
+        "draw_calls": 55.0
+      },
+      {
+        "entities": 5.0,
+        "avg_ms": 3.504,
+        "p95_ms": 4.534,
+        "p99_ms": 5.062,
+        "avg_fps": 285.4,
+        "draw_calls": 56.0
+      },
+      {
+        "entities": 10.0,
+        "avg_ms": 3.515,
+        "p95_ms": 4.678,
+        "p99_ms": 5.412,
+        "avg_fps": 284.5,
+        "draw_calls": 59.0
+      },
+      {
+        "entities": 20.0,
+        "avg_ms": 3.514,
+        "p95_ms": 4.709,
+        "p99_ms": 5.776,
+        "avg_fps": 284.6,
+        "draw_calls": 54.0
+      },
+      {
+        "entities": 50.0,
+        "avg_ms": 3.428,
+        "p95_ms": 4.394,
+        "p99_ms": 4.732,
+        "avg_fps": 291.7,
+        "draw_calls": 57.0
+      },
+      {
+        "entities": 100.0,
+        "avg_ms": 4.04,
+        "p95_ms": 6.251,
+        "p99_ms": 9.195,
+        "avg_fps": 247.6,
+        "draw_calls": 59.0
+      },
+      {
+        "entities": 200.0,
+        "avg_ms": 4.443,
+        "p95_ms": 7.002,
+        "p99_ms": 12.429,
+        "avg_fps": 225.0,
+        "draw_calls": 60.0
+      },
+      {
+        "entities": 500.0,
+        "avg_ms": 4.071,
+        "p95_ms": 5.548,
+        "p99_ms": 6.277,
+        "avg_fps": 245.6,
+        "draw_calls": 63.0
+      },
+      {
+        "entities": 1000.0,
+        "avg_ms": 4.827,
+        "p95_ms": 7.008,
+        "p99_ms": 8.145,
+        "avg_fps": 207.2,
+        "draw_calls": 87.0
+      },
+      {
+        "entities": 2000.0,
+        "avg_ms": 6.026,
+        "p95_ms": 9.657,
+        "p99_ms": 11.417,
+        "avg_fps": 165.9,
+        "draw_calls": 75.0
+      },
+      {
+        "entities": 5000.0,
+        "avg_ms": 10.618,
+        "p95_ms": 22.089,
+        "p99_ms": 24.766,
+        "avg_fps": 94.2,
+        "draw_calls": 123.0
+      },
+      {
+        "entities": 10000.0,
+        "avg_ms": 19.363,
+        "p95_ms": 39.033,
+        "p99_ms": 41.995,
+        "avg_fps": 51.6,
+        "draw_calls": 171.0
+      },
+      {
+        "entities": 20000.0,
+        "avg_ms": 31.329,
+        "p95_ms": 61.988,
+        "p99_ms": 68.765,
+        "avg_fps": 31.9,
+        "draw_calls": 279.0
+      },
+      {
+        "entities": 50000.0,
+        "avg_ms": 62.064,
+        "p95_ms": 124.818,
+        "p99_ms": 142.812,
+        "avg_fps": 16.1,
+        "draw_calls": 1255.0
+      }
+    ]
+  },
+  {
+    "key": "new_debug",
+    "label": "v0.74.9 debug executable",
+    "source": "C:\\Users\\soulwax\\AppData\\Roaming\\EchoWarrior\\benchmarks\\stress-1784140024.csv",
+    "meta": {
+      "started_unix": "1784140024",
+      "build": "v0.74.9 (debug)",
+      "resolution": "1568x822",
+      "gfx": "render_scale 2.0"
+    },
+    "summary": {
+      "smooth_60_up_to": "2000",
+      "smooth_120_up_to": "1000",
+      "vsync_suspected": "false"
+    },
+    "rows": [
+      {
+        "entities": 1.0,
+        "avg_ms": 3.544,
+        "p95_ms": 4.249,
+        "p99_ms": 6.682,
+        "avg_fps": 282.1,
+        "draw_calls": 62.0
+      },
+      {
+        "entities": 2.0,
+        "avg_ms": 3.715,
+        "p95_ms": 4.441,
+        "p99_ms": 4.973,
+        "avg_fps": 269.2,
+        "draw_calls": 60.0
+      },
+      {
+        "entities": 5.0,
+        "avg_ms": 3.56,
+        "p95_ms": 4.093,
+        "p99_ms": 4.342,
+        "avg_fps": 280.9,
+        "draw_calls": 59.0
+      },
+      {
+        "entities": 10.0,
+        "avg_ms": 3.478,
+        "p95_ms": 4.017,
+        "p99_ms": 4.333,
+        "avg_fps": 287.5,
+        "draw_calls": 58.0
+      },
+      {
+        "entities": 20.0,
+        "avg_ms": 3.559,
+        "p95_ms": 4.255,
+        "p99_ms": 4.656,
+        "avg_fps": 281.0,
+        "draw_calls": 60.0
+      },
+      {
+        "entities": 50.0,
+        "avg_ms": 3.453,
+        "p95_ms": 3.967,
+        "p99_ms": 4.232,
+        "avg_fps": 289.6,
+        "draw_calls": 58.0
+      },
+      {
+        "entities": 100.0,
+        "avg_ms": 4.071,
+        "p95_ms": 5.852,
+        "p99_ms": 8.575,
+        "avg_fps": 245.7,
+        "draw_calls": 62.0
+      },
+      {
+        "entities": 200.0,
+        "avg_ms": 4.512,
+        "p95_ms": 6.983,
+        "p99_ms": 11.958,
+        "avg_fps": 221.6,
+        "draw_calls": 65.0
+      },
+      {
+        "entities": 500.0,
+        "avg_ms": 4.165,
+        "p95_ms": 5.173,
+        "p99_ms": 5.642,
+        "avg_fps": 240.1,
+        "draw_calls": 69.0
+      },
+      {
+        "entities": 1000.0,
+        "avg_ms": 4.915,
+        "p95_ms": 6.806,
+        "p99_ms": 7.666,
+        "avg_fps": 203.5,
+        "draw_calls": 90.0
+      },
+      {
+        "entities": 2000.0,
+        "avg_ms": 6.012,
+        "p95_ms": 9.764,
+        "p99_ms": 11.282,
+        "avg_fps": 166.3,
+        "draw_calls": 75.0
+      },
+      {
+        "entities": 5000.0,
+        "avg_ms": 11.928,
+        "p95_ms": 19.549,
+        "p99_ms": 22.342,
+        "avg_fps": 83.8,
+        "draw_calls": 123.0
+      },
+      {
+        "entities": 10000.0,
+        "avg_ms": 23.704,
+        "p95_ms": 36.059,
+        "p99_ms": 41.201,
+        "avg_fps": 42.2,
+        "draw_calls": 166.0
+      },
+      {
+        "entities": 20000.0,
+        "avg_ms": 43.536,
+        "p95_ms": 63.428,
+        "p99_ms": 69.754,
+        "avg_fps": 23.0,
+        "draw_calls": 239.0
+      },
+      {
+        "entities": 50000.0,
+        "avg_ms": 77.452,
+        "p95_ms": 89.469,
+        "p99_ms": 143.291,
+        "avg_fps": 12.9,
+        "draw_calls": 1152.0
+      }
+    ]
+  },
+  {
+    "key": "new_release",
+    "label": "v0.74.9 speed_trace release executable",
+    "source": "C:\\Users\\soulwax\\AppData\\Roaming\\EchoWarrior\\benchmarks\\stress-1784140795.csv",
+    "meta": {
+      "started_unix": "1784140795",
+      "build": "v0.74.9 (release)",
+      "resolution": "1568x822",
+      "gfx": "render_scale 2.0"
+    },
+    "summary": {
+      "smooth_60_up_to": "2000",
+      "smooth_120_up_to": "1000",
+      "vsync_suspected": "false"
+    },
+    "rows": [
+      {
+        "entities": 1.0,
+        "avg_ms": 3.64,
+        "p95_ms": 4.584,
+        "p99_ms": 5.261,
+        "avg_fps": 274.7,
+        "draw_calls": 60.0
+      },
+      {
+        "entities": 2.0,
+        "avg_ms": 3.696,
+        "p95_ms": 4.476,
+        "p99_ms": 4.935,
+        "avg_fps": 270.6,
+        "draw_calls": 59.0
+      },
+      {
+        "entities": 5.0,
+        "avg_ms": 3.578,
+        "p95_ms": 4.135,
+        "p99_ms": 4.351,
+        "avg_fps": 279.5,
+        "draw_calls": 58.0
+      },
+      {
+        "entities": 10.0,
+        "avg_ms": 3.547,
+        "p95_ms": 4.132,
+        "p99_ms": 4.739,
+        "avg_fps": 281.9,
+        "draw_calls": 61.0
+      },
+      {
+        "entities": 20.0,
+        "avg_ms": 3.688,
+        "p95_ms": 4.575,
+        "p99_ms": 5.53,
+        "avg_fps": 271.1,
+        "draw_calls": 56.0
+      },
+      {
+        "entities": 50.0,
+        "avg_ms": 3.548,
+        "p95_ms": 4.328,
+        "p99_ms": 4.796,
+        "avg_fps": 281.8,
+        "draw_calls": 55.0
+      },
+      {
+        "entities": 100.0,
+        "avg_ms": 3.95,
+        "p95_ms": 5.431,
+        "p99_ms": 8.561,
+        "avg_fps": 253.2,
+        "draw_calls": 57.0
+      },
+      {
+        "entities": 200.0,
+        "avg_ms": 4.57,
+        "p95_ms": 6.867,
+        "p99_ms": 11.896,
+        "avg_fps": 218.8,
+        "draw_calls": 57.0
+      },
+      {
+        "entities": 500.0,
+        "avg_ms": 4.262,
+        "p95_ms": 5.764,
+        "p99_ms": 6.695,
+        "avg_fps": 234.6,
+        "draw_calls": 62.0
+      },
+      {
+        "entities": 1000.0,
+        "avg_ms": 4.861,
+        "p95_ms": 7.052,
+        "p99_ms": 8.176,
+        "avg_fps": 205.7,
+        "draw_calls": 84.0
+      },
+      {
+        "entities": 2000.0,
+        "avg_ms": 5.957,
+        "p95_ms": 9.4,
+        "p99_ms": 10.882,
+        "avg_fps": 167.9,
+        "draw_calls": 74.0
+      },
+      {
+        "entities": 5000.0,
+        "avg_ms": 10.13,
+        "p95_ms": 17.448,
+        "p99_ms": 24.598,
+        "avg_fps": 98.7,
+        "draw_calls": 122.0
+      },
+      {
+        "entities": 10000.0,
+        "avg_ms": 14.619,
+        "p95_ms": 26.942,
+        "p99_ms": 30.074,
+        "avg_fps": 68.4,
+        "draw_calls": 175.0
+      },
+      {
+        "entities": 20000.0,
+        "avg_ms": 26.015,
+        "p95_ms": 57.993,
+        "p99_ms": 68.371,
+        "avg_fps": 38.4,
+        "draw_calls": 289.0
+      },
+      {
+        "entities": 50000.0,
+        "avg_ms": 50.323,
+        "p95_ms": 106.08,
+        "p99_ms": 153.773,
+        "avg_fps": 19.9,
+        "draw_calls": 1279.0
+      },
+      {
+        "entities": 100000.0,
+        "avg_ms": 62.682,
+        "p95_ms": 113.686,
+        "p99_ms": 123.362,
+        "avg_fps": 16.0,
+        "draw_calls": 897.0
+      }
+    ]
+  }
+]

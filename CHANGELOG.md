@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.0.16] - 2026-07-15
+
+Release type: PATCH
+
+- Added a release benchmark comparison page for the old v0.73.4 Macroquad baseline, v0.74.8 pure-Macroquad release run, and newest v0.74.9 debug/speed_trace release executable stress CSVs.
+- Added a static SVG/JSON chart generator for the comparison and committed the generated average-frame-time, p95, ratio, and smooth-ceiling graphs.
+- Linked the comparison from the sidebar, wiki map, and canonical Performance Benchmarks page.
+
 ## [v1.0.15] - 2026-07-15
 
 Release type: PATCH

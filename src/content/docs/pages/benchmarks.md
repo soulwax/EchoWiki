@@ -8,6 +8,9 @@ versions, and the reconciliation notes that say which raw runs were excluded
 and why. Numbers without conditions are noise — every row here carries its
 build version, profile, resolution, and date.
 
+For the focused 2026-07-15 old-release vs newest executable comparison with
+static SVG charts, read [Release Benchmark Comparison](release-benchmark-comparison/).
+
 ## How the numbers are produced
 
 ```mermaid

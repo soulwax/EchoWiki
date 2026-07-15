@@ -64,10 +64,12 @@ The structure follows a documentation pattern used by mature engine manuals: fir
 1. [CLI Tools](cli-tools/)
 2. [Assets And Packaging](assets-and-packaging/)
 3. [Asset Pack Reference](asset-pack-reference/)
-4. [Renderer Diagnostics](renderer-diagnostics/)
-5. [Protection And Tamper Boundaries](architecture/protection-and-tamper-boundaries/)
-6. [Pack Integrity Deep Dive](architecture/pack-integrity-deep-dive/)
-7. [Vercel Deployment](vercel-deployment/)
+4. [Performance Benchmarks](benchmarks/)
+5. [Release Benchmark Comparison](release-benchmark-comparison/)
+6. [Renderer Diagnostics](renderer-diagnostics/)
+7. [Protection And Tamper Boundaries](architecture/protection-and-tamper-boundaries/)
+8. [Pack Integrity Deep Dive](architecture/pack-integrity-deep-dive/)
+9. [Vercel Deployment](vercel-deployment/)
 
 ### Leitmotif Work
 
