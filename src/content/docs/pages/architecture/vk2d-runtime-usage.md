@@ -247,3 +247,5 @@ For a new renderer-backed feature:
 6. Run the canonical shell, then the compatibility path if it was touched.
 
 For submodule ownership and signed pointer updates, see [Renderer Submodule Workflow](../renderer-submodule-workflow/).
+
+Everything above is EchoWarrior-specific — how *this game* drives `vk2d`. If you want to use `vk2d` in an unrelated project with no EchoWarrior code involved, start at [10D. vk2d Standalone Quickstart](vk2d-standalone-quickstart/) instead.

@@ -47,6 +47,13 @@ The structure follows a documentation pattern used by mature engine manuals: fir
 8. [Main Code Map](main-code-map/)
 9. [Verification Guide](verification-guide/)
 
+### Using vk2d Outside EchoWarrior
+
+1. [vk2d Standalone Quickstart](architecture/vk2d-standalone-quickstart/)
+2. [vk2d Materials And Shaders](architecture/vk2d-standalone-materials/)
+3. [vk2d Optional Features](architecture/vk2d-standalone-features/)
+4. [vk2d Renderer Internals](architecture/vk2d-renderer-internals/) — once you're patching the crate, not just consuming it
+
 ### Runtime Work
 
 1. [Runtime Shell](runtime-shell/)

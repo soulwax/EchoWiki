@@ -140,6 +140,18 @@ export default defineConfig({
                 { label: '10A. Canonical vk2d Renderer', slug: 'pages/architecture/vulkan-renderer-path' },
                 { label: '10B. vk2d Renderer Internals', slug: 'pages/architecture/vk2d-renderer-internals' },
                 { label: '10C. vk2d Runtime Usage', slug: 'pages/architecture/vk2d-runtime-usage' },
+                {
+                  label: '10D. vk2d Standalone Quickstart',
+                  slug: 'pages/architecture/vk2d-standalone-quickstart',
+                },
+                {
+                  label: '10E. vk2d Materials And Shaders',
+                  slug: 'pages/architecture/vk2d-standalone-materials',
+                },
+                {
+                  label: '10F. vk2d Optional Features',
+                  slug: 'pages/architecture/vk2d-standalone-features',
+                },
               ],
             },
             {
